@@ -14,6 +14,7 @@ import {
   Factory,
   LayoutDashboard,
   LogOut,
+  MailSearch,
   Menu,
   Play,
   RefreshCw,
@@ -208,13 +209,34 @@ function DemoDialog({
   onRun: (run: Run) => Promise<void>;
   readOnly: boolean;
 }) {
-  const [busy, setBusy] = useState<Scenario | null>(null),
-    [error, setError] = useState<Error | null>(null);
+  const [busy, setBusy] = useState<Scenario | "custom-email" | null>(null),
+    [error, setError] = useState<Error | null>(null),
+    [subject, setSubject] = useState("Delivery update for PO 4500192 item 10"),
+    [content, setContent] = useState(
+      "Hello Purchasing Team,\n\nMaterial: SHAFT-DN300\nPurchase order PO 4500192, item 10.\n\nBecause of capacity problems in our heat treatment department, the new confirmed availability at your plant is 19 October 2026, 08:00 Bangkok time, for the full quantity of 40 pcs.\n\nWe may be able to make 10 of these 40 pcs available at your plant on 13 October 2026, 08:00 Bangkok time. This early partial delivery is not confirmed yet.\n\nBest regards,\nSynthetic Supplier",
+    );
   async function start(scenario: Scenario) {
     setBusy(scenario);
     setError(null);
     try {
       const run = await api<Run>("/api/demo/runs", { scenario });
+      await onRun(run);
+      onClose();
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setBusy(null);
+    }
+  }
+  async function startCustom(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setBusy("custom-email");
+    setError(null);
+    try {
+      const run = await api<Run>("/api/demo/custom-email", {
+        subject,
+        content_text: content,
+      });
       await onRun(run);
       onClose();
     } catch (err) {
@@ -241,7 +263,10 @@ function DemoDialog({
         </p>
         <div className="notice">
           <ShieldCheck size={18} />
-          <p>Synthetic data · Simulated AI · Local effects only</p>
+          <p>
+            Synthetic data · Guided fixtures or explicit Gemini mail · Local
+            effects only
+          </p>
         </div>
         {error && <ErrorBox error={error} />}
         <div className="demo-options">
@@ -273,6 +298,58 @@ function DemoDialog({
             ),
           )}
         </div>
+        <div className="demo-divider">
+          <span>OR CHECK YOUR OWN SAMPLE MAIL</span>
+        </div>
+        <form className="custom-mail" onSubmit={startCustom}>
+          <div className="custom-mail-heading">
+            <span className="demo-icon">
+              <MailSearch size={23} />
+            </span>
+            <div>
+              <strong>Analyze with Gemini</strong>
+              <p>
+                Edit this synthetic supplier email. Gemini extracts a candidate;
+                the backend accepts only exact quoted and ERP-consistent facts.
+              </p>
+            </div>
+          </div>
+          <label>
+            Subject
+            <input
+              value={subject}
+              onChange={(event) => setSubject(event.target.value)}
+              required
+              maxLength={500}
+              disabled={!!busy || readOnly}
+            />
+          </label>
+          <label>
+            Email body
+            <textarea
+              value={content}
+              onChange={(event) => setContent(event.target.value)}
+              required
+              maxLength={50000}
+              rows={10}
+              disabled={!!busy || readOnly}
+            />
+          </label>
+          <div className="custom-mail-actions">
+            <small>
+              Sender is fixed to supplier@example.test. Nothing is sent to a
+              real mailbox.
+            </small>
+            <button className="button primary" disabled={!!busy || readOnly}>
+              {busy === "custom-email" ? (
+                <RefreshCw className="spin" size={17} />
+              ) : (
+                <MailSearch size={17} />
+              )}
+              Check sample mail
+            </button>
+          </div>
+        </form>
         <p className="footnote">
           A demo starts analysis; it does not approve consequential actions. The
           responsible role reviews the exact plan before execution.

@@ -10,3 +10,6 @@ dist/
 playwright-report/
 test-results/
 !evidence/test-results/
+graphify-out/cache/
+graphify-out/.graphify_python
+graphify-out/.graphify_root

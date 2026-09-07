@@ -26,7 +26,7 @@
       "id": "APICWF0300000001",
       "name": "APIC | WF03 | Normalize Verify and Correlate",
       "file": "wf03.json",
-      "export_hash": "69e00d31ce8d46aa3b95f5b72658fde45165f7e2990ec78e46ed6a28eb97bd0b",
+      "export_hash": "12c7985c8ecfbe60a5e9d098d25e643317057880dc46e78391c945a57d2805dc",
       "state": "INACTIVE",
       "test_status": "NOT_RUN"
     },

@@ -7,7 +7,9 @@ files=sorted(set(x for x in result.stdout.decode().split('\0') if x))
 secrets=[]
 env=ROOT/'.env'
 if env.exists():
-    secrets += [line.split('=',1)[1].encode() for line in env.read_text().splitlines() if '=' in line and len(line.split('=',1)[1])>=20]
+    public_keys={'PROFILE','EXTERNAL_ACTIONS_ENABLED','AI_MODE','LLM_MODEL','LLM_MAX_CALLS'}
+    secrets += [value.encode() for line in env.read_text().splitlines() if '=' in line
+                for key,value in [line.split('=',1)] if key not in public_keys and len(value)>=20]
 for name in ('credentials.json','n8n-owner.json'):
     path=ROOT/'.local'/name
     if path.exists():

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "profile": "DEMO_LOCAL",
+  "provider": "google-gemini",
+  "model": "models/gemini-3.1-flash-lite",
+  "prompt_version": "extraction-v2.0",
+  "tested_at": "2026-09-07T16:16:13.744832+00:00",
+  "scope_id": "eaf41881-f63f-4c83-a1bc-dd41e98d0372",
+  "source_event_id": "298da245-4eea-48b8-9980-1ca7b31ca41e",
+  "job_id": "67d022c6-069a-430f-93bb-fc03fde37fb4",
+  "incident_id": "0d87e45c-d6c0-43ca-8767-ebfc3562a023",
+  "workflow_id": "APICWF0500000001",
+  "execution_id": "2887",
+  "result": {
+    "status": "WAITING_APPROVAL",
+    "risk_score": 88,
+    "severity": "CRITICAL",
+    "confirmed_quantity": 40,
+    "proposed_partial_status": "PROPOSED"
+  },
+  "boundary": "One synthetic live-provider smoke run; not a statistical model evaluation."
+}

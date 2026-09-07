@@ -22,6 +22,7 @@ class Envelope(Strict):
     payload: dict[str,Any] | None = None
     attachments: list[dict[str,Any]] = Field(default_factory=list,max_length=10)
     correction_context: dict[str,Any] | None = None
+    ai_mode: Literal["fixture","live"] = "fixture"
 
 
 class Stage(BaseModel):
@@ -80,6 +81,18 @@ class Decision(Strict):
 class Demo(Strict):
     scenario: Literal["supplier-delay","supplier-split","machine-breakdown","quality-issue","quality-shipped","unknown-input"]
     scope_id: UUID | None = None
+
+
+class CustomEmail(Strict):
+    subject: str = Field(min_length=1,max_length=500)
+    content_text: str = Field(min_length=1,max_length=50000)
+
+
+class LiveExtractionInput(Strict):
+    envelope: dict[str,Any]
+    snapshot: dict[str,Any]
+    candidate: dict[str,Any]
+    model: str = Field(min_length=1,max_length=200)
 
 
 class ImpactInput(Strict):

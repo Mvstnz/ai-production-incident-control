@@ -9,6 +9,7 @@ additional operational impact, approval and execution trail inspectable.
 flowchart LR
   Sources["Synthetic email / API / form"] --> Intake["WF01 / WF02: durable intake"]
   Intake --> Verify["WF03: normalize, verify, correlate"]
+  Gemini["Gemini: untrusted extraction candidate"] --> Verify
   Verify --> Impact["WF04: ERP snapshot and impact"]
   Impact --> Plan["WF05: risk and grounded plan"]
   Plan --> Approval["WF06: wait and revalidate"]
@@ -43,7 +44,7 @@ being inferred from a valid JSON export.
 | Component | Responsibility | Source |
 |---|---|---|
 | Operations API | Durable intake, claims, revisions, immutable assessments, plans, approvals, actions, reads and audit | `backend/main.py`, `backend/state.py` |
-| Domain functions | Deterministic impact, risk, safe fixture extraction, grounded plans and sales-line union | `backend/domain.py` |
+| Domain functions | Deterministic impact, risk, safe fixture extraction, live-candidate evidence verification, grounded plans and sales-line union | `backend/domain.py` |
 | Mock ERP API | Snapshot reads and explicit approved synthetic commands | `backend/erp.py` |
 | Local adapters | Internal tickets, allowlisted local mail, synthetic ERP commands, uncertain outcomes | `backend/adapters.py` |
 | Dashboard | Authenticated English control center backed by the Operations API | `dashboard/` |
@@ -63,9 +64,12 @@ local n8n release does not establish the cloud instance's release.
    account and source ID. A changed payload for an existing transport identity
    is a conflict.
 2. WF03 claims a bounded lease, obtains source and ERP context, and verifies the
-   facts. Exact known synthetic email uses the visible fixture provider. Typed
-   form/API input is validated directly. Unknown text and ambiguous or injected
-   instructions require review.
+   facts. Exact guided synthetic email uses the visible fixture provider. Typed
+   form/API input is validated directly. An explicitly live synthetic email first
+   reserves one durable call-budget slot, then Gemini returns only a candidate.
+   Exact quotes, quantities, offset-aware dates and ERP identity are revalidated
+   by the backend. Unknown text and ambiguous, invented or injected instructions
+   require review.
 3. Incident identity uses the verified business object and an active episode.
    The canonical fact fingerprint distinguishes additional corroborating sources
    from a new fact revision. Changed revisions supersede unexecuted plans and

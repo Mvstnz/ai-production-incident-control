@@ -1790,6 +1790,65 @@ td.date-cell {
 .demo-arrow {
   color: #83a561;
 }
+.demo-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 25px 0 18px;
+  color: #87958d;
+  font-size: 8px;
+  letter-spacing: 1.4px;
+}
+.demo-divider::before,
+.demo-divider::after {
+  content: "";
+  height: 1px;
+  background: var(--line);
+  flex: 1;
+}
+.custom-mail {
+  border: 1px solid #dce6d1;
+  border-radius: 7px;
+  padding: 20px 22px;
+  background: #fbfdf9;
+  display: grid;
+  gap: 15px;
+}
+.custom-mail-heading {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.custom-mail-heading strong {
+  display: block;
+  font-size: 15px;
+}
+.custom-mail-heading p {
+  margin: 5px 0 0;
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.custom-mail label {
+  font-size: 9px;
+}
+.custom-mail textarea {
+  resize: vertical;
+  min-height: 150px;
+  line-height: 1.55;
+}
+.custom-mail-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.custom-mail-actions small {
+  max-width: 420px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
 .login-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

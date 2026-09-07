@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 import re
 from typing import Any
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 POLICY = json.loads((ROOT / "config/risk-policy.v1.json").read_text(encoding="utf-8"))
@@ -658,6 +659,149 @@ def extract_fixture(envelope: Json, snapshot: Json) -> Json:
         else:
             key = f"QUALITY_ISSUE:{facts['lot_id']}:{facts['inspection_id']}"
         result.update(status="VERIFIED", facts=_json(facts), business_key=key)
+    except (DomainValidationError, TypeError, KeyError, ValueError) as error:
+        result["review_reasons"] = [str(error)]
+    return result
+
+
+_ENGLISH_MONTHS = {name: index for index, name in enumerate(
+    ("January", "February", "March", "April", "May", "June", "July", "August",
+     "September", "October", "November", "December"), 1)}
+
+
+def _evidence_span(envelope: Json, quote: Any, field: str) -> Json:
+    if not isinstance(quote, str) or not quote.strip():
+        raise DomainValidationError(f"{field}: an exact evidence quote is required")
+    for source in ("content_text", "subject"):
+        value = envelope.get(source, "")
+        if isinstance(value, str):
+            start = value.find(quote)
+            if start >= 0:
+                return {"source": source, "start": start, "end": start + len(quote), "quote": quote}
+    raise DomainValidationError(f"{field}: evidence quote is not present in subject or content_text")
+
+
+def _date_in_quote(value: Any, quote: str, field: str) -> None:
+    expected = timestamp(value, field)
+    candidates = []
+    for match in re.finditer(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})\b", quote):
+        candidates.append(timestamp(match.group(0), field + " evidence"))
+    pattern = r"\b(\d{1,2}) (" + "|".join(_ENGLISH_MONTHS) + r") (\d{4}),? (\d{1,2}):(\d{2}) Bangkok time\b"
+    for match in re.finditer(pattern, quote, re.I):
+        month = next(number for name, number in _ENGLISH_MONTHS.items() if name.lower() == match.group(2).lower())
+        try:
+            local = datetime(int(match.group(3)), month, int(match.group(1)), int(match.group(4)),
+                             int(match.group(5)), tzinfo=ZoneInfo("Asia/Bangkok"))
+        except ValueError:
+            raise DomainValidationError(f"{field}: invalid date in evidence quote") from None
+        candidates.append(local.astimezone(timezone.utc))
+    if expected not in candidates:
+        raise DomainValidationError(f"{field}: extracted date is not mechanically supported by its evidence quote")
+
+
+def _live_schedule(rows: Any, envelope: Json, field: str, status: str) -> tuple[Any, list[Json]]:
+    if field == "confirmed_supply_schedule":
+        if not isinstance(rows, list) or not rows:
+            raise DomainValidationError("confirmed_supply_schedule: at least one confirmed entry is required")
+        source_rows = rows
+    else:
+        if rows in (None, [], {}):
+            return None, []
+        if not isinstance(rows, dict):
+            raise DomainValidationError("proposed_partial: one object or null is required")
+        source_rows = [rows]
+    clean, spans = [], []
+    for index, row in enumerate(source_rows):
+        if not isinstance(row, dict) or set(row) - {"quantity", "available_at", "status", "replaces_quantity_from_final_delivery", "evidence_quote"}:
+            raise DomainValidationError(f"{field}[{index}]: unsupported model fields")
+        if row.get("status") != status:
+            raise DomainValidationError(f"{field}[{index}]: status must be {status}")
+        quantity = number(_required(row, "quantity"), f"{field}[{index}].quantity")
+        quote = _required(row, "evidence_quote")
+        span = _evidence_span(envelope, quote, f"{field}[{index}]")
+        if not re.search(rf"(?<!\d){re.escape(str(_json(quantity)))}(?!\d)", quote):
+            raise DomainValidationError(f"{field}[{index}].quantity: value is not present in evidence quote")
+        _date_in_quote(_required(row, "available_at"), quote, f"{field}[{index}].available_at")
+        lowered = quote.lower()
+        if status == "CONFIRMED" and ("confirm" not in lowered or "not confirmed" in lowered):
+            raise DomainValidationError(f"{field}[{index}]: evidence does not establish confirmed availability")
+        if status == "PROPOSED" and not any(term in lowered for term in ("may", "might", "could", "propos", "not confirmed")):
+            raise DomainValidationError(f"{field}[{index}]: evidence does not establish a proposal")
+        item = {"quantity": _json(quantity), "available_at": row["available_at"], "status": status}
+        if status == "PROPOSED":
+            item["replaces_quantity_from_final_delivery"] = _bool(
+                row.get("replaces_quantity_from_final_delivery"),
+                "proposed_partial.replaces_quantity_from_final_delivery")
+        clean.append(item)
+        spans.append({"value": deepcopy(item), "evidence": span})
+    return (clean if field == "confirmed_supply_schedule" else clean[0]), spans
+
+
+def verify_live_extraction(envelope: Json, snapshot: Json, candidate: Any, model: str) -> Json:
+    """Turn an untrusted Gemini candidate into verified facts or manual review.
+
+    Model output never supplies status, business identity, recipients or actions. Every
+    accepted critical fact needs an exact source quote and must pass the deterministic
+    ERP impact validator before it can enter the incident pipeline.
+    """
+    result = {"status": "MANUAL_REVIEW", "incident_type": None, "business_key": None,
+              "facts": {}, "evidence": {}, "review_reasons": [], "provider": "google-gemini",
+              "model": model, "prompt_version": "extraction-v2.0"}
+    try:
+        text = envelope.get("content_text", "")
+        subject = envelope.get("subject", "")
+        if envelope.get("source") != "EMAIL" or envelope.get("ai_mode") != "live":
+            raise DomainValidationError("Live extraction requires an EMAIL envelope explicitly marked ai_mode=live")
+        if not isinstance(text, str) or not text.strip() or len(text.encode("utf-8")) > 65536:
+            raise DomainValidationError("content_text exceeds 64 KiB, is empty or has invalid type")
+        if not isinstance(subject, str) or len(subject) > 500:
+            raise DomainValidationError("subject exceeds 500 characters or has invalid type")
+        if envelope.get("attachments"):
+            raise DomainValidationError("Attachments are unsupported; required attachment facts need manual review")
+        if _INJECTION.search(text) or _INJECTION.search(subject):
+            raise DomainValidationError("Instruction-like untrusted content: prompt-injection review")
+        if not isinstance(candidate, dict):
+            raise DomainValidationError("Gemini output must be one JSON object")
+        allowed = {"incident_type", "purchase_order", "purchase_order_item", "material",
+                   "confirmed_supply_schedule", "proposed_partial", "reason", "evidence", "ambiguities"}
+        if set(candidate) - allowed:
+            raise DomainValidationError("Gemini output contains unsupported fields")
+        ambiguities = candidate.get("ambiguities", [])
+        if ambiguities is None:
+            ambiguities = []
+        if not isinstance(ambiguities, list) or any(not isinstance(item, str) for item in ambiguities):
+            raise DomainValidationError("ambiguities must be a list of strings")
+        if ambiguities:
+            raise DomainValidationError("Gemini reported ambiguity: " + "; ".join(ambiguities[:5]))
+        if candidate.get("incident_type") != "SUPPLIER_DELAY":
+            raise DomainValidationError("Email live extraction currently supports SUPPLIER_DELAY only")
+        evidence_quotes = _required(candidate, "evidence")
+        if not isinstance(evidence_quotes, dict) or set(evidence_quotes) != {"purchase_order", "purchase_order_item", "material", "reason"}:
+            raise DomainValidationError("evidence must contain exactly purchase_order, purchase_order_item, material and reason quotes")
+        facts = {"incident_type": "SUPPLIER_DELAY"}
+        evidence = {"incident_type": {"value": "SUPPLIER_DELAY", "evidence": {"source": "workflow_contract"}}}
+        for field in ("purchase_order", "purchase_order_item", "material", "reason"):
+            value = _required(candidate, field)
+            if not isinstance(value, str) or len(value) > 500:
+                raise DomainValidationError(f"{field}: a bounded string is required")
+            span = _evidence_span(envelope, evidence_quotes.get(field), field)
+            if value.lower() not in span["quote"].lower():
+                raise DomainValidationError(f"{field}: value is not present in evidence quote")
+            facts[field] = value
+            evidence[field] = {"value": value, "evidence": span}
+        confirmed, confirmed_spans = _live_schedule(candidate.get("confirmed_supply_schedule"), envelope, "confirmed_supply_schedule", "CONFIRMED")
+        proposed, proposed_spans = _live_schedule(candidate.get("proposed_partial"), envelope, "proposed_partial", "PROPOSED")
+        facts["confirmed_supply_schedule"] = confirmed
+        facts["proposed_partial"] = proposed
+        evidence["confirmed_supply_schedule"] = {"value": confirmed, "evidence": confirmed_spans[0]["evidence"]}
+        if proposed is not None:
+            evidence["proposed_partial"] = {"value": proposed, "evidence": proposed_spans[0]["evidence"]}
+        verified = evaluate_impact(snapshot, facts)
+        if verified["review_reasons"]:
+            raise DomainValidationError("; ".join(verified["review_reasons"]))
+        result.update(status="VERIFIED", incident_type="SUPPLIER_DELAY", facts=_json(facts),
+                      business_key=f"SUPPLIER_DELAY:{facts['purchase_order']}:{facts['purchase_order_item']}",
+                      evidence=evidence)
     except (DomainValidationError, TypeError, KeyError, ValueError) as error:
         result["review_reasons"] = [str(error)]
     return result

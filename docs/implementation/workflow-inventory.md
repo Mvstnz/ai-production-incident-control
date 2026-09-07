@@ -15,7 +15,7 @@ Local state: published, graph readback matched source. Target state: created/rea
 | APIC / WF09 / Error and Dead Letter Handler | `APICWF0900000001` | [`KF1ttQVhDbDHBDmY`](https://mvstnz1.app.n8n.cloud/workflow/KF1ttQVhDbDHBDmY) | Inactive / runtime NOT_RUN |
 | APIC / WF10 / Daily Management Digest | `APICWF1000000001` | [`anfiXs99aCeeg1g4`](https://mvstnz1.app.n8n.cloud/workflow/anfiXs99aCeeg1g4) | Inactive / runtime NOT_RUN |
 
-Local probe: `APICPROBE0000001`, executed successfully. Target probe: `Fm2mFkzgF0jwFJEA`, created/read back, execution blocked. Neither is one of the ten core workflows.
+Local probe: `APICPROBE0000001`, executed successfully. Target probe: `Fm2mFkzgF0jwFJEA`, created/read back and manually executed successfully with the bound Gemini credential (execution `3`); it remains inactive/unpublished. This isolated credential check does not remove the target core workflows' Operations/ERP connectivity blocker. Neither probe is one of the ten core workflows.
 
 The local graph source is `n8n/workflows/`; sanitized persisted exports are `n8n/exports/local/`. Actual cloud exports and SDK builders are `n8n/target/`. See [target deployment](target-deployment.md) for missing credentials, configuration and graph drift.
 

@@ -20,6 +20,8 @@ def main():
     headers = [('apicOpsService01','APIC Operations Service','X-Service-Token','SERVICE_TOKEN'),('apicErpRead0001','APIC ERP Read','X-ERP-Token','ERP_READ_TOKEN'),('apicWebhook001','APIC Webhook Intake','X-Webhook-Token','N8N_WEBHOOK_TOKEN')]
     n8n = [{'id':cid,'name':name,'type':'httpHeaderAuth','data':{'name':header,'value':env[key]}} for cid,name,header,key in headers]
     n8n.append({'id':'apicForm000001','name':'APIC Demo Form','type':'httpBasicAuth','data':{'user':'apic-form','password':env['N8N_WEBHOOK_TOKEN']}})
+    if env.get('LLM_API_KEY','').strip():
+        n8n.append({'id':'apicGemini0001','name':'APIC Gemini','type':'googlePalmApi','data':{'apiKey':env['LLM_API_KEY'].strip()}})
     (local/'n8n-credentials.json').write_text(json.dumps(n8n),encoding='utf-8')
     print('Local secrets ready; existing secrets preserved. Credentials: .local/credentials.json (do not commit).')
 if __name__ == '__main__': main()

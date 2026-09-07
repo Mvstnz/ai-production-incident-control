@@ -31,7 +31,9 @@ services:
       SESSION_SECRET: ${SESSION_SECRET}
       N8N_WEBHOOK_TOKEN: ${N8N_WEBHOOK_TOKEN}
       PROFILE: DEMO_LOCAL
-      AI_MODE: fixture
+      AI_MODE: ${AI_MODE:-fixture}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_MAX_CALLS: ${LLM_MAX_CALLS:-0}
       EXTERNAL_ACTIONS_ENABLED: 'false'
       ERP_BASE_URL: http://mock-erp:8001
       N8N_BASE_URL: http://n8n:5678

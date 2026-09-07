@@ -21,9 +21,9 @@
   "scope": {
     "published": false,
     "executed": false,
-    "credentials_created": false,
-    "update_workflow_called": false,
-    "execute_workflow_called": false,
+    "credentials_created": true,
+    "update_workflow_called": true,
+    "execute_workflow_called": true,
     "alternate_transports_used": false,
     "foreign_workflows_touched": false,
     "forbidden_foreign_ids": [
@@ -31,6 +31,34 @@
       "3bLubRLjNjvSORwO"
     ],
     "preserved_probe": "Fm2mFkzgF0jwFJEA"
+  },
+  "subsequent_gemini_update": {
+    "recorded_at": "2026-09-07T15:59:00Z",
+    "credential": {
+      "name": "Google Gemini(PaLM) Api account",
+      "type": "googlePalmApi",
+      "secret_exported": false,
+      "connection_test": "PASS"
+    },
+    "isolated_probe": {
+      "workflow_id": "Fm2mFkzgF0jwFJEA",
+      "execution_id": "3",
+      "status": "PASS",
+      "active": false,
+      "published": false,
+      "model": "models/gemini-3.1-flash-lite"
+    },
+    "wf03": {
+      "workflow_id": "6tHziLEHudpdk5hk",
+      "version_id": "e4494a97-ffba-4f9c-9ad7-3ff27acc381b",
+      "node_count": 19,
+      "gemini_credential_bound": true,
+      "active": false,
+      "published": false,
+      "runtime_status": "NOT_RUN",
+      "configuration_status": "BLOCKED_OPERATIONS_AND_ERP_ENDPOINTS"
+    },
+    "boundary": "The isolated probe validates only the Gemini credential and model. No core target workflow was executed."
   },
   "expected_create_order": [
     "wf09",
@@ -810,7 +838,7 @@
       "url": "https://mvstnz1.app.n8n.cloud/workflow/6tHziLEHudpdk5hk",
       "active": false,
       "active_version_id": null,
-      "version_id": "647fc8e4-69f6-4f1d-bf44-f9c270660848",
+      "version_id": "e4494a97-ffba-4f9c-9ad7-3ff27acc381b",
       "created_at": "2026-09-07T11:38:29.623Z",
       "status": "BLOCKED",
       "implementation_status": "IMPLEMENTED",
@@ -960,7 +988,7 @@
       },
       "sdk_validation": {
         "valid": true,
-        "nodeCount": 14,
+        "nodeCount": 19,
         "warnings": [
           {
             "code": "PLAIN_GENERIC_AUTH",
@@ -971,6 +999,16 @@
             "code": "PLAIN_GENERIC_AUTH",
             "message": "'Load Source and Snapshot' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
             "nodeName": "Load Source and Snapshot"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Reserve Live AI Budget' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Reserve Live AI Budget"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Verify Gemini Facts' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Verify Gemini Facts"
           },
           {
             "code": "PLAIN_GENERIC_AUTH",
@@ -991,6 +1029,21 @@
             "code": "INVALID_EXPRESSION_PATH",
             "message": "'Claim Analysis Job' parameter 'jsonBody' uses $json.job_id but no predecessor outputs this field.",
             "nodeName": "Claim Analysis Job"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Use Live Gemini Extraction' parameter 'conditions.conditions[0].leftValue' uses $json.envelope.ai_mode but no predecessor outputs this field.",
+            "nodeName": "Use Live Gemini Extraction"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Extract Supplier Facts with Gemini' parameter 'messages.values[0].content' uses $json.envelope but no predecessor outputs this field.",
+            "nodeName": "Extract Supplier Facts with Gemini"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Verify Gemini Facts' parameter 'jsonBody' uses $json.candidate but no predecessor outputs this field.",
+            "nodeName": "Verify Gemini Facts"
           },
           {
             "code": "INVALID_EXPRESSION_PATH",
@@ -1096,10 +1149,10 @@
       "readback_comparison": {
         "valid": true,
         "errors": [],
-        "source_node_count": 13,
-        "requested_node_count": 14,
-        "returned_node_count": 14,
-        "edge_count": 12,
+        "source_node_count": 18,
+        "requested_node_count": 19,
+        "returned_node_count": 19,
+        "edge_count": 18,
         "code_runtime_strings_preserved": true,
         "auth_parameters_preserved": true,
         "extra_sticky_notes": [],
@@ -1116,6 +1169,41 @@
           },
           {
             "node": "Load Source and Snapshot",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Reserve Live AI Budget",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Extract Supplier Facts with Gemini",
+            "required": {
+              "googlePalmApi": {
+                "name": "Google Gemini(PaLM) Api account"
+              }
+            },
+            "returned": {
+              "googlePalmApi": {
+                "id": "Y92HqimbCmO0bDD8",
+                "name": "Google Gemini(PaLM) Api account"
+              }
+            },
+            "status": "CONFIGURED"
+          },
+          {
+            "node": "Verify Gemini Facts",
             "required": {
               "httpHeaderAuth": {
                 "name": "APIC Operations Service"
@@ -1175,12 +1263,12 @@
       },
       "settings_status": "BLOCKED",
       "hashes": {
-        "builder_sha256": "8dec1f2ccb30f5f211c504ed8e76513678eda663da40b72677f140c0216fbdac",
-        "export_sha256": "6f60fa0f4b00e99c3d866e231186987117a2ba0d07462d021478bb24eb103aa5",
-        "current_source_file_sha256": "aa856c108fc05e1546017c9c17e30d239198c7086a54ad2fd9cfabdf199e28ee",
-        "source_snapshot_sha256": "57873231e6431fc3bb90a7d11ebb2013feb3acd6123ef824b3c77a34983732a1",
-        "expected_graph_sha256": "3b1c06ee8aca19353891b46b46eff5a5b3d862dc277e45b7ceb22bbe3b47e1a3",
-        "readback_graph_sha256": "3c2ea37dbe5820894b9e14daf6c1eb00df503beaacf66a98f38a34553dc148bf"
+        "builder_sha256": "75ff36c39d17268786d3c56f636da47d7ff747edfb3ffc022a485ba5a41bfe3d",
+        "export_sha256": "da27d82da700166f055f7468230eae9f04a702101766861bd704a5e744d5c47d",
+        "current_source_file_sha256": "ea0fe8ab58919da7e7be810646b7dbcb0fe78511532913c4b082c7a6b6f1a9a2",
+        "source_snapshot_sha256": "11ef89e9bcba61a2ed6efe46b857f18050ca26985703b18a737b253402e13181",
+        "expected_graph_sha256": "7fbe30f36f2fb50f98a3da6c85b5e2156972732ecae271f96948c30d5dc667ec",
+        "readback_graph_sha256": "6b7456ccce6c3180453bce433a5f5fa7c46157c87688fe07e6cc3ff22bdbb04a"
       },
       "source_drift": false,
       "dependencies": [
@@ -3258,19 +3346,19 @@
   "local_verification": {
     "status": "LOCAL_TESTED_WITH_SOURCE_DRIFT",
     "command": "rtk proxy node n8n/target/verify.cjs",
-    "checked_at": "2026-09-07T12:18:46.353Z",
+    "checked_at": "2026-09-07T16:22:04.503Z",
     "workflow_count": 10,
     "passed_readback_comparisons": 10,
-    "total_source_nodes": 86,
-    "total_target_nodes": 96,
-    "total_edges": 67,
+    "total_source_nodes": 91,
+    "total_target_nodes": 101,
+    "total_edges": 73,
     "source_drift": [
       "wf04",
       "wf08"
     ],
     "duplicate_names": 0,
     "missing_target_references": 0,
-    "credential_bindings": 0,
+    "credential_bindings": 1,
     "runtime_executions": 0,
     "target_test_status": "NOT_RUN",
     "checks": [
@@ -3309,15 +3397,15 @@
         "id": "6tHziLEHudpdk5hk",
         "valid": true,
         "source_drift": false,
-        "node_count": 14,
-        "edge_count": 12,
-        "credential_bindings": 0,
-        "builder_sha256": "8dec1f2ccb30f5f211c504ed8e76513678eda663da40b72677f140c0216fbdac",
-        "export_sha256": "6f60fa0f4b00e99c3d866e231186987117a2ba0d07462d021478bb24eb103aa5",
-        "current_source_file_sha256": "aa856c108fc05e1546017c9c17e30d239198c7086a54ad2fd9cfabdf199e28ee",
-        "source_snapshot_sha256": "57873231e6431fc3bb90a7d11ebb2013feb3acd6123ef824b3c77a34983732a1",
-        "expected_graph_sha256": "3b1c06ee8aca19353891b46b46eff5a5b3d862dc277e45b7ceb22bbe3b47e1a3",
-        "readback_graph_sha256": "3c2ea37dbe5820894b9e14daf6c1eb00df503beaacf66a98f38a34553dc148bf"
+        "node_count": 19,
+        "edge_count": 18,
+        "credential_bindings": 1,
+        "builder_sha256": "75ff36c39d17268786d3c56f636da47d7ff747edfb3ffc022a485ba5a41bfe3d",
+        "export_sha256": "da27d82da700166f055f7468230eae9f04a702101766861bd704a5e744d5c47d",
+        "current_source_file_sha256": "ea0fe8ab58919da7e7be810646b7dbcb0fe78511532913c4b082c7a6b6f1a9a2",
+        "source_snapshot_sha256": "11ef89e9bcba61a2ed6efe46b857f18050ca26985703b18a737b253402e13181",
+        "expected_graph_sha256": "7fbe30f36f2fb50f98a3da6c85b5e2156972732ecae271f96948c30d5dc667ec",
+        "readback_graph_sha256": "6b7456ccce6c3180453bce433a5f5fa7c46157c87688fe07e6cc3ff22bdbb04a"
       },
       {
         "key": "wf04",

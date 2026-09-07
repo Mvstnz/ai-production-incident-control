@@ -32,7 +32,9 @@ for (const source of snapshot) {
   assert.equal(workflow.active,false);
   assert.equal(workflow.settings.errorWorkflow,undefined);
   assert.equal(workflow.nodes.filter(n=>n.name==='Target Configuration BLOCKED').length,1);
-  assert.equal(workflow.nodes.filter(n=>n.credentials && Object.keys(n.credentials).length).length,0);
+  const configuredCredentialNodes=workflow.nodes.filter(n=>n.credentials && Object.keys(n.credentials).length);
+  assert.equal(configuredCredentialNodes.length,key==='wf03'?1:0);
+  if(key==='wf03') assert.equal(configuredCredentialNodes[0].credentials.googlePalmApi?.name,'Google Gemini(PaLM) Api account');
   for (const n of workflow.nodes) {
     if(n.type==='n8n-nodes-base.executeWorkflow') assert(Object.values(ids).includes(n.parameters.workflowId.value),key+' local/unresolved target reference');
     if(n.type==='n8n-nodes-base.httpRequest') {
@@ -42,7 +44,7 @@ for (const source of snapshot) {
     }
   }
   const serialized = JSON.stringify(workflow);
-  for(const forbidden of ['pinData','shared','owner','scopes','APICWF','apicOpsService01','apicErpRead0001','apicWebhook001','apicForm000001']) assert(!serialized.includes('"'+forbidden+'"') && !serialized.includes('APICWF') && !serialized.includes('apicOpsService01'),key+' forbidden export metadata');
+  for(const forbidden of ['pinData','shared','owner','scopes','APICWF','apicOpsService01','apicErpRead0001','apicWebhook001','apicForm000001','apicGemini0001']) assert(!serialized.includes('"'+forbidden+'"') && !serialized.includes('APICWF') && !serialized.includes('apicOpsService01'),key+' forbidden export metadata');
   const localPath = path.join(repo,'n8n/workflows',key+'.json');
   const localBytes = fs.readFileSync(localPath);
   const local = JSON.parse(localBytes);
@@ -59,6 +61,8 @@ for (const source of snapshot) {
     fs.writeFileSync(path.join(pendingDir,key+'.drift.json'),JSON.stringify({key,status:'BLOCKED_UPDATE',target_id:ids[key],source_snapshot_sha256:hash(canonicalText(source)),current_source_sha256:hash(localBytes),current_builder_sha256:hash(pending.code),changed_nodes:normalized.nodes.filter(n=>canonicalText(n)!==canonicalText(source.nodes.find(s=>s.name===n.name)??null)).map(n=>n.name),connections_changed:canonicalText(normalized.connections)!==canonicalText(source.connections),target_updated:false},null,2)+'\n');
   }
   const record = evidence.workflows.find(w=>w.key===key);
+  const currentValidationPath=path.join(root,key+'.validation.json');
+  if(fs.existsSync(currentValidationPath)) record.sdk_validation=read(currentValidationPath);
   assert.equal(record.sdk_validation.valid,true);
   assert.equal(record.readback_nodes_validation.valid,true);
   assert.equal(record.execution_search.count,0);
@@ -73,7 +77,8 @@ for (const source of snapshot) {
     expected_graph_sha256:hash(canonicalText(result.expected)),
     readback_graph_sha256:hash(canonicalText({nodes:workflow.nodes,connections:workflow.connections}))
   };
-  Object.assign(record,{hashes,source_drift:drift,readback_comparison:inspected,
+  Object.assign(record,{version_id:workflow.versionId,active:workflow.active,active_version_id:workflow.activeVersionId,
+    hashes,source_drift:drift,readback_comparison:inspected,
     pending_update:drift?{status:'BLOCKED_UPDATE',builder_file:'n8n/target/pending/'+key+'.builder.ts',details:read(path.join(root,'pending',key+'.drift.json')),sdk_validation:fs.existsSync(path.join(root,'pending',key+'.validation.json'))?read(path.join(root,'pending',key+'.validation.json')):null}:null,
     dependencies:result.expected.nodes.filter(n=>n.type==='n8n-nodes-base.executeWorkflow').map(n=>({node:n.name,target_id:n.parameters.workflowId.value,wait_for_subworkflow:n.parameters.options?.waitForSubWorkflow})),
     missing_settings:Object.fromEntries(Object.entries(record.settings_requested).filter(([k,v])=>canonicalText(workflow.settings[k]??null)!==canonicalText(v)))
@@ -83,7 +88,7 @@ for (const source of snapshot) {
     p.validation_matches_builder = p.sdk_validation?.builder_sha256 === p.details.current_builder_sha256;
     p.sdk_status = p.validation_matches_builder && p.sdk_validation?.validation.valid ? 'VALIDATED_NOT_DEPLOYED' : 'NOT_RUN_CURRENT_BUILDER';
   }
-  checks.push({key,id:ids[key],valid:true,source_drift:drift,node_count:workflow.nodes.length,edge_count:edges(workflow.connections).length,credential_bindings:0,...hashes});
+  checks.push({key,id:ids[key],valid:true,source_drift:drift,node_count:workflow.nodes.length,edge_count:edges(workflow.connections).length,credential_bindings:configuredCredentialNodes.length,...hashes});
 }
 const sourceDrift = checks.filter(c=>c.source_drift).map(c=>c.key);
 const summary = {
@@ -92,7 +97,7 @@ const summary = {
   total_source_nodes:checks.reduce((n,c)=>n+c.node_count-1,0),
   total_target_nodes:checks.reduce((n,c)=>n+c.node_count,0),
   total_edges:checks.reduce((n,c)=>n+c.edge_count,0),
-  source_drift:sourceDrift,duplicate_names:0,missing_target_references:0,credential_bindings:0,
+  source_drift:sourceDrift,duplicate_names:0,missing_target_references:0,credential_bindings:checks.reduce((n,c)=>n+c.credential_bindings,0),
   runtime_executions:0,target_test_status:'NOT_RUN',checks
 };
 evidence.local_verification=summary;
@@ -107,7 +112,8 @@ const manifest={
     {name:'APIC Operations Service',type:'httpHeaderAuth',header:'X-Service-Token',status:'MISSING'},
     {name:'APIC ERP Read',type:'httpHeaderAuth',header:'X-ERP-Token',status:'MISSING'},
     {name:'APIC Webhook Intake',type:'httpHeaderAuth',status:'MISSING'},
-    {name:'APIC Demo Form',type:'httpBasicAuth',status:'MISSING'}
+    {name:'APIC Demo Form',type:'httpBasicAuth',status:'MISSING'},
+    {name:'Google Gemini(PaLM) Api account',type:'googlePalmApi',status:'CONFIGURED',scope:'WF03 live branch; isolated credential probe passed'}
   ],
   note:'Credential header names must be matched to the approved backend deployment; no values or target credential IDs exist.',
   workflows:evidence.workflows.map(({key,id,name,url,active,active_version_id,version_id,status,implementation_status,configuration_status,target_test_status,source_file,builder_file,export_file,hashes,source_drift,dependencies,settings_requested,settings_observed,missing_settings,readback_comparison,sdk_validation,readback_nodes_validation})=>({

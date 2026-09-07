@@ -19,8 +19,8 @@ from fastapi.responses import JSONResponse
 from pydantic import AwareDatetime
 
 from backend.db import audit, canonical, digest, js, now, outbox, transaction, uid, utcnow
-from backend.domain import aggregate_values, build_plan, evaluate_impact, evaluate_risk, extract_fixture
-from backend.models import ActionCommand, Claim, Decision, Demo, DraftInput, Envelope, ExtractInput, ImpactInput, Login, PlanContext, RiskInput, Stage
+from backend.domain import aggregate_values, build_plan, evaluate_impact, evaluate_risk, extract_fixture, verify_live_extraction
+from backend.models import ActionCommand, Claim, CustomEmail, Decision, Demo, DraftInput, Envelope, ExtractInput, ImpactInput, LiveExtractionInput, Login, PlanContext, RiskInput, Stage
 from backend.security import BodyLimitMiddleware, hashed, origin, passwords, rate_limit, role, safe_message, scope, service, user
 from backend.seed import fixture
 from backend.clock import SLA, add_business_hours
@@ -164,6 +164,41 @@ def context(body:Stage):
 
 @app.post("/internal/extract",dependencies=[Depends(service)])
 def extract(body:ExtractInput): return extract_fixture(body.envelope,body.snapshot)
+
+
+def live_ai_config():
+    try: limit=int(os.getenv("LLM_MAX_CALLS","0"))
+    except ValueError: limit=0
+    model=os.getenv("LLM_MODEL","").strip()
+    enabled=os.getenv("AI_MODE","fixture")=="live" and bool(model) and limit>0
+    return enabled,model,max(0,limit)
+
+
+@app.post("/internal/extract/live/prepare",dependencies=[Depends(service)])
+def prepare_live_extract(body:Stage):
+    enabled,model,limit=live_ai_config()
+    if not enabled: raise HTTPException(503,"Live AI is disabled or missing a bounded model configuration")
+    data=body.model_dump(mode="json",exclude_none=True)
+    envelope=data.get("envelope")
+    if not isinstance(envelope,dict) or envelope.get("source")!="EMAIL" or envelope.get("ai_mode")!="live":
+        raise HTTPException(422,"Live AI requires an EMAIL envelope explicitly marked ai_mode=live")
+    with transaction() as conn:
+        require_job(conn,data)
+        conn.execute("SELECT pg_advisory_xact_lock(hashtext('apic:live-ai-budget'))")
+        existing=conn.execute("SELECT model FROM ops.live_ai_calls WHERE job_id=%s",(body.job_id,)).fetchone()
+        used=conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls").fetchone()["count"]
+        if not existing:
+            if used>=limit: raise HTTPException(429,"The configured live AI call budget is exhausted")
+            conn.execute("INSERT INTO ops.live_ai_calls(job_id,scope_id,model) VALUES (%s,%s,%s)",(body.job_id,body.scope_id,model))
+            used+=1
+    return {**data,"llm_model":existing["model"] if existing else model,"llm_calls_used":used,"llm_calls_limit":limit}
+
+
+@app.post("/internal/extract/live/verify",dependencies=[Depends(service)])
+def verify_live_extract(body:LiveExtractionInput):
+    configured,model,_=live_ai_config()
+    if not configured or body.model!=model: raise HTTPException(409,"Live AI model does not match the bounded runtime configuration")
+    return verify_live_extraction(body.envelope,body.snapshot,body.candidate,body.model)
 
 
 @app.post("/internal/incidents/correlate",dependencies=[Depends(service)])
@@ -312,7 +347,8 @@ def dashboard(conn,sid,updated_after=None,updated_before=None):
     value=aggregate_values([x["body"] for x in impacts])
     pending=conn.execute("SELECT count(*) AS n FROM ops.approvals WHERE scope_id=%s AND status='PENDING'",(sid,)).fetchone()["n"]
     sla=conn.execute("SELECT count(*) AS n FROM ops.outbox_events WHERE scope_id=%s AND kind='SLA'",(sid,)).fetchone()["n"]
-    return {"open_incidents":len(incidents),"critical_incidents":sum(i["severity"]=="CRITICAL" for i in incidents),"affected_open_order_value_cents":value["affected_open_order_value_cents"],"pending_approvals":pending,"sla_breaches":sla,"currency":"EUR","clock":now(conn,sid),"timezone":"Asia/Bangkok","ai_mode":"simulated AI","profile":"DEMO_LOCAL","aggregation":"union of unique open sales positions"}
+    live,_,_=live_ai_config()
+    return {"open_incidents":len(incidents),"critical_incidents":sum(i["severity"]=="CRITICAL" for i in incidents),"affected_open_order_value_cents":value["affected_open_order_value_cents"],"pending_approvals":pending,"sla_breaches":sla,"currency":"EUR","clock":now(conn,sid),"timezone":"Asia/Bangkok","ai_mode":"Live Gemini + verified facts" if live else "Simulated AI","profile":"DEMO_LOCAL","aggregation":"union of unique open sales positions"}
 
 
 @app.get("/api/dashboard")
@@ -417,9 +453,11 @@ def errors(scope_id:UUID,actor=Depends(user)):
 
 @app.get("/api/system")
 def system(scope_id:UUID,actor=Depends(user)):
+    live,model,limit=live_ai_config()
     with transaction() as conn:
         scope(conn,actor,scope_id)
-        return {"profile":"DEMO_LOCAL","ai_mode":"simulated AI","external_actions_enabled":False,"jobs":conn.execute("SELECT id,source_event_id,status,step,attempts,next_attempt_at,execution_id,workflow_id,last_error FROM ops.analysis_jobs WHERE scope_id=%s",(scope_id,)).fetchall(),"outbox":conn.execute("SELECT kind,status,count(*) AS count FROM ops.outbox_events WHERE scope_id=%s GROUP BY kind,status",(scope_id,)).fetchall(),"notifications":conn.execute("SELECT id,body,created_at FROM ops.sandbox_notifications WHERE scope_id=%s ORDER BY created_at DESC",(scope_id,)).fetchall(),"wait_registrations":conn.execute("SELECT scope_id,plan_id,execution_id,workflow_id,registered_at FROM ops.wait_registrations WHERE scope_id=%s",(scope_id,)).fetchall(),"health":{"database":"ready"}}
+        calls=conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls").fetchone()["count"]
+        return {"profile":"DEMO_LOCAL","ai_mode":"Live Gemini + verified facts" if live else "Simulated AI","live_ai":{"enabled":live,"model":model or None,"calls_used":calls,"calls_limit":limit},"external_actions_enabled":False,"jobs":conn.execute("SELECT id,source_event_id,status,step,attempts,next_attempt_at,execution_id,workflow_id,last_error FROM ops.analysis_jobs WHERE scope_id=%s",(scope_id,)).fetchall(),"outbox":conn.execute("SELECT kind,status,count(*) AS count FROM ops.outbox_events WHERE scope_id=%s GROUP BY kind,status",(scope_id,)).fetchall(),"notifications":conn.execute("SELECT id,body,created_at FROM ops.sandbox_notifications WHERE scope_id=%s ORDER BY created_at DESC",(scope_id,)).fetchall(),"wait_registrations":conn.execute("SELECT scope_id,plan_id,execution_id,workflow_id,registered_at FROM ops.wait_registrations WHERE scope_id=%s",(scope_id,)).fetchall(),"health":{"database":"ready"}}
 
 
 def forward_intake(envelope):
@@ -470,6 +508,25 @@ def demo(body:Demo,actor=Depends(user)):
         kind="MACHINE_BREAKDOWN" if body.scenario=="machine-breakdown" else "QUALITY_ISSUE"
         envelope={**base,"source":"API","payload":fixture(kind)["facts"],"subject":body.scenario}
     return {**forward_intake(Envelope(**envelope).model_dump(mode="json")),"scope_id":sid}
+
+
+@app.post("/api/demo/custom-email",status_code=202)
+def custom_email(body:CustomEmail,actor=Depends(user)):
+    role(actor,"operator","purchasing","production_manager","quality_manager","admin")
+    live,_,limit=live_ai_config()
+    if not live: raise HTTPException(503,"Live Gemini mail analysis is not enabled")
+    sid=uid()
+    with transaction() as conn:
+        calls=conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls").fetchone()["count"]
+        if calls>=limit: raise HTTPException(429,"The configured live AI call budget is exhausted")
+        conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,'Demo · Gemini mail',%s,'2026-10-10T01:00:00Z')",(sid,actor["id"]))
+        conn.execute("INSERT INTO ops.memberships SELECT %s,id FROM ops.users WHERE id=%s OR role IN ('production_manager','quality_manager','purchasing','admin')",(sid,actor["id"]))
+        audit(conn,sid,"DEMO_CREATED",sid,actor=str(actor["id"]),data={"scenario":"custom-gemini-email","synthetic":True})
+    erp_call("/erp/v1/demo/seed",{"scope_id":sid,"shipped":False},write=True)
+    envelope=Envelope(scope_id=sid,source="EMAIL",source_account_id="synthetic-custom-mail",
+        source_id=uid(),received_at="2026-10-10T01:00:00Z",correlation_id=uid(),
+        sender="supplier@example.test",subject=body.subject,content_text=body.content_text,ai_mode="live")
+    return {**forward_intake(envelope.model_dump(mode="json")),"scope_id":sid}
 
 
 @app.post("/api/demo/runs/{scope_id}/advance")

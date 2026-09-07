@@ -1,0 +1,71 @@
+{
+  "valid": true,
+  "nodeCount": 19,
+  "warnings": [
+    {
+      "code": "PLAIN_GENERIC_AUTH",
+      "message": "'Claim Analysis Job' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+      "nodeName": "Claim Analysis Job"
+    },
+    {
+      "code": "PLAIN_GENERIC_AUTH",
+      "message": "'Load Source and Snapshot' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+      "nodeName": "Load Source and Snapshot"
+    },
+    {
+      "code": "PLAIN_GENERIC_AUTH",
+      "message": "'Reserve Live AI Budget' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+      "nodeName": "Reserve Live AI Budget"
+    },
+    {
+      "code": "PLAIN_GENERIC_AUTH",
+      "message": "'Verify Gemini Facts' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+      "nodeName": "Verify Gemini Facts"
+    },
+    {
+      "code": "PLAIN_GENERIC_AUTH",
+      "message": "'Fixture or Structured Extraction' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+      "nodeName": "Fixture or Structured Extraction"
+    },
+    {
+      "code": "PLAIN_GENERIC_AUTH",
+      "message": "'Verify and Correlate Revision' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+      "nodeName": "Verify and Correlate Revision"
+    },
+    {
+      "code": "PLAIN_GENERIC_AUTH",
+      "message": "'Complete Analysis Job' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+      "nodeName": "Complete Analysis Job"
+    },
+    {
+      "code": "INVALID_EXPRESSION_PATH",
+      "message": "'Claim Analysis Job' parameter 'jsonBody' uses $json.job_id but no predecessor outputs this field.",
+      "nodeName": "Claim Analysis Job"
+    },
+    {
+      "code": "INVALID_EXPRESSION_PATH",
+      "message": "'Use Live Gemini Extraction' parameter 'conditions.conditions[0].leftValue' uses $json.envelope.ai_mode but no predecessor outputs this field.",
+      "nodeName": "Use Live Gemini Extraction"
+    },
+    {
+      "code": "INVALID_EXPRESSION_PATH",
+      "message": "'Extract Supplier Facts with Gemini' parameter 'messages.values[0].content' uses $json.envelope but no predecessor outputs this field.",
+      "nodeName": "Extract Supplier Facts with Gemini"
+    },
+    {
+      "code": "INVALID_EXPRESSION_PATH",
+      "message": "'Verify Gemini Facts' parameter 'jsonBody' uses $json.candidate but no predecessor outputs this field.",
+      "nodeName": "Verify Gemini Facts"
+    },
+    {
+      "code": "INVALID_EXPRESSION_PATH",
+      "message": "'Fixture or Structured Extraction' parameter 'jsonBody' uses $json.envelope but no predecessor outputs this field.",
+      "nodeName": "Fixture or Structured Extraction"
+    },
+    {
+      "code": "INVALID_EXPRESSION_PATH",
+      "message": "'Current Verified Revision' parameter 'conditions.conditions[0].leftValue' uses $json.skip_analysis but no predecessor outputs this field.",
+      "nodeName": "Current Verified Revision"
+    }
+  ]
+}
