@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "review_seconds": {"CRITICAL": 900, "HIGH": 3600, "MEDIUM": 14400, "LOW": null},
+  "escalation_stages": 2,
+  "approval_expiry_hours": 24,
+  "action_followup_business_hours": 4,
+  "business_calendar": {"timezone": "Asia/Bangkok", "weekdays": [0, 1, 2, 3, 4], "open_hour": 8, "close_hour": 17, "holidays": []},
+  "note": "Synthetic demo policy. No automatic approval. Calendar omits public holidays. n8n Wait uses real runtime time."
+}

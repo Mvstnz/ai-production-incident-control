@@ -1,0 +1,2610 @@
+[
+  {
+    "key": "wf01",
+    "name": "APIC | WF01 | Email Intake",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF01 · Email Intake\nAuthenticated intake → durable event/job transaction → 202 → asynchronous analysis. Idempotency lives in PostgreSQL, not this execution.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Authenticated Intake",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "apic-email",
+          "authentication": "headerAuth",
+          "responseMode": "responseNode",
+          "options": {
+            "allowedOrigins": "http://127.0.0.1:5173"
+          }
+        },
+        "webhookId": "ecbf62eb-d7df-53bb-ab28-ecbaea0aa6cf",
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Webhook Intake"
+          }
+        }
+      },
+      {
+        "name": "Canonical Envelope",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const e=$input.first().json.body; if(!e || JSON.stringify(e).length>65536) throw new Error('INVALID_ENVELOPE_SIZE'); return [{json:e}];"
+        }
+      },
+      {
+        "name": "Commit Source Event",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/source-events",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Durable Acceptance",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {
+            "responseCode": 202
+          }
+        }
+      },
+      {
+        "name": "Start Analysis",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf03"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Authenticated Intake": {
+        "main": [
+          [
+            {
+              "node": "Canonical Envelope",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Canonical Envelope": {
+        "main": [
+          [
+            {
+              "node": "Commit Source Event",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Commit Source Event": {
+        "main": [
+          [
+            {
+              "node": "Durable Acceptance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Durable Acceptance": {
+        "main": [
+          [
+            {
+              "node": "Start Analysis",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf02",
+    "name": "APIC | WF02 | API and Form Intake",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF02 · API and Form Intake\nAuthenticated intake → durable event/job transaction → 202 → asynchronous analysis. Idempotency lives in PostgreSQL, not this execution.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Authenticated Intake",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "apic-intake",
+          "authentication": "headerAuth",
+          "responseMode": "responseNode",
+          "options": {
+            "allowedOrigins": "http://127.0.0.1:5173"
+          }
+        },
+        "webhookId": "8c704cb3-f9d2-5d2f-aa02-3bd4718adfa3",
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Webhook Intake"
+          }
+        }
+      },
+      {
+        "name": "Canonical Envelope",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const e=$input.first().json.body; if(!e || JSON.stringify(e).length>65536) throw new Error('INVALID_ENVELOPE_SIZE'); return [{json:e}];"
+        }
+      },
+      {
+        "name": "Commit Source Event",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/source-events",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Durable Acceptance",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {
+            "responseCode": 202
+          }
+        }
+      },
+      {
+        "name": "Start Analysis",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf03"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        }
+      },
+      {
+        "name": "Authenticated Supplier Form",
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.6,
+        "position": [
+          0,
+          700
+        ],
+        "parameters": {
+          "authentication": "basicAuth",
+          "formTitle": "Report a supplier delay",
+          "formDescription": "Synthetic demo only. Enter confirmed availability; proposed delivery is never treated as confirmed.",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Purchase order",
+                "fieldName": "purchase_order",
+                "fieldType": "text",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "PO position",
+                "fieldName": "purchase_order_item",
+                "fieldType": "text",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Material",
+                "fieldName": "material",
+                "fieldType": "text",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Open quantity (pcs)",
+                "fieldName": "quantity",
+                "fieldType": "text",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Confirmed available at (ISO timestamp with offset)",
+                "fieldName": "available_at",
+                "fieldType": "text",
+                "requiredField": true
+              }
+            ]
+          },
+          "responseMode": "lastNode",
+          "options": {
+            "path": "apic-supplier-form",
+            "respondWithOptions": {
+              "values": {
+                "respondWith": "text",
+                "formSubmittedText": "Report durably recorded. Check the Operations dashboard for verified assessment or clarification."
+              }
+            }
+          }
+        },
+        "webhookId": "apic-supplier-form",
+        "credentials": {
+          "httpBasicAuth": {
+            "name": "APIC Demo Form"
+          }
+        }
+      },
+      {
+        "name": "Form Envelope",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1890,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const d=$json; return [{json:{schema_version:'1.0',scope_id:'928d1daf-6ffe-54e4-8cf3-5d4032986821',source:'FORM',source_account_id:'apic-authenticated-form',source_id:'form-'+$execution.id,received_at:$now.toISO(),correlation_id:'00000000-0000-4000-8000-'+String($execution.id).padStart(12,'0'),sender:'operator@example.test',subject:'Structured supplier delay',content_text:'Authenticated structured supplier form',payload:{incident_type:'SUPPLIER_DELAY',purchase_order:d.purchase_order,purchase_order_item:d.purchase_order_item,material:d.material,confirmed_supply_schedule:[{quantity:Number(d.quantity),available_at:d.available_at,status:'CONFIRMED'}],reason:'Supplier form report'}}}];"
+        }
+      },
+      {
+        "name": "Commit Form Source Event",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          2160,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/source-events",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Start Form Analysis",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2430,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf03"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Authenticated Intake": {
+        "main": [
+          [
+            {
+              "node": "Canonical Envelope",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Canonical Envelope": {
+        "main": [
+          [
+            {
+              "node": "Commit Source Event",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Commit Source Event": {
+        "main": [
+          [
+            {
+              "node": "Durable Acceptance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Durable Acceptance": {
+        "main": [
+          [
+            {
+              "node": "Start Analysis",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Authenticated Supplier Form": {
+        "main": [
+          [
+            {
+              "node": "Form Envelope",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Form Envelope": {
+        "main": [
+          [
+            {
+              "node": "Commit Form Source Event",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Commit Form Source Event": {
+        "main": [
+          [
+            {
+              "node": "Start Form Analysis",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf03",
+    "name": "APIC | WF03 | Normalize Verify and Correlate",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF03 · Normalize Verify and Correlate\nClaim due job → extract supported fixture or structured facts → verify ERP identity → correlate immutable revision. Unknown input requires manual review.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Execution Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+        }
+      },
+      {
+        "name": "Claim Analysis Job",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/jobs/claim",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {job_id:$json.job_id,owner:'n8n:'+$execution.id,limit:1,execution_id:$execution.id,workflow_id:$workflow.id} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Claimed Job",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return ($input.first().json.items||[]).map(j=>({json:{...j,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+        }
+      },
+      {
+        "name": "Load Source and Snapshot",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/jobs/context",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Fixture or Structured Extraction",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1620,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/extract",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {envelope:$json.envelope,snapshot:$json.snapshot} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Bind Extraction",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1890,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return [{json:{...$('Load Source and Snapshot').first().json,extraction:$input.first().json}}];"
+        }
+      },
+      {
+        "name": "Verify and Correlate Revision",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          2160,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/incidents/correlate",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Current Verified Revision",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2430,
+          200
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "bf122387-85b6-574b-96e6-b4345942f94e",
+                "leftValue": "={{ !$json.skip_analysis && $json.status!=='MANUAL_REVIEW' }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "name": "ERP Impact Analysis",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2700,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf04"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        }
+      },
+      {
+        "name": "Risk and Action Plan",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2970,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf05"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        }
+      },
+      {
+        "name": "Complete Analysis Job",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          3240,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/jobs/complete",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Execution Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Context": {
+        "main": [
+          [
+            {
+              "node": "Claim Analysis Job",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claim Analysis Job": {
+        "main": [
+          [
+            {
+              "node": "Claimed Job",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claimed Job": {
+        "main": [
+          [
+            {
+              "node": "Load Source and Snapshot",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Load Source and Snapshot": {
+        "main": [
+          [
+            {
+              "node": "Fixture or Structured Extraction",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fixture or Structured Extraction": {
+        "main": [
+          [
+            {
+              "node": "Bind Extraction",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Bind Extraction": {
+        "main": [
+          [
+            {
+              "node": "Verify and Correlate Revision",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Verify and Correlate Revision": {
+        "main": [
+          [
+            {
+              "node": "Current Verified Revision",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ERP Impact Analysis": {
+        "main": [
+          [
+            {
+              "node": "Risk and Action Plan",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Risk and Action Plan": {
+        "main": [
+          [
+            {
+              "node": "Complete Analysis Job",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Current Verified Revision": {
+        "main": [
+          [
+            {
+              "node": "ERP Impact Analysis",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Complete Analysis Job",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf04",
+    "name": "APIC | WF04 | ERP Impact Analysis",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF04 · ERP Impact Analysis\nRead one immutable ERP snapshot → pure baseline/incident allocation → persist evidence. No formula duplication in n8n.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Impact Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+        }
+      },
+      {
+        "name": "Read Immutable ERP Snapshot",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "url": "={{ 'http://mock-erp:8001/erp/v1/snapshots/'+$json.snapshot_id+'?scope_id='+$json.scope_id }}",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC ERP Read"
+          }
+        }
+      },
+      {
+        "name": "Calculate Temporal Impact",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/impact/evaluate",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {snapshot:$json,facts:$('Impact Context').first().json.facts} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Persist Impact Evidence",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/impact/save",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {...$('Impact Context').first().json,impact:$json} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Impact Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Impact Context": {
+        "main": [
+          [
+            {
+              "node": "Read Immutable ERP Snapshot",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Read Immutable ERP Snapshot": {
+        "main": [
+          [
+            {
+              "node": "Calculate Temporal Impact",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate Temporal Impact": {
+        "main": [
+          [
+            {
+              "node": "Persist Impact Evidence",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf05",
+    "name": "APIC | WF05 | Risk Explanation and Action Plan",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF05 · Risk Explanation and Action Plan\nVersioned risk policy → allowed SOP actions → verified exact drafts → immutable plan and approval/outbox. Simulated AI explicitly disclosed.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Plan Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+        }
+      },
+      {
+        "name": "Evaluate Risk Policy",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/risk/evaluate",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {impact:$json.impact} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Draft Allowed Actions",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/plans/draft",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {impact:$('Plan Context').first().json.impact,risk:$json,incident_id:$('Plan Context').first().json.incident_id,revision:$('Plan Context').first().json.revision} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Commit Versioned Plan",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/plans",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {...$('Plan Context').first().json,risk:$('Evaluate Risk Policy').first().json,plan:$json} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Plan Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Plan Context": {
+        "main": [
+          [
+            {
+              "node": "Evaluate Risk Policy",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Evaluate Risk Policy": {
+        "main": [
+          [
+            {
+              "node": "Draft Allowed Actions",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Draft Allowed Actions": {
+        "main": [
+          [
+            {
+              "node": "Commit Versioned Plan",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf06",
+    "name": "APIC | WF06 | Human Approval",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF06 · Human Approval\nA Wait wakeup is technical only. After waiting, reload the DB decision and revalidate exact plan/version/hash/role before any action. Parent analysis is already complete.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Approval Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+        }
+      },
+      {
+        "name": "Load Authoritative Approvals",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/approvals/context",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Pending Human Decision",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "556da52b-1faa-5c2f-8ba8-8f00abd69ab1",
+                "leftValue": "={{ $json.status==='PENDING' }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "name": "Register Protected Continuation",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/approvals/register-wait",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {...$('Approval Context').first().json,resume_url:$execution.resumeUrl} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Wait for Approval Wakeup",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1620,
+          200
+        ],
+        "parameters": {
+          "resume": "webhook",
+          "httpMethod": "POST",
+          "incomingAuthentication": "headerAuth",
+          "responseMode": "onReceived",
+          "limitWaitTime": true,
+          "limitType": "afterTimeInterval",
+          "resumeAmount": 30,
+          "resumeUnit": "seconds",
+          "options": {
+            "noResponseBody": true
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Webhook Intake"
+          }
+        }
+      },
+      {
+        "name": "Revalidate Decision and Plan",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1890,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/approvals/revalidate",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $('Approval Context').first().json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Authorized Action References",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2160,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const c=$('Approval Context').first().json; return ($json.ready_action_ids||[]).map(id=>({json:{scope_id:c.scope_id,action_id:id}}));"
+        }
+      },
+      {
+        "name": "Execute Approved Action",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2430,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf07"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Approval Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Approval Context": {
+        "main": [
+          [
+            {
+              "node": "Load Authoritative Approvals",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Load Authoritative Approvals": {
+        "main": [
+          [
+            {
+              "node": "Pending Human Decision",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Register Protected Continuation": {
+        "main": [
+          [
+            {
+              "node": "Wait for Approval Wakeup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait for Approval Wakeup": {
+        "main": [
+          [
+            {
+              "node": "Revalidate Decision and Plan",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Revalidate Decision and Plan": {
+        "main": [
+          [
+            {
+              "node": "Authorized Action References",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Authorized Action References": {
+        "main": [
+          [
+            {
+              "node": "Execute Approved Action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pending Human Decision": {
+        "main": [
+          [
+            {
+              "node": "Register Protected Continuation",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Revalidate Decision and Plan",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf07",
+    "name": "APIC | WF07 | Action Execution",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF07 · Action Execution\nAtomic claim rechecks exact current authorization. Adapter supports only local effects; accepted-but-timed-out write is UNKNOWN_OUTCOME and cannot blindly retry. Notification never resolves incident.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Action Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+        }
+      },
+      {
+        "name": "Claim Authorized Action",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/actions/claim",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "May Execute Exact Payload",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "b2442fd3-5663-5882-a86c-6c51ae9afa2a",
+                "leftValue": "={{ $json.can_execute===true }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "name": "Execute Controlled Sandbox Adapter",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/actions/execute",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {scope_id:$('Action Context').first().json.scope_id,action_id:$json.action_id,claim_token:$json.claim_token,execution_id:$execution.id,workflow_id:$workflow.id} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Known Action Outcome",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1620,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return $input.all().map(i=>({json:{action_id:i.json.action_id,status:i.json.status,provider_reference:i.json.provider_reference||null}}));"
+        }
+      }
+    ],
+    "connections": {
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Action Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Action Context": {
+        "main": [
+          [
+            {
+              "node": "Claim Authorized Action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claim Authorized Action": {
+        "main": [
+          [
+            {
+              "node": "May Execute Exact Payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "May Execute Exact Payload": {
+        "main": [
+          [
+            {
+              "node": "Execute Controlled Sandbox Adapter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execute Controlled Sandbox Adapter": {
+        "main": [
+          [
+            {
+              "node": "Known Action Outcome",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf08",
+    "name": "APIC | WF08 | SLA Dispatch and Recovery",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF08 · SLA Dispatch and Recovery\nEvery 60 seconds claim bounded due work. Recover leases, outstanding decisions and outbox; deduplicate each SLA stage. Business clock does not alter n8n Wait time.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Every Minute",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.4,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 1
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Protected Recovery Test",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "apic-recovery",
+          "authentication": "headerAuth",
+          "responseMode": "lastNode",
+          "options": {
+            "allowedOrigins": "http://127.0.0.1:5173"
+          }
+        },
+        "webhookId": "3d9a7a05-5ecc-595d-8c69-e24e4b91757f",
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Webhook Intake"
+          }
+        }
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Recovery Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return [{json:{execution_id:$execution.id,workflow_id:$workflow.id}}];"
+        }
+      },
+      {
+        "name": "Recover Due Work and SLA",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/recovery",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      },
+      {
+        "name": "Due Jobs",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1620,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return ($json.jobs||[]).map(x=>({json:x}));"
+        }
+      },
+      {
+        "name": "Dispatch WF03",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1890,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf03"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        }
+      },
+      {
+        "name": "Due Approval Plans",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2160,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return ($json.plans||[]).map(x=>({json:x}));"
+        }
+      },
+      {
+        "name": "Dispatch WF06",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2430,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf06"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        }
+      },
+      {
+        "name": "Due Actions",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2700,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return ($json.actions||[]).map(x=>({json:x}));"
+        }
+      },
+      {
+        "name": "Dispatch WF07",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          2970,
+          200
+        ],
+        "parameters": {
+          "source": "database",
+          "workflowId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "wf07"
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        }
+      },
+      {
+        "name": "Due Wakeups",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3240,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "return ($json.wakeups||[]).map(x=>({json:x}));"
+        }
+      },
+      {
+        "name": "Send Protected Wakeup",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          3510,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $json.resume_url }}",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "options": {
+            "timeout": 5000,
+            "response": {
+              "response": {
+                "neverError": true,
+                "fullResponse": true
+              }
+            }
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Webhook Intake"
+          }
+        }
+      },
+      {
+        "name": "Wakeup Accepted",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3780,
+          200
+        ],
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "71109397-bfcf-5ffc-aea3-03b78e4148c1",
+                "leftValue": "={{ $json.statusCode>=200 && $json.statusCode<300 }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        }
+      },
+      {
+        "name": "Acknowledge Wakeup",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          4050,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/outbox/ack",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {scope_id:$('Due Wakeups').item.json.scope_id,event_id:$('Due Wakeups').item.json.event_id} }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Recover Due Work and SLA": {
+        "main": [
+          [
+            {
+              "node": "Due Jobs",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Due Approval Plans",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Due Actions",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Due Wakeups",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Due Jobs": {
+        "main": [
+          [
+            {
+              "node": "Dispatch WF03",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Due Approval Plans": {
+        "main": [
+          [
+            {
+              "node": "Dispatch WF06",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Due Actions": {
+        "main": [
+          [
+            {
+              "node": "Dispatch WF07",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Due Wakeups": {
+        "main": [
+          [
+            {
+              "node": "Send Protected Wakeup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send Protected Wakeup": {
+        "main": [
+          [
+            {
+              "node": "Wakeup Accepted",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wakeup Accepted": {
+        "main": [
+          [
+            {
+              "node": "Acknowledge Wakeup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Every Minute": {
+        "main": [
+          [
+            {
+              "node": "Recovery Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Protected Recovery Test": {
+        "main": [
+          [
+            {
+              "node": "Recovery Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Recovery Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recovery Context": {
+        "main": [
+          [
+            {
+              "node": "Recover Due Work and SLA",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf09",
+    "name": "APIC | WF09 | Error and Dead Letter Handler",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF09 · Error and Dead Letter Handler\nReal automatic Error Trigger and explicit test/subworkflow input. Redact raw supplier text and credentials; bounded retry stays in DB. No self-error recursion.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Automatic Execution Error",
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {}
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Protected Error Harness",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "apic-error",
+          "authentication": "headerAuth",
+          "responseMode": "lastNode",
+          "options": {
+            "allowedOrigins": "http://127.0.0.1:5173"
+          }
+        },
+        "webhookId": "02e39ddb-b495-5699-8a8e-3fa620cd9721",
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Webhook Intake"
+          }
+        }
+      },
+      {
+        "name": "Safe Error Metadata",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const e=$input.first().json.body||$input.first().json; const err=e.execution?.error||{}; const status=Number(e.status_code||err.httpCode||err.statusCode||err.context?.httpCode)||null; const delay=Number(e.retry_after||err.context?.retryAfter)||null; return [{json:{scope_id:e.scope_id||null,job_id:e.job_id||null,execution_id:String(e.execution?.id||e.execution_id||$execution.id),workflow_id:e.workflow?.id||e.workflow_id||$workflow.id,status_code:status,retry_after:delay,error_class:e.error_class||(status && status<500 && status!==429?'PERMANENT':'TRANSIENT'),message:e.error_class==='PERMANENT'?'Permanent workflow configuration failure':'Workflow execution failed; inspect authorized runtime logs'}}];"
+        }
+      },
+      {
+        "name": "Record Error and Classify Retry",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/errors",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Automatic Execution Error": {
+        "main": [
+          [
+            {
+              "node": "Safe Error Metadata",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Safe Error Metadata",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Protected Error Harness": {
+        "main": [
+          [
+            {
+              "node": "Safe Error Metadata",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Safe Error Metadata": {
+        "main": [
+          [
+            {
+              "node": "Record Error and Classify Retry",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "wf10",
+    "name": "APIC | WF10 | Daily Management Digest",
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "Asia/Bangkok",
+      "saveDataErrorExecution": "all",
+      "saveDataSuccessExecution": "all",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "wf09"
+    },
+    "nodes": [
+      {
+        "name": "Purpose",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          -270
+        ],
+        "parameters": {
+          "content": "## WF10 · Daily Management Digest\nOne digest per scope, Bangkok business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.\n\nSynthetic data · simulated AI · local sandbox only.",
+          "height": 190,
+          "width": 700
+        }
+      },
+      {
+        "name": "Daily at 08 Bangkok",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.4,
+        "position": [
+          270,
+          200
+        ],
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 8 * * *"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Workflow Input",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          540,
+          200
+        ],
+        "parameters": {
+          "inputSource": "passthrough"
+        }
+      },
+      {
+        "name": "Protected Digest Test",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          810,
+          200
+        ],
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "apic-digest",
+          "authentication": "headerAuth",
+          "responseMode": "lastNode",
+          "options": {
+            "allowedOrigins": "http://127.0.0.1:5173"
+          }
+        },
+        "webhookId": "95db3f5a-b4d7-5bc5-aa69-5d229f26a441",
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Webhook Intake"
+          }
+        }
+      },
+      {
+        "name": "Digest Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1080,
+          200
+        ],
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "javaScript",
+          "jsCode": "const d=$input.first().json.body||$input.first().json; return [{json:{scope_id:d.scope_id||null,execution_id:$execution.id,workflow_id:$workflow.id}}];"
+        }
+      },
+      {
+        "name": "Commit Consistent Sandbox Digest",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1350,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "http://ops-api:8000/internal/digest",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "credentials": {
+          "httpHeaderAuth": {
+            "name": "APIC Operations Service"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Daily at 08 Bangkok": {
+        "main": [
+          [
+            {
+              "node": "Digest Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Workflow Input": {
+        "main": [
+          [
+            {
+              "node": "Digest Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Protected Digest Test": {
+        "main": [
+          [
+            {
+              "node": "Digest Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Digest Context": {
+        "main": [
+          [
+            {
+              "node": "Commit Consistent Sandbox Digest",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  }
+]
+

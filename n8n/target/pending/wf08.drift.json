@@ -1,0 +1,13 @@
+{
+  "key": "wf08",
+  "status": "BLOCKED_UPDATE",
+  "target_id": "K8yUTKNLA2WyHJUU",
+  "source_snapshot_sha256": "77aebfe8aa20601abe01904649b4ad3faeb110974fbb4a1a31c0de627f128226",
+  "current_source_sha256": "4cd48f6fc30c40d47e1d1bd2d6e85a02f035b37403cffc57508903e0d4f007c1",
+  "current_builder_sha256": "59b26511fede82ce34671afbfe7e2c342cf6d95158c52cc7a7da09f279feeded",
+  "changed_nodes": [
+    "Protected Recovery Test"
+  ],
+  "connections_changed": false,
+  "target_updated": false
+}

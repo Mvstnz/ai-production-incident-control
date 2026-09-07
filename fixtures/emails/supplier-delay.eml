@@ -1,0 +1,27 @@
+From: Planning Team <planning@asia-precision.example>
+To: Demo Purchasing <purchasing@demo-plant.example>
+Date: Mon, 12 Oct 2026 08:00:00 +0700
+Message-ID: <supplier-delay-4500192-10-v1@asia-precision.example>
+Subject: Delivery Update - PO 4500192 / Item 10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+
+Dear Purchasing Team,
+
+Due to capacity problems in our heat treatment department, we cannot meet
+the confirmed delivery date for PO 4500192, item 10.
+
+Material: SHAFT-DN300
+Open order quantity: 40 pcs
+Original confirmed delivery: 12 October 2026, 08:00 Asia/Bangkok
+New confirmed delivery: 19 October 2026, 08:00 Asia/Bangkok
+
+We may be able to ship 10 pcs on 13 October 2026, 08:00 Asia/Bangkok.
+This partial shipment is not yet confirmed and would be part of the
+existing total of 40 pcs, not an additional quantity.
+
+Best regards,
+Planning Team
+Asia Precision Components
+
+Synthetic portfolio fixture - not a real supplier message.

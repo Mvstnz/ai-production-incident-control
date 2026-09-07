@@ -1,0 +1,18 @@
+{
+  "name": "ai-production-incident-control",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "dashboard"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace dashboard",
+    "typecheck": "npm run typecheck --workspace dashboard",
+    "dev": "npm run dev --workspace dashboard"
+  },
+  "devDependencies": {
+    "prettier": "3.9.6",
+    "typescript": "5.9.3"
+  }
+}

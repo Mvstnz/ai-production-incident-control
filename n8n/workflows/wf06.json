@@ -1,0 +1,341 @@
+{
+  "id": "APICWF0600000001",
+  "name": "APIC | WF06 | Human Approval",
+  "active": false,
+  "nodes": [
+    {
+      "id": "ba007db6-3899-5ae7-8e63-b9c286e505fc",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF06 · Human Approval\nA Wait wakeup is technical only. After waiting, reload the DB decision and revalidate exact plan/version/hash/role before any action. Parent analysis is already complete.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "be78ceb7-d561-5eed-b6c6-1d69ff81b364",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "2f8810d3-ad3d-543e-8281-163100315b2e",
+      "name": "Approval Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "645c8856-df90-5ef5-ac55-3b9d62e46f21",
+      "name": "Load Authoritative Approvals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/approvals/context",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "044bcad0-e1ee-5ce7-9bbf-47b81a4e7cb9",
+      "name": "Pending Human Decision",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "556da52b-1faa-5c2f-8ba8-8f00abd69ab1",
+              "leftValue": "={{ $json.status==='PENDING' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "16cbd6e9-95c6-5e6b-903a-daa559db6023",
+      "name": "Register Protected Continuation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/approvals/register-wait",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {...$('Approval Context').first().json,resume_url:$execution.resumeUrl} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "ffc0da95-b5c3-5493-901f-4eaccf3621b3",
+      "name": "Wait for Approval Wakeup",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1620,
+        200
+      ],
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "incomingAuthentication": "headerAuth",
+        "responseMode": "onReceived",
+        "limitWaitTime": true,
+        "limitType": "afterTimeInterval",
+        "resumeAmount": 30,
+        "resumeUnit": "seconds",
+        "options": {
+          "noResponseBody": true
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicWebhook001",
+          "name": "APIC Webhook Intake"
+        }
+      }
+    },
+    {
+      "id": "c23aade1-de66-5b32-8293-aaafdcf7ad1b",
+      "name": "Revalidate Decision and Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1890,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/approvals/revalidate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $('Approval Context').first().json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "84eb2089-cbdc-59c1-a428-13b8ddef8bf1",
+      "name": "Authorized Action References",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const c=$('Approval Context').first().json; return ($json.ready_action_ids||[]).map(id=>({json:{scope_id:c.scope_id,action_id:id}}));"
+      }
+    },
+    {
+      "id": "7fee7f81-8077-5e64-9f90-40f704fa7380",
+      "name": "Execute Approved Action",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2430,
+        200
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "APICWF0700000001"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Approval Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approval Context": {
+      "main": [
+        [
+          {
+            "node": "Load Authoritative Approvals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Authoritative Approvals": {
+      "main": [
+        [
+          {
+            "node": "Pending Human Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register Protected Continuation": {
+      "main": [
+        [
+          {
+            "node": "Wait for Approval Wakeup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Approval Wakeup": {
+      "main": [
+        [
+          {
+            "node": "Revalidate Decision and Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revalidate Decision and Plan": {
+      "main": [
+        [
+          {
+            "node": "Authorized Action References",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authorized Action References": {
+      "main": [
+        [
+          {
+            "node": "Execute Approved Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pending Human Decision": {
+      "main": [
+        [
+          {
+            "node": "Register Protected Continuation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Revalidate Decision and Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "pinData": {},
+  "tags": []
+}

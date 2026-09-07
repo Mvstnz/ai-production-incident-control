@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "external_actions_enabled_default": false,
+  "recipient_allowlist": ["supplier@example.test", "operations@example.test"],
+  "actions": {
+    "INTERNAL_TICKET": {"required_role": null, "automatic": true, "adapter": "sandbox"},
+    "SUPPLIER_EMAIL": {"required_role": "purchasing", "critical_role": "production_manager", "automatic": false, "adapter": "sandbox_mail"},
+    "RESCHEDULE": {"required_role": "production_manager", "automatic": false, "adapter": "mock_erp"},
+    "QUALITY_BLOCK": {"required_role": "quality_manager", "automatic": false, "adapter": "mock_erp"},
+    "QUALITY_RELEASE": {"required_role": "quality_manager", "automatic": false, "adapter": "mock_erp", "requires_separate_disposition_evidence": true}
+  }
+}

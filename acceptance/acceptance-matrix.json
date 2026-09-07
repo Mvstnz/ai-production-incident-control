@@ -1,0 +1,394 @@
+{
+  "spec_version": "1.1",
+  "note": "Executed local evidence only. Target runtime and live model evaluation are separate; blocked or unexecuted checks are never passed.",
+  "criteria": [
+    {
+      "id": "AC01",
+      "test": "Frischer lokaler Start",
+      "expected": "Dienste healthy; Seeds/Migrationen bereit; Demo ohne externe Konten nutzbar.",
+      "status": "NOT_RUN",
+      "evidence": [
+        "evidence/test-results/github-ci.json"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC02",
+      "test": "Zweiter Bootstrap/Deploy",
+      "expected": "Keine doppelten Workflow-IDs/Seeds/Aktionen; persistente Daten bleiben erhalten.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/test-results/rebootstrap.json"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC03",
+      "test": "Liefer-Hero Baseline",
+      "expected": "38 Bedarf, 14 verfügbar, 24 Fehlmenge; drei geprüft, zwei betroffen; €126.400; 88 CRITICAL.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#hero_baseline_and_proposed_partial"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC04",
+      "test": "Nur angebotene zehn Stück",
+      "expected": "Baseline bleibt unverändert; Angebot nur als Was-wäre-wenn sichtbar.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#hero_baseline_and_proposed_partial"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC05",
+      "test": "Bestätigter Split 10 + 30",
+      "expected": "Insgesamt 40 Zugang; 14 Fehlmenge; ein betroffener MO; €54.400; 69 HIGH.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#confirmed_split_replaces_supply_and_revises"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC06",
+      "test": "Zehn identische Quellen gleichzeitig",
+      "expected": "Ein Source Event und ein fachlicher Incident; keine doppelten externen Aktionen.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#parallel_deduplication_and_cross_channel_correlation"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC07",
+      "test": "Mail + Formular, dieselben Fakten",
+      "expected": "Zwei Quellen verknüpft, ein Incident, identische Revision nicht doppelt bewertet.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#parallel_deduplication_and_cross_channel_correlation"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC08",
+      "test": "Neue Meldung, Terminänderung",
+      "expected": "Neue Revision desselben aktiven Incidents; Altbewertung erhalten, passende Approvals superseded.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#confirmed_split_replaces_supply_and_revises"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC09",
+      "test": "Mehrere passende PO-Positionen / fehlendes Jahr",
+      "expected": "MANUAL_REVIEW mit konkretem Klärungsgrund; keine erfundene Zuordnung.",
+      "status": "PASS",
+      "evidence": [
+        "docs/implementation/api-integration-output.txt",
+        "tests/integration/test_acceptance_edges.py"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC10",
+      "test": "Reservierter/gesperrter Bestand",
+      "expected": "Keine Anrechnung als freier Bestand und kein Doppelabzug eigener Reservierungen.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/test-results/domain-junit.xml",
+        "docs/implementation/api-integration-output.txt"
+      ],
+      "verification_scope": "DEMO_LOCAL",
+      "note": "test_own_reservation_is_protected_without_double_subtraction; test_lot_inventory_excludes_blocked_and_foreign_reservations"
+    },
+    {
+      "id": "AC11",
+      "test": "Gleiche Kundenposition in zwei Incidents",
+      "expected": "Dashboard-Gesamtwert zählt die Position einmal.",
+      "status": "PASS",
+      "evidence": [
+        "docs/implementation/api-integration-output.txt",
+        "tests/integration/test_acceptance_edges.py"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC12",
+      "test": "Prompt Injection im Mailtext",
+      "expected": "Keine Tools/URLs/Empfänger aus injizierter Anweisung; Fakten validiert oder Review.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/test-results/domain-junit.xml",
+        "docs/implementation/api-integration-output.txt"
+      ],
+      "verification_scope": "DEMO_LOCAL",
+      "note": "test_unknown_free_text_and_prompt_injection_never_automated; test_unknown_and_injection_are_manual_review"
+    },
+    {
+      "id": "AC13",
+      "test": "Falsche LLM-Zahl im Entwurf",
+      "expected": "Draft wird verworfen/korrigiert mit Template oder Review; nicht ungesehen versendet.",
+      "status": "PASS",
+      "evidence": [
+        "docs/implementation/api-integration-output.txt",
+        "tests/integration/test_acceptance_edges.py"
+      ],
+      "verification_scope": "DEMO_LOCAL",
+      "note": "Exact API boundary scenario; no live LLM call."
+    },
+    {
+      "id": "AC14",
+      "test": "Approve derselben Version zweimal",
+      "expected": "Ein gültiger Konsum; Aktion höchstens einmal im Sandbox-Provider.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#approval_replay_early_decision_and_delivery"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC15",
+      "test": "Approval vor tatsächlicher Wait-Bereitschaft",
+      "expected": "Entscheidung bleibt gespeichert; Workflow wird später fortgesetzt.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#approval_replay_early_decision_and_delivery"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC16",
+      "test": "Abgelehnt / geändert / abgelaufen",
+      "expected": "Kein unzulässiger Dispatch; Modify erzeugt neue Version/Freigabe; Incident bleibt offen.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/resilience.json#rejected_plan_never_dispatches_supplier_email",
+        "evidence/workflow-runs/resilience.json#modified_plan_requires_new_exact_approval",
+        "evidence/workflow-runs/resilience.json#expired_plan_prevents_late_approval"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC17",
+      "test": "Alte Freigabe nach neuem Plan",
+      "expected": "Konflikt; keine Aktion für veraltete Fakten.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/resilience.json#superseded_approval_rejected_after_new_revision"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC18",
+      "test": "Viewer / manipulierte Rolle / Token-Replay",
+      "expected": "Serverseitig verhindert; GET-Link allein bewirkt keine Entscheidung.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#runtime_auth_csrf_scope_boundaries"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC19",
+      "test": "Provider erfolgreich, Client-Timeout",
+      "expected": "UNKNOWN_OUTCOME oder belegte Reconciliation; kein blindes erneutes Senden.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#accepted_write_timeout_does_not_resend"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC20",
+      "test": "Temporärer API-Fehler / 429",
+      "expected": "Begrenzte Retries, Backoff/Retry-After; am Ende Erfolg oder nachvollziehbare DLQ.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/resilience.json#ERP_503_stops_after_four_attempts_in_DLQ",
+        "evidence/workflow-runs/resilience.json#ERP_429_respects_retry_after_then_recovers"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC21",
+      "test": "DB-Ausfall vor Ingestion-Commit",
+      "expected": "Kein falsches 202; Quelle sicher erneut zustellbar; Runtime-Fehler sichtbar.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/resilience.json#database_outage_no_false_202_and_safe_redelivery"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC22",
+      "test": "Restart während Wartestatus / nach Outbox-Commit",
+      "expected": "Wiederanlauf aus DB; keine verlorene Freigabe und keine doppelte Wirkung.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/resilience.json#registered_wait_and_committed_approval_outbox_survive_n8n_restart"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC23",
+      "test": "Fällige SLA mehrfach geprüft",
+      "expected": "Pro Plan/Stufe nur eine Eskalation; keine automatische Freigabe.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/resilience.json#SLA_stages_are_unique_and_never_auto_approve"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC24",
+      "test": "Maschinenfixture",
+      "expected": "Qualifizierte Alternative belegt; Capacity Gap korrekt; Score 52 HIGH; Umplanung nur genehmigt.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#machine_approved_mock_erp_reschedule"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC25",
+      "test": "Verifiziert defekte Charge in offener Lieferung",
+      "expected": "Trace korrekt; CRITICAL-Hard-Override; Mock-Sperre nur mit Quality-Freigabe.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#quality_trace_and_quality_manager_approval"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC26",
+      "test": "Meldung ohne bestätigten Qualitätsbeleg",
+      "expected": "Dringende Klärung statt erfundener bestätigter Prüfung.",
+      "status": "PASS",
+      "evidence": [
+        "docs/implementation/api-integration-output.txt",
+        "tests/integration/test_acceptance_edges.py"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC27",
+      "test": "Supplier-Mail wurde gesendet",
+      "expected": "Incident bleibt MONITORING, bis fachliche Erledigung nachgewiesen ist.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#approval_replay_early_decision_and_delivery"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC28",
+      "test": "Digest zweimal für gleichen Tag",
+      "expected": "Ein Bericht je Scope/Datum/Kanal; Zahlen identisch mit KPI-API.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#daily_digest_is_idempotent"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC29",
+      "test": "Demo-Reset",
+      "expected": "Nur eigener synthetischer Scope verändert; keine fremden Workflows/Daten berührt.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/resilience.json#reset_only_changes_owned_synthetic_scope"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC30",
+      "test": "Export-/Repo-Geheimnisscan",
+      "expected": "Keine Secrets, echten Rohmails oder privaten Kundendaten.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/test-results/secret-scan.json"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC31",
+      "test": "Zielinstanz-Test",
+      "expected": "Zehn Projektworkflows gelesen/deployed; durchgeführte E2E-Läufe mit Execution-IDs belegt.",
+      "status": "BLOCKED",
+      "evidence": [
+        "evidence/workflow-runs/target-deployment.json",
+        "n8n/target/manifest.json",
+        "docs/BLOCKERS.md"
+      ],
+      "verification_scope": "CONNECTED_SANDBOX",
+      "note": "Ten target workflows created and read back. Zero target executions; update/execute approval gate and required reachable endpoints/credentials missing."
+    },
+    {
+      "id": "AC32",
+      "test": "Evaluation-Bericht",
+      "expected": "Fixture vs. Live klar getrennt; Modell-/Datensatzversion und Nenner angegeben; nicht gelaufen ist nicht bestanden.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/evaluations/fixture-v1-report.json"
+      ],
+      "verification_scope": "DEMO_LOCAL",
+      "note": "50 deterministic fixture cases; development/holdout denominators and versions reported. LIVE_EVAL_NOT_RUN; no model-performance claim."
+    },
+    {
+      "id": "AC33",
+      "test": "Nicht vollständige bzw. gemischte ERP-Snapshots",
+      "expected": "Keine scheinbar verlässliche Bewertung aus inkonsistentem Datenstand.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/test-results/domain-junit.xml",
+        "docs/implementation/api-integration-output.txt"
+      ],
+      "verification_scope": "DEMO_LOCAL",
+      "note": "test_mixed_or_incomplete_snapshots; test_immutable_snapshot_and_cross_scope_foreign_key"
+    },
+    {
+      "id": "AC34",
+      "test": "API-Auth, CSRF, Scope-Isolation",
+      "expected": "Fremdscope/unerlaubte Mutation verhindert; Service- und User-Rechte nicht austauschbar.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/workflow-runs/local-e2e.json#runtime_auth_csrf_scope_boundaries"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC35",
+      "test": "LOW-Incident mit externer Mailaktion",
+      "expected": "Trotzdem fachliche Freigabe erforderlich.",
+      "status": "PASS",
+      "evidence": [
+        "docs/implementation/api-integration-output.txt",
+        "tests/integration/test_acceptance_edges.py"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    },
+    {
+      "id": "AC36",
+      "test": "n8n Canvas / Dashboard Konsistenz",
+      "expected": "Sichtbare Statuswerte und gespeicherte Ergebnisse stimmen mit echten Executions überein.",
+      "status": "PASS",
+      "evidence": [
+        "evidence/test-results/browser.json",
+        "evidence/screenshots/n8n-action-execution-670.png",
+        "evidence/screenshots/dashboard-actions.png"
+      ],
+      "verification_scope": "DEMO_LOCAL"
+    }
+  ],
+  "evaluated_at": "2026-09-07T12:36:47.193290+00:00",
+  "summary": {
+    "PASS": 34,
+    "FAIL": 0,
+    "BLOCKED": 1,
+    "NOT_RUN": 1
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "id": "APICWF0200000001",
+  "name": "APIC | WF02 | API and Form Intake",
+  "active": false,
+  "nodes": [
+    {
+      "id": "c742b83c-ef06-5633-8c9d-fecabd0ecbef",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF02 · API and Form Intake\nAuthenticated intake → durable event/job transaction → 202 → asynchronous analysis. Idempotency lives in PostgreSQL, not this execution.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "49b92d8c-1ca5-5ccb-9ba3-5333b39edb5d",
+      "name": "Authenticated Intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "apic-intake",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "http://127.0.0.1:5173"
+        }
+      },
+      "webhookId": "8c704cb3-f9d2-5d2f-aa02-3bd4718adfa3",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicWebhook001",
+          "name": "APIC Webhook Intake"
+        }
+      }
+    },
+    {
+      "id": "fe95a970-8f67-5840-a8cc-549d44f1f230",
+      "name": "Canonical Envelope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const e=$input.first().json.body; if(!e || JSON.stringify(e).length>65536) throw new Error('INVALID_ENVELOPE_SIZE'); return [{json:e}];"
+      }
+    },
+    {
+      "id": "1ffc4aba-3277-524d-9536-e4d904516ec4",
+      "name": "Commit Source Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/source-events",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "22c23474-307f-5190-8281-cbc8f774feec",
+      "name": "Durable Acceptance",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 202
+        }
+      }
+    },
+    {
+      "id": "d89d170a-83bb-5486-a8ed-248f793b5b30",
+      "name": "Start Analysis",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "APICWF0300000001"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      }
+    },
+    {
+      "id": "f5709c1d-40c1-5a85-ac43-f07fa3de4f6f",
+      "name": "Authenticated Supplier Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        700
+      ],
+      "parameters": {
+        "authentication": "basicAuth",
+        "formTitle": "Report a supplier delay",
+        "formDescription": "Synthetic demo only. Enter confirmed availability; proposed delivery is never treated as confirmed.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Purchase order",
+              "fieldName": "purchase_order",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "PO position",
+              "fieldName": "purchase_order_item",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Material",
+              "fieldName": "material",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Open quantity (pcs)",
+              "fieldName": "quantity",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Confirmed available at (ISO timestamp with offset)",
+              "fieldName": "available_at",
+              "fieldType": "text",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "path": "apic-supplier-form",
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Report durably recorded. Check the Operations dashboard for verified assessment or clarification."
+            }
+          }
+        }
+      },
+      "webhookId": "apic-supplier-form",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "apicForm000001",
+          "name": "APIC Demo Form"
+        }
+      }
+    },
+    {
+      "id": "a249bbbf-39f7-5d1f-ad27-02f476229a06",
+      "name": "Form Envelope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1890,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const d=$json; return [{json:{schema_version:'1.0',scope_id:'928d1daf-6ffe-54e4-8cf3-5d4032986821',source:'FORM',source_account_id:'apic-authenticated-form',source_id:'form-'+$execution.id,received_at:$now.toISO(),correlation_id:'00000000-0000-4000-8000-'+String($execution.id).padStart(12,'0'),sender:'operator@example.test',subject:'Structured supplier delay',content_text:'Authenticated structured supplier form',payload:{incident_type:'SUPPLIER_DELAY',purchase_order:d.purchase_order,purchase_order_item:d.purchase_order_item,material:d.material,confirmed_supply_schedule:[{quantity:Number(d.quantity),available_at:d.available_at,status:'CONFIRMED'}],reason:'Supplier form report'}}}];"
+      }
+    },
+    {
+      "id": "e80fad45-c7e2-52e9-81d7-dd44a0783f96",
+      "name": "Commit Form Source Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2160,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/source-events",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "d6770f2a-a24b-5c08-be2c-646ea9042316",
+      "name": "Start Form Analysis",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2430,
+        200
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "APICWF0300000001"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Authenticated Intake": {
+      "main": [
+        [
+          {
+            "node": "Canonical Envelope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Canonical Envelope": {
+      "main": [
+        [
+          {
+            "node": "Commit Source Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commit Source Event": {
+      "main": [
+        [
+          {
+            "node": "Durable Acceptance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Durable Acceptance": {
+      "main": [
+        [
+          {
+            "node": "Start Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authenticated Supplier Form": {
+      "main": [
+        [
+          {
+            "node": "Form Envelope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form Envelope": {
+      "main": [
+        [
+          {
+            "node": "Commit Form Source Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commit Form Source Event": {
+      "main": [
+        [
+          {
+            "node": "Start Form Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "pinData": {},
+  "tags": []
+}

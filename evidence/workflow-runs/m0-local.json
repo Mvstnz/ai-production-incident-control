@@ -1,0 +1,26 @@
+{
+  "profile": "DEMO_LOCAL",
+  "workflow_id": "APICPROBE0000001",
+  "runs": [
+    {
+      "status": "PASS",
+      "result": {
+        "project": "apic-portfolio",
+        "probe": 42,
+        "execution_id": "1"
+      },
+      "unauthenticated_status": "REJECTED",
+      "tested_at": "2026-09-07T11:09:24Z"
+    },
+    {
+      "status": "PASS",
+      "result": {
+        "project": "apic-portfolio",
+        "probe": 42,
+        "execution_id": "2"
+      },
+      "unauthenticated_status": "REJECTED",
+      "tested_at": "2026-09-07T11:13:02Z"
+    }
+  ]
+}

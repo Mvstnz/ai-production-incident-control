@@ -1,0 +1,174 @@
+{
+  "key": "wf09",
+  "name": "APIC | WF09 | Error and Dead Letter Handler",
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "nodes": [
+    {
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF09 · Error and Dead Letter Handler\nReal automatic Error Trigger and explicit test/subworkflow input. Redact raw supplier text and credentials; bounded retry stays in DB. No self-error recursion.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "name": "Automatic Execution Error",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "name": "Protected Error Harness",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "apic-error",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {
+          "allowedOrigins": "http://127.0.0.1:5173"
+        }
+      },
+      "webhookId": "02e39ddb-b495-5699-8a8e-3fa620cd9721",
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "APIC Webhook Intake"
+        }
+      }
+    },
+    {
+      "name": "Safe Error Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const e=$input.first().json.body||$input.first().json; const err=e.execution?.error||{}; const status=Number(e.status_code||err.httpCode||err.statusCode||err.context?.httpCode)||null; const delay=Number(e.retry_after||err.context?.retryAfter)||null; return [{json:{scope_id:e.scope_id||null,job_id:e.job_id||null,execution_id:String(e.execution?.id||e.execution_id||$execution.id),workflow_id:e.workflow?.id||e.workflow_id||$workflow.id,status_code:status,retry_after:delay,error_class:e.error_class||(status && status<500 && status!==429?'PERMANENT':'TRANSIENT'),message:e.error_class==='PERMANENT'?'Permanent workflow configuration failure':'Workflow execution failed; inspect authorized runtime logs'}}];"
+      }
+    },
+    {
+      "name": "Record Error and Classify Retry",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://configure-apic-ops.invalid/internal/errors",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "name": "Target Configuration BLOCKED",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -720
+      ],
+      "parameters": {
+        "content": "## BLOCKED — inactive / unpublished\nConfigure authorized Operations and ERP HTTPS endpoints and missing APIC credentials before any separately authorized execution.\n\nhttps://configure-apic-ops.invalid and https://configure-apic-erp.invalid are deliberately non-routable configuration placeholders. Preserve every endpoint path. Dynamic wakeup URLs must be backend-validated for the authorized n8n host and protected by APIC Webhook Intake.\n\nWorkflow settings (Asia/Bangkok, caller policy, retention and shared WF09 error routing) are pending: no documented SDK creation settings; update is blocked by the approval gate. WF09 must remain unpublished. No runtime test has run.",
+        "width": 980,
+        "height": 390,
+        "color": 3
+      }
+    }
+  ],
+  "connections": {
+    "Automatic Execution Error": {
+      "main": [
+        [
+          {
+            "node": "Safe Error Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Safe Error Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protected Error Harness": {
+      "main": [
+        [
+          {
+            "node": "Safe Error Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Safe Error Metadata": {
+      "main": [
+        [
+          {
+            "node": "Record Error and Classify Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

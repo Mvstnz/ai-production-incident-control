@@ -1,0 +1,16 @@
+{
+  "fixture_version": "1.0",
+  "data_classification": "SYNTHETIC_ONLY",
+  "incident_type": "QUALITY_ISSUE",
+  "analysis_time": "2026-10-10T08:00:00+07:00",
+  "currency": "EUR",
+  "inventory_lots": [{"lot_id": "LOT-Q100", "material": "SEAL-DN300", "physical_quantity": 20, "quality_status": "QUARANTINED"}],
+  "quality_inspections": [{"inspection_id": "QI-100", "lot_id": "LOT-Q100", "material": "SEAL-DN300", "verified": true, "result": "FAILED", "inspected_quantity": 20, "defect_type": "Dimensional tolerance failure", "inspected_at": "2026-10-10T07:30:00+07:00"}],
+  "shipments": [{"shipment_id": "SHIP-100", "status": "PENDING", "scheduled_at": "2026-10-11T08:00:00+07:00"}],
+  "shipment_items": [{"shipment_item_id": "SHIP-100/10", "shipment_id": "SHIP-100", "sales_line": "SO-4001/10", "open_quantity": 20, "open_net_line_value_cents": 3600000, "customer_due_at": "2026-10-11T08:00:00+07:00", "strategic_customer": false}],
+  "lot_allocations": [{"lot_id": "LOT-Q100", "shipment_item_id": "SHIP-100/10", "quantity": 20}],
+  "replacement_available_at": "2026-10-14T08:00:00+07:00",
+  "qualified_alternative_available": false,
+  "facts": {"incident_type": "QUALITY_ISSUE", "lot_id": "LOT-Q100", "inspection_id": "QI-100", "material": "SEAL-DN300", "reported_quantity": 20, "defect_type": "Dimensional tolerance failure"},
+  "expected": {"blockable_quantity": 20, "shipped_quantity": 0, "hard_override": "VERIFIED_DEFECTIVE_LOT_PENDING_SHIPMENT", "severity": "CRITICAL", "required_role": "quality_manager"}
+}

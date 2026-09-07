@@ -1,0 +1,3429 @@
+{
+  "schema_version": "1.0",
+  "project": "apic-portfolio",
+  "subtask": "Bounded inactive target deployment",
+  "repository": {
+    "branch": "main",
+    "commit": null,
+    "note": "No commits existed; concurrent uncommitted parent work preserved. Writes restricted to n8n/target/, this evidence file and docs/implementation/target-deployment.md."
+  },
+  "target": {
+    "endpoint": "https://mvstnz1.app.n8n.cloud/mcp-server/http",
+    "project_id": "YS0S0X7u4Oc458ln",
+    "instance_version": null,
+    "instance_version_status": "UNKNOWN: not exposed by authorized MCP",
+    "target_test_status": "NOT_RUN"
+  },
+  "status": "BLOCKED",
+  "implementation_status": "IMPLEMENTED",
+  "target_test_status": "NOT_RUN",
+  "execution_ids": [],
+  "scope": {
+    "published": false,
+    "executed": false,
+    "credentials_created": false,
+    "update_workflow_called": false,
+    "execute_workflow_called": false,
+    "alternate_transports_used": false,
+    "foreign_workflows_touched": false,
+    "forbidden_foreign_ids": [
+      "zkTKdNAJ8L1X6AqP",
+      "3bLubRLjNjvSORwO"
+    ],
+    "preserved_probe": "Fm2mFkzgF0jwFJEA"
+  },
+  "expected_create_order": [
+    "wf09",
+    "wf07",
+    "wf06",
+    "wf05",
+    "wf04",
+    "wf03",
+    "wf01",
+    "wf02",
+    "wf10",
+    "wf08"
+  ],
+  "actual_create_order": [
+    "wf09",
+    "wf07",
+    "wf05",
+    "wf06",
+    "wf04",
+    "wf03",
+    "wf01",
+    "wf02",
+    "wf10",
+    "wf08"
+  ],
+  "creation_order_deviation": "WF06 initially failed read-only SDK validation for OutputSelector wiring; WF05 was created before corrected WF06. All actual dependency prerequisites were created before their callers; no duplicate or update was used.",
+  "sdk_recovery": {
+    "workflow": "wf06",
+    "initial_validation": {
+      "valid": false,
+      "errors": [
+        "Failed to parse generated workflow code: Cannot pass an OutputSelector to .add(). Pending Human Decision.output(1) by itself does not connect anything; chain `.to(target)` on the selector first to produce a connection. Example: .add(Pending Human Decision.output(1).to(targetNode)) — not .add(Pending Human Decision.output(1)).to(targetNode)."
+      ],
+      "hint": "The code failed to parse as n8n Workflow SDK code. This usually means it does not follow the required SDK patterns. Before retrying, call get_workflow_sdk_reference to read the Workflow SDK reference. Use workflow(), trigger()/node(), .add()/.to(), expr(), and newCredential() exactly as documented. Rewrite the code using the documented patterns, then call validate_workflow again before creating or updating a workflow."
+    },
+    "fix": "Use .add(source.output(1).to(target)) for a selector connection; retrieved SDK functions reference again before revalidation.",
+    "mutating_attempt_before_valid": false
+  },
+  "initial_inventory": {
+    "data": [
+      {
+        "id": "Fm2mFkzgF0jwFJEA",
+        "name": "APIC | M0 | Runtime Probe",
+        "description": "Synthetic apic-portfolio runtime probe. Manual Trigger and Code return project=apic-portfolio and probe=42 without network access, credentials, or messages.",
+        "active": false,
+        "createdAt": "2026-09-07T11:00:02.686Z",
+        "updatedAt": "2026-09-07T11:00:02.686Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      }
+    ],
+    "count": 1
+  },
+  "final_inventory": {
+    "data": [
+      {
+        "id": "K8yUTKNLA2WyHJUU",
+        "name": "APIC | WF08 | SLA Dispatch and Recovery",
+        "description": "apic-portfolio: recover due jobs, approval plans, actions and protected wakeups through visible dispatch branches. BLOCKED configuration; inactive, unpublished, runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:40:38.089Z",
+        "updatedAt": "2026-09-07T11:40:38.089Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "anfiXs99aCeeg1g4",
+        "name": "APIC | WF10 | Daily Management Digest",
+        "description": "apic-portfolio: Daily Management Digest. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:39:43.563Z",
+        "updatedAt": "2026-09-07T11:39:43.563Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "BGz4AwLb1Y6S4Zfv",
+        "name": "APIC | WF02 | API and Form Intake",
+        "description": "apic-portfolio: API and Form Intake. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:39:33.040Z",
+        "updatedAt": "2026-09-07T11:39:33.040Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "chlrLWx22aB9AELo",
+        "name": "APIC | WF01 | Email Intake",
+        "description": "apic-portfolio: Email Intake. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:39:22.027Z",
+        "updatedAt": "2026-09-07T11:39:22.027Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "6tHziLEHudpdk5hk",
+        "name": "APIC | WF03 | Normalize Verify and Correlate",
+        "description": "apic-portfolio: Normalize Verify and Correlate. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:38:29.623Z",
+        "updatedAt": "2026-09-07T11:38:29.623Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "JidtBtBq79j2UeUU",
+        "name": "APIC | WF04 | ERP Impact Analysis",
+        "description": "apic-portfolio: ERP Impact Analysis. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:38:19.048Z",
+        "updatedAt": "2026-09-07T11:38:19.048Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "oBliSIngBBWlmj17",
+        "name": "APIC | WF06 | Human Approval",
+        "description": "apic-portfolio: Human Approval. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:38:08.948Z",
+        "updatedAt": "2026-09-07T11:38:08.948Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "DaGeYQsYvTTBkzpA",
+        "name": "APIC | WF05 | Risk Explanation and Action Plan",
+        "description": "apic-portfolio: Risk Explanation and Action Plan. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:36:53.221Z",
+        "updatedAt": "2026-09-07T11:36:53.221Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "NwyqBStHsct30JQZ",
+        "name": "APIC | WF07 | Action Execution",
+        "description": "apic-portfolio: Action Execution. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+        "active": false,
+        "createdAt": "2026-09-07T11:36:37.435Z",
+        "updatedAt": "2026-09-07T11:36:37.435Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "KF1ttQVhDbDHBDmY",
+        "name": "APIC | WF09 | Error and Dead Letter Handler",
+        "description": "apic-portfolio: classify sanitized workflow errors and bounded retries through Operations API. BLOCKED configuration; inactive/unpublished and unexecuted.",
+        "active": false,
+        "createdAt": "2026-09-07T11:35:15.695Z",
+        "updatedAt": "2026-09-07T11:35:15.695Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      },
+      {
+        "id": "Fm2mFkzgF0jwFJEA",
+        "name": "APIC | M0 | Runtime Probe",
+        "description": "Synthetic apic-portfolio runtime probe. Manual Trigger and Code return project=apic-portfolio and probe=42 without network access, credentials, or messages.",
+        "active": false,
+        "createdAt": "2026-09-07T11:00:02.686Z",
+        "updatedAt": "2026-09-07T11:00:02.686Z",
+        "triggerCount": 0,
+        "availableInMCP": true,
+        "parentFolderId": null,
+        "tags": []
+      }
+    ],
+    "count": 11
+  },
+  "credential_inventory": {
+    "count": 0,
+    "data": []
+  },
+  "prior_gate": {
+    "source": "evidence/workflow-runs/m0-target-probe.json",
+    "message": "MCP tool call requires approval, but approval policy is never",
+    "tools": [
+      "mcp__n8n__execute_workflow",
+      "mcp__n8n__update_workflow"
+    ],
+    "retried": false
+  },
+  "blockers": [
+    {
+      "id": "MISSING_HTTPS_ENDPOINTS",
+      "status": "BLOCKED",
+      "detail": "No authorized reachable Operations or ERP HTTPS endpoints are configured. Reserved .invalid hosts replace Compose origins and preserve endpoint paths.",
+      "ops_origin": "https://configure-apic-ops.invalid",
+      "erp_origin": "https://configure-apic-erp.invalid"
+    },
+    {
+      "id": "MISSING_CREDENTIALS",
+      "status": "BLOCKED",
+      "detail": "SDK newCredential markers declare missing credential requirements only. Actual target readbacks have no credential bindings. No credential resource or secret was created.",
+      "names": [
+        "APIC Operations Service",
+        "APIC ERP Read",
+        "APIC Webhook Intake",
+        "APIC Demo Form"
+      ]
+    },
+    {
+      "id": "WORKFLOW_SETTINGS",
+      "status": "BLOCKED",
+      "detail": "Exposed SDK reference has no documented workflow settings creation signature; create_workflow_from_code has no settings argument. Readback settings only executionOrder=v1 and availableInMCP=true. Asia/Bangkok timezone, caller policy, execution retention and WF09 routing are unconfigured. update_workflow is forbidden by prior approval gate."
+    },
+    {
+      "id": "ERROR_WORKFLOW_UNPUBLISHED",
+      "status": "BLOCKED",
+      "target_id": "KF1ttQVhDbDHBDmY",
+      "detail": "Shared error routing requires WF09 to be published before linking according to MCP guidance. Publication was deferred for this blocked deployment pass; errorWorkflow is not configured."
+    },
+    {
+      "id": "TARGET_EXECUTION_PROHIBITED",
+      "status": "BLOCKED",
+      "detail": "User authorized target deployment and testing. The parent bounded this creation/readback pass to inactive workflows because update/execute were rejected by the automatic approval gate and required network/credentials are missing. Runtime and E2E verification NOT_RUN."
+    },
+    {
+      "id": "AUTH_SCHEMA_DISCREPANCY",
+      "status": "BLOCKED",
+      "detail": "Wait 1.1 TypeScript definition lists incomingAuthentication basicAuth|none, while returned credential schema includes httpHeaderAuth and target node/full SDK validators accept the preserved headerAuth config. Readback preserves headerAuth; runtime behavior remains unverified and must be checked before any later publication."
+    },
+    {
+      "id": "DEPLOYMENT_ORIGINS",
+      "status": "BLOCKED",
+      "detail": "Original localhost allowedOrigins values were preserved with the source node parameters. Configure an explicitly authorized HTTPS dashboard origin, backend n8n wait/resume host allowlist and webhook mappings as part of a future authorized deployment."
+    },
+    {
+      "id": "SOURCE_DRIFT",
+      "status": "BLOCKED",
+      "workflows": [
+        "wf04",
+        "wf08"
+      ],
+      "detail": "Concurrent local source changed after deployment snapshot; target graph preserves the captured snapshot. Update remains forbidden."
+    }
+  ],
+  "warning_interpretation": {
+    "PLAIN_GENERIC_AUTH": "Preserved explicit project httpHeaderAuth requirements. MCP warns that generic credential setup may reject newly provisioned plain generic credentials. No credentials were provisioned; resolve supported binding later without silently changing auth contracts.",
+    "INVALID_EXPRESSION_PATH": "Builder output samples are empty objects and do not describe API/Code runtime response fields. Warnings are retained, not treated as runtime success. Code strings and expressions match source; actual outputs are untested."
+  },
+  "workflows": [
+    {
+      "key": "wf01",
+      "id": "chlrLWx22aB9AELo",
+      "name": "APIC | WF01 | Email Intake",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/chlrLWx22aB9AELo",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "2b425e3c-d452-4d59-905b-5a93e1dfe3e7",
+      "created_at": "2026-09-07T11:39:22.027Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf01.json",
+      "builder_file": "n8n/target/wf01.builder.ts",
+      "export_file": "n8n/target/wf01.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "chlrLWx22aB9AELo",
+        "name": "APIC | WF01 | Email Intake",
+        "nodeCount": 7,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/chlrLWx22aB9AELo",
+        "note": "HTTP Request nodes (Commit Source Event) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Source Event' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Source Event"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Authenticated Intake",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Canonical Envelope",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Commit Source Event",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Durable Acceptance",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Start Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 7,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Source Event' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Source Event"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Authenticated Intake",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Canonical Envelope",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Commit Source Event",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Durable Acceptance",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Start Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 6,
+        "requested_node_count": 7,
+        "returned_node_count": 7,
+        "edge_count": 4,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Authenticated Intake",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Webhook Intake"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Commit Source Event",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "e8eeebdc06610b58582569a772e071a5d3aee23a0a1a1267abeef2409d164506",
+        "export_sha256": "08038cb6301e8aa763a02a37cbf79b8e544ae942112af1b9bbfa50b673ff3f0b",
+        "current_source_file_sha256": "f5193966c83da9775f498d5223591e505a2562e33da361cb23cbb7908367a481",
+        "source_snapshot_sha256": "8d65aad4c23af487591bd9c1cd430a4805149b1b6239551737b643772ea383f7",
+        "expected_graph_sha256": "f2f9943fc28833abca0e6ceb735ce70252c89defad31a9463abcce38c28c24c2",
+        "readback_graph_sha256": "b99dd60a7fd7df73f33303c72c08f06769b45bde0c8470cfec3abb2a97f7beae"
+      },
+      "source_drift": false,
+      "dependencies": [
+        {
+          "node": "Start Analysis",
+          "target_id": "6tHziLEHudpdk5hk",
+          "wait_for_subworkflow": false
+        }
+      ],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": null
+    },
+    {
+      "key": "wf02",
+      "id": "BGz4AwLb1Y6S4Zfv",
+      "name": "APIC | WF02 | API and Form Intake",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/BGz4AwLb1Y6S4Zfv",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "42fc0a86-e6dd-4a2e-b5ab-31d9c39f4a2c",
+      "created_at": "2026-09-07T11:39:33.040Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf02.json",
+      "builder_file": "n8n/target/wf02.builder.ts",
+      "export_file": "n8n/target/wf02.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "BGz4AwLb1Y6S4Zfv",
+        "name": "APIC | WF02 | API and Form Intake",
+        "nodeCount": 11,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/BGz4AwLb1Y6S4Zfv",
+        "note": "HTTP Request nodes (Commit Source Event, Commit Form Source Event) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Source Event' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Source Event"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Form Source Event' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Form Source Event"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Authenticated Intake",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Canonical Envelope",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Commit Source Event",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Durable Acceptance",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Start Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Authenticated Supplier Form",
+            "type": "n8n-nodes-base.formTrigger",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Form Envelope",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Commit Form Source Event",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Start Form Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 11,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Source Event' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Source Event"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Form Source Event' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Form Source Event"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Authenticated Intake",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Canonical Envelope",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Commit Source Event",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Durable Acceptance",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Start Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Authenticated Supplier Form",
+            "type": "n8n-nodes-base.formTrigger",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Form Envelope",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Commit Form Source Event",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Start Form Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 10,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 10,
+        "requested_node_count": 11,
+        "returned_node_count": 11,
+        "edge_count": 7,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Authenticated Intake",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Webhook Intake"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Commit Source Event",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Authenticated Supplier Form",
+            "required": {
+              "httpBasicAuth": {
+                "name": "APIC Demo Form"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Commit Form Source Event",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "e5fd7c5ac8415f7ff2fb4c0c5899fad569bbb34f50088b3674650cfb74612d34",
+        "export_sha256": "9c670d640629b8ba6764b503304bb4398ce6ddd3903c7f336347694e02a59300",
+        "current_source_file_sha256": "eb00c5e23ec16d57516f6bc2e2d2cc63e989c683e86491a4212018b341ad20d4",
+        "source_snapshot_sha256": "f71147ddcf84a441e6bd8c92229c88006a2bb82624b5ad6b077715e5ba8211fe",
+        "expected_graph_sha256": "e09f0c713e9ea45d9b0430ad2e775ea2c6520bb801ad4c3639ff129099f9426b",
+        "readback_graph_sha256": "75a66e1c848da22bf39bbdf67e800f297a8cc3a48acb9383bd12faab71110e95"
+      },
+      "source_drift": false,
+      "dependencies": [
+        {
+          "node": "Start Analysis",
+          "target_id": "6tHziLEHudpdk5hk",
+          "wait_for_subworkflow": false
+        },
+        {
+          "node": "Start Form Analysis",
+          "target_id": "6tHziLEHudpdk5hk",
+          "wait_for_subworkflow": false
+        }
+      ],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": null
+    },
+    {
+      "key": "wf03",
+      "id": "6tHziLEHudpdk5hk",
+      "name": "APIC | WF03 | Normalize Verify and Correlate",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/6tHziLEHudpdk5hk",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "647fc8e4-69f6-4f1d-bf44-f9c270660848",
+      "created_at": "2026-09-07T11:38:29.623Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf03.json",
+      "builder_file": "n8n/target/wf03.builder.ts",
+      "export_file": "n8n/target/wf03.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "6tHziLEHudpdk5hk",
+        "name": "APIC | WF03 | Normalize Verify and Correlate",
+        "nodeCount": 14,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/6tHziLEHudpdk5hk",
+        "note": "HTTP Request nodes (Claim Analysis Job, Load Source and Snapshot, Fixture or Structured Extraction, Verify and Correlate Revision, Complete Analysis Job) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Claim Analysis Job' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Claim Analysis Job"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Load Source and Snapshot' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Load Source and Snapshot"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Fixture or Structured Extraction' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Fixture or Structured Extraction"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Verify and Correlate Revision' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Verify and Correlate Revision"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Complete Analysis Job' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Complete Analysis Job"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Claim Analysis Job' parameter 'jsonBody' uses $json.job_id but no predecessor outputs this field.",
+            "nodeName": "Claim Analysis Job"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Fixture or Structured Extraction' parameter 'jsonBody' uses $json.envelope but no predecessor outputs this field.",
+            "nodeName": "Fixture or Structured Extraction"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Current Verified Revision' parameter 'conditions.conditions[0].leftValue' uses $json.skip_analysis but no predecessor outputs this field.",
+            "nodeName": "Current Verified Revision"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Execution Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Claim Analysis Job",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Claimed Job",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Load Source and Snapshot",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Fixture or Structured Extraction",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Bind Extraction",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Verify and Correlate Revision",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Current Verified Revision",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 10,
+            "name": "ERP Impact Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 11,
+            "name": "Risk and Action Plan",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 12,
+            "name": "Complete Analysis Job",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 14,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Claim Analysis Job' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Claim Analysis Job"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Load Source and Snapshot' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Load Source and Snapshot"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Fixture or Structured Extraction' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Fixture or Structured Extraction"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Verify and Correlate Revision' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Verify and Correlate Revision"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Complete Analysis Job' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Complete Analysis Job"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Claim Analysis Job' parameter 'jsonBody' uses $json.job_id but no predecessor outputs this field.",
+            "nodeName": "Claim Analysis Job"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Fixture or Structured Extraction' parameter 'jsonBody' uses $json.envelope but no predecessor outputs this field.",
+            "nodeName": "Fixture or Structured Extraction"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Current Verified Revision' parameter 'conditions.conditions[0].leftValue' uses $json.skip_analysis but no predecessor outputs this field.",
+            "nodeName": "Current Verified Revision"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Execution Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Claim Analysis Job",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Claimed Job",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Load Source and Snapshot",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Fixture or Structured Extraction",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Bind Extraction",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Verify and Correlate Revision",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Current Verified Revision",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 10,
+            "name": "ERP Impact Analysis",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 11,
+            "name": "Risk and Action Plan",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 12,
+            "name": "Complete Analysis Job",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 13,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 13,
+        "requested_node_count": 14,
+        "returned_node_count": 14,
+        "edge_count": 12,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Claim Analysis Job",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Load Source and Snapshot",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Fixture or Structured Extraction",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Verify and Correlate Revision",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Complete Analysis Job",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "8dec1f2ccb30f5f211c504ed8e76513678eda663da40b72677f140c0216fbdac",
+        "export_sha256": "6f60fa0f4b00e99c3d866e231186987117a2ba0d07462d021478bb24eb103aa5",
+        "current_source_file_sha256": "aa856c108fc05e1546017c9c17e30d239198c7086a54ad2fd9cfabdf199e28ee",
+        "source_snapshot_sha256": "57873231e6431fc3bb90a7d11ebb2013feb3acd6123ef824b3c77a34983732a1",
+        "expected_graph_sha256": "3b1c06ee8aca19353891b46b46eff5a5b3d862dc277e45b7ceb22bbe3b47e1a3",
+        "readback_graph_sha256": "3c2ea37dbe5820894b9e14daf6c1eb00df503beaacf66a98f38a34553dc148bf"
+      },
+      "source_drift": false,
+      "dependencies": [
+        {
+          "node": "ERP Impact Analysis",
+          "target_id": "JidtBtBq79j2UeUU",
+          "wait_for_subworkflow": true
+        },
+        {
+          "node": "Risk and Action Plan",
+          "target_id": "DaGeYQsYvTTBkzpA",
+          "wait_for_subworkflow": true
+        }
+      ],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": null
+    },
+    {
+      "key": "wf04",
+      "id": "JidtBtBq79j2UeUU",
+      "name": "APIC | WF04 | ERP Impact Analysis",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/JidtBtBq79j2UeUU",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "3470d691-bfde-4c40-afdc-ed8c6f9c5ee3",
+      "created_at": "2026-09-07T11:38:19.048Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf04.json",
+      "builder_file": "n8n/target/wf04.builder.ts",
+      "export_file": "n8n/target/wf04.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "JidtBtBq79j2UeUU",
+        "name": "APIC | WF04 | ERP Impact Analysis",
+        "nodeCount": 7,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/JidtBtBq79j2UeUU",
+        "note": "HTTP Request nodes (Read Immutable ERP Snapshot, Calculate Temporal Impact, Persist Impact Evidence) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Read Immutable ERP Snapshot' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Read Immutable ERP Snapshot"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Calculate Temporal Impact' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Calculate Temporal Impact"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Persist Impact Evidence' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Persist Impact Evidence"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Read Immutable ERP Snapshot' parameter 'url' uses $json.snapshot_id but no predecessor outputs this field.",
+            "nodeName": "Read Immutable ERP Snapshot"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Impact Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Read Immutable ERP Snapshot",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Calculate Temporal Impact",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Persist Impact Evidence",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 7,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Read Immutable ERP Snapshot' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Read Immutable ERP Snapshot"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Calculate Temporal Impact' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Calculate Temporal Impact"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Persist Impact Evidence' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Persist Impact Evidence"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Read Immutable ERP Snapshot' parameter 'url' uses $json.snapshot_id but no predecessor outputs this field.",
+            "nodeName": "Read Immutable ERP Snapshot"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Impact Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Read Immutable ERP Snapshot",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Calculate Temporal Impact",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Persist Impact Evidence",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 6,
+        "requested_node_count": 7,
+        "returned_node_count": 7,
+        "edge_count": 4,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Read Immutable ERP Snapshot",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC ERP Read"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Calculate Temporal Impact",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Persist Impact Evidence",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "d022511e91f1bcc84bff29dae860dceecf3c230fa0cb0fc3526eb3a2289d67b4",
+        "export_sha256": "455b8d9f8863eeb467242895f6543777d44ff512293166088c46547ec963ae0f",
+        "current_source_file_sha256": "12195532637d4bb8a3b12fcd9adb67f4d0a8504c362d9f40fda6f1df01a57184",
+        "source_snapshot_sha256": "5edcf320f2f3c111b96b09b0288e84efbcc11b4c75e2581c80ff428887028ccf",
+        "expected_graph_sha256": "fd63a7497e9d613a80b347b4cf5eca00aa70295340bc0b0d92eda997df59a586",
+        "readback_graph_sha256": "ab33f89c65dcbf12bf44912b587e5915432765ddd0e81543b669acf19d8ac35e"
+      },
+      "source_drift": true,
+      "dependencies": [],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": {
+        "status": "BLOCKED_UPDATE",
+        "builder_file": "n8n/target/pending/wf04.builder.ts",
+        "details": {
+          "key": "wf04",
+          "status": "BLOCKED_UPDATE",
+          "target_id": "JidtBtBq79j2UeUU",
+          "source_snapshot_sha256": "5edcf320f2f3c111b96b09b0288e84efbcc11b4c75e2581c80ff428887028ccf",
+          "current_source_sha256": "12195532637d4bb8a3b12fcd9adb67f4d0a8504c362d9f40fda6f1df01a57184",
+          "current_builder_sha256": "59577d139ad1c2b1d532e0da92a1e8ceed827d5e0621e4f6e4de724f7c1d1453",
+          "changed_nodes": [
+            "Read Immutable ERP Snapshot",
+            "ERP Snapshot Read Succeeded",
+            "Calculate Temporal Impact",
+            "Persist Impact Evidence",
+            "Preserve ERP Retry Metadata",
+            "Persist Failed Snapshot Read",
+            "Stop Failed Analysis"
+          ],
+          "connections_changed": true,
+          "target_updated": false
+        },
+        "sdk_validation": {
+          "key": "wf04",
+          "status": "VALIDATED_NOT_DEPLOYED",
+          "target_test_status": "NOT_RUN",
+          "builder_sha256": "59577d139ad1c2b1d532e0da92a1e8ceed827d5e0621e4f6e4de724f7c1d1453",
+          "validation": {
+            "valid": true,
+            "nodeCount": 11,
+            "warnings": [
+              {
+                "code": "PLAIN_GENERIC_AUTH",
+                "message": "'Read Immutable ERP Snapshot' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+                "nodeName": "Read Immutable ERP Snapshot"
+              },
+              {
+                "code": "PLAIN_GENERIC_AUTH",
+                "message": "'Calculate Temporal Impact' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+                "nodeName": "Calculate Temporal Impact"
+              },
+              {
+                "code": "PLAIN_GENERIC_AUTH",
+                "message": "'Persist Impact Evidence' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+                "nodeName": "Persist Impact Evidence"
+              },
+              {
+                "code": "PLAIN_GENERIC_AUTH",
+                "message": "'Persist Failed Snapshot Read' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+                "nodeName": "Persist Failed Snapshot Read"
+              },
+              {
+                "code": "INVALID_EXPRESSION_PATH",
+                "message": "'Read Immutable ERP Snapshot' parameter 'url' uses $json.snapshot_id but no predecessor outputs this field.",
+                "nodeName": "Read Immutable ERP Snapshot"
+              },
+              {
+                "code": "INVALID_EXPRESSION_PATH",
+                "message": "'ERP Snapshot Read Succeeded' parameter 'conditions.conditions[0].leftValue' uses $json.statusCode but no predecessor outputs this field.",
+                "nodeName": "ERP Snapshot Read Succeeded"
+              },
+              {
+                "code": "INVALID_EXPRESSION_PATH",
+                "message": "'Calculate Temporal Impact' parameter 'jsonBody' uses $json.body but no predecessor outputs this field.",
+                "nodeName": "Calculate Temporal Impact"
+              }
+            ]
+          }
+        },
+        "validation_matches_builder": true,
+        "sdk_status": "VALIDATED_NOT_DEPLOYED"
+      }
+    },
+    {
+      "key": "wf05",
+      "id": "DaGeYQsYvTTBkzpA",
+      "name": "APIC | WF05 | Risk Explanation and Action Plan",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/DaGeYQsYvTTBkzpA",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "2b78bd13-5ca8-4611-ba41-92d3dc220fa8",
+      "created_at": "2026-09-07T11:36:53.221Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf05.json",
+      "builder_file": "n8n/target/wf05.builder.ts",
+      "export_file": "n8n/target/wf05.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "DaGeYQsYvTTBkzpA",
+        "name": "APIC | WF05 | Risk Explanation and Action Plan",
+        "nodeCount": 7,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/DaGeYQsYvTTBkzpA",
+        "note": "HTTP Request nodes (Evaluate Risk Policy, Draft Allowed Actions, Commit Versioned Plan) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Evaluate Risk Policy' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Evaluate Risk Policy"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Draft Allowed Actions' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Draft Allowed Actions"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Versioned Plan' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Versioned Plan"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Evaluate Risk Policy' parameter 'jsonBody' uses $json.impact but no predecessor outputs this field.",
+            "nodeName": "Evaluate Risk Policy"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Plan Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Evaluate Risk Policy",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Draft Allowed Actions",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Commit Versioned Plan",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 7,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Evaluate Risk Policy' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Evaluate Risk Policy"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Draft Allowed Actions' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Draft Allowed Actions"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Versioned Plan' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Versioned Plan"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Evaluate Risk Policy' parameter 'jsonBody' uses $json.impact but no predecessor outputs this field.",
+            "nodeName": "Evaluate Risk Policy"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Plan Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Evaluate Risk Policy",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Draft Allowed Actions",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Commit Versioned Plan",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 6,
+        "requested_node_count": 7,
+        "returned_node_count": 7,
+        "edge_count": 4,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Evaluate Risk Policy",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Draft Allowed Actions",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Commit Versioned Plan",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "da0694cfaf5f40cc9297bfcb10d1497d8b87396a0e55e8322e0accf1770dce03",
+        "export_sha256": "037c44531d0e6b9b2e2e2c094265018ba8626e7ac80aee6e796b11d2f8979513",
+        "current_source_file_sha256": "d9eabda44261d00fd7fcc58770e2e48a4eb4f120d5a9421d353a4a1f356fd88b",
+        "source_snapshot_sha256": "dc7653237bcb9b8eddb0575939347d73c77ec7c1d65ac09c4b1ae7d2bbc09ef1",
+        "expected_graph_sha256": "21e79edfe3c91b1e0761797826e3c586970db97bf420f2ace47fbcea052f3519",
+        "readback_graph_sha256": "b1cefc4dd6f71a883e4cbcb09efa3254747bc49943479a14deae6705f7b246c1"
+      },
+      "source_drift": false,
+      "dependencies": [],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": null
+    },
+    {
+      "key": "wf06",
+      "id": "oBliSIngBBWlmj17",
+      "name": "APIC | WF06 | Human Approval",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/oBliSIngBBWlmj17",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "abc093b0-6fb9-4094-ad3a-2ad030774f1c",
+      "created_at": "2026-09-07T11:38:08.948Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf06.json",
+      "builder_file": "n8n/target/wf06.builder.ts",
+      "export_file": "n8n/target/wf06.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "oBliSIngBBWlmj17",
+        "name": "APIC | WF06 | Human Approval",
+        "nodeCount": 11,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/oBliSIngBBWlmj17",
+        "note": "HTTP Request nodes (Load Authoritative Approvals, Register Protected Continuation, Revalidate Decision and Plan) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Load Authoritative Approvals' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Load Authoritative Approvals"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Register Protected Continuation' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Register Protected Continuation"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Revalidate Decision and Plan' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Revalidate Decision and Plan"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Pending Human Decision' parameter 'conditions.conditions[0].leftValue' uses $json.status but no predecessor outputs this field.",
+            "nodeName": "Pending Human Decision"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Approval Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Load Authoritative Approvals",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Pending Human Decision",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Register Protected Continuation",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Wait for Approval Wakeup",
+            "type": "n8n-nodes-base.wait",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Revalidate Decision and Plan",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Authorized Action References",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Execute Approved Action",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 11,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Load Authoritative Approvals' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Load Authoritative Approvals"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Register Protected Continuation' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Register Protected Continuation"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Revalidate Decision and Plan' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Revalidate Decision and Plan"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Pending Human Decision' parameter 'conditions.conditions[0].leftValue' uses $json.status but no predecessor outputs this field.",
+            "nodeName": "Pending Human Decision"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Approval Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Load Authoritative Approvals",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Pending Human Decision",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Register Protected Continuation",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Wait for Approval Wakeup",
+            "type": "n8n-nodes-base.wait",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Revalidate Decision and Plan",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Authorized Action References",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Execute Approved Action",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 10,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 10,
+        "requested_node_count": 11,
+        "returned_node_count": 11,
+        "edge_count": 9,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Load Authoritative Approvals",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Register Protected Continuation",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Wait for Approval Wakeup",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Webhook Intake"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Revalidate Decision and Plan",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "439e044dfc35d34849d068c562e1185034f77505f5f33e2bf6412ca6729096c3",
+        "export_sha256": "c351e53c2ebda93b371494011e03ef3e9b1f26904475c31dce917e336207ccc4",
+        "current_source_file_sha256": "1ab88ed2ff7d552de66e2fb6472dee6b3eee1355ad83c3a55ba3e95f3fb40912",
+        "source_snapshot_sha256": "cc56cb90aaee1252dcb16cf49d39c6d40d196b4ee4cd480776d016b9c7e3220b",
+        "expected_graph_sha256": "a36aef29dd09656a44bb0a3467eeefa701229af2eb643e00d97ef061ce02e0ee",
+        "readback_graph_sha256": "53db7675a53ef7596459eb45bdadb1f87355ca355a6c9c5f9a90dcdfc58bdfb9"
+      },
+      "source_drift": false,
+      "dependencies": [
+        {
+          "node": "Execute Approved Action",
+          "target_id": "NwyqBStHsct30JQZ",
+          "wait_for_subworkflow": true
+        }
+      ],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": null
+    },
+    {
+      "key": "wf07",
+      "id": "NwyqBStHsct30JQZ",
+      "name": "APIC | WF07 | Action Execution",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/NwyqBStHsct30JQZ",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "e37202d8-0278-447f-8dce-4cdd32bb7f99",
+      "created_at": "2026-09-07T11:36:37.435Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf07.json",
+      "builder_file": "n8n/target/wf07.builder.ts",
+      "export_file": "n8n/target/wf07.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "NwyqBStHsct30JQZ",
+        "name": "APIC | WF07 | Action Execution",
+        "nodeCount": 8,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/NwyqBStHsct30JQZ",
+        "note": "HTTP Request nodes (Claim Authorized Action, Execute Controlled Sandbox Adapter) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Claim Authorized Action' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Claim Authorized Action"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Execute Controlled Sandbox Adapter' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Execute Controlled Sandbox Adapter"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'May Execute Exact Payload' parameter 'conditions.conditions[0].leftValue' uses $json.can_execute but no predecessor outputs this field.",
+            "nodeName": "May Execute Exact Payload"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Execute Controlled Sandbox Adapter' parameter 'jsonBody' uses $json.action_id but no predecessor outputs this field.",
+            "nodeName": "Execute Controlled Sandbox Adapter"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Action Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Claim Authorized Action",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "May Execute Exact Payload",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Execute Controlled Sandbox Adapter",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Known Action Outcome",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 8,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Claim Authorized Action' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Claim Authorized Action"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Execute Controlled Sandbox Adapter' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Execute Controlled Sandbox Adapter"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'May Execute Exact Payload' parameter 'conditions.conditions[0].leftValue' uses $json.can_execute but no predecessor outputs this field.",
+            "nodeName": "May Execute Exact Payload"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Execute Controlled Sandbox Adapter' parameter 'jsonBody' uses $json.action_id but no predecessor outputs this field.",
+            "nodeName": "Execute Controlled Sandbox Adapter"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Action Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Claim Authorized Action",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "May Execute Exact Payload",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Execute Controlled Sandbox Adapter",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Known Action Outcome",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 7,
+        "requested_node_count": 8,
+        "returned_node_count": 8,
+        "edge_count": 5,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Claim Authorized Action",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Execute Controlled Sandbox Adapter",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "46b0ad17a39c6c95634246b94e09020f2af706f7a65ee5545d1160785844664c",
+        "export_sha256": "3e4325bfb8922fadc038e0bc1663fac13ba7c8aa8978f30075f421c6032bf745",
+        "current_source_file_sha256": "6b75fff73465cdafd06a2c460142330a11bd5781ac64e257bb8ab553909563f1",
+        "source_snapshot_sha256": "96f7f904afccf473d765199bb933ec524a8beb7931bb6661ab3429c9b07a901f",
+        "expected_graph_sha256": "d17e3a818d77ec864cfaec2164c54c41899bd23f3f5fae7eaa797698f77590ef",
+        "readback_graph_sha256": "1503f4fe467f86f7e676dcc5d20b5c045e1bc8d33a7ba007fc0ba045b615e754"
+      },
+      "source_drift": false,
+      "dependencies": [],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": null
+    },
+    {
+      "key": "wf08",
+      "id": "K8yUTKNLA2WyHJUU",
+      "name": "APIC | WF08 | SLA Dispatch and Recovery",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/K8yUTKNLA2WyHJUU",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "fbfa9f01-6f37-4062-8a2c-949a6fb6f3b5",
+      "created_at": "2026-09-07T11:40:38.089Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf08.json",
+      "builder_file": "n8n/target/wf08.builder.ts",
+      "export_file": "n8n/target/wf08.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "K8yUTKNLA2WyHJUU",
+        "name": "APIC | WF08 | SLA Dispatch and Recovery",
+        "nodeCount": 17,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/K8yUTKNLA2WyHJUU",
+        "note": "HTTP Request nodes (Recover Due Work and SLA, Send Protected Wakeup, Acknowledge Wakeup) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Recover Due Work and SLA' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Recover Due Work and SLA"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Send Protected Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Send Protected Wakeup"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Acknowledge Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Acknowledge Wakeup"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Send Protected Wakeup' parameter 'url' uses $json.resume_url but no predecessor outputs this field.",
+            "nodeName": "Send Protected Wakeup"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Wakeup Accepted' parameter 'conditions.conditions[0].leftValue' uses $json.statusCode but no predecessor outputs this field.",
+            "nodeName": "Wakeup Accepted"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Acknowledge Wakeup' parameter 'jsonBody' uses $('Due Wakeups').item.json.scope_id but 'Due Wakeups' doesn't output this field.",
+            "nodeName": "Acknowledge Wakeup"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Every Minute",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Protected Recovery Test",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Recovery Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Recover Due Work and SLA",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Due Jobs",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Dispatch WF03",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Due Approval Plans",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Dispatch WF06",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 10,
+            "name": "Due Actions",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 11,
+            "name": "Dispatch WF07",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 12,
+            "name": "Due Wakeups",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 13,
+            "name": "Send Protected Wakeup",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 14,
+            "name": "Wakeup Accepted",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 15,
+            "name": "Acknowledge Wakeup",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 17,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Recover Due Work and SLA' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Recover Due Work and SLA"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Send Protected Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Send Protected Wakeup"
+          },
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Acknowledge Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Acknowledge Wakeup"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Send Protected Wakeup' parameter 'url' uses $json.resume_url but no predecessor outputs this field.",
+            "nodeName": "Send Protected Wakeup"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Wakeup Accepted' parameter 'conditions.conditions[0].leftValue' uses $json.statusCode but no predecessor outputs this field.",
+            "nodeName": "Wakeup Accepted"
+          },
+          {
+            "code": "INVALID_EXPRESSION_PATH",
+            "message": "'Acknowledge Wakeup' parameter 'jsonBody' uses $('Due Wakeups').item.json.scope_id but 'Due Wakeups' doesn't output this field.",
+            "nodeName": "Acknowledge Wakeup"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Every Minute",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Protected Recovery Test",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Recovery Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Recover Due Work and SLA",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Due Jobs",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 7,
+            "name": "Dispatch WF03",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 8,
+            "name": "Due Approval Plans",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 9,
+            "name": "Dispatch WF06",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 10,
+            "name": "Due Actions",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 11,
+            "name": "Dispatch WF07",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "valid": true
+          },
+          {
+            "index": 12,
+            "name": "Due Wakeups",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 13,
+            "name": "Send Protected Wakeup",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 14,
+            "name": "Wakeup Accepted",
+            "type": "n8n-nodes-base.if",
+            "valid": true
+          },
+          {
+            "index": 15,
+            "name": "Acknowledge Wakeup",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 16,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 16,
+        "requested_node_count": 17,
+        "returned_node_count": 17,
+        "edge_count": 14,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Protected Recovery Test",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Webhook Intake"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Recover Due Work and SLA",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Send Protected Wakeup",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Webhook Intake"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Acknowledge Wakeup",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "3538e16b66387f55e8ec20a27339a55a2ef8a6870ded4491ebfe4a336bc9d292",
+        "export_sha256": "1b079fbf527fbceffb801965d4e48416289f59f94b0d7b90bd9eca0534b4cf3e",
+        "current_source_file_sha256": "4cd48f6fc30c40d47e1d1bd2d6e85a02f035b37403cffc57508903e0d4f007c1",
+        "source_snapshot_sha256": "77aebfe8aa20601abe01904649b4ad3faeb110974fbb4a1a31c0de627f128226",
+        "expected_graph_sha256": "80d91ef417740f5a043654c5e83aeab74301ab999e527f9070517db6cec1587c",
+        "readback_graph_sha256": "15bd5bb810a50bdf6dba307dcee8bcbe312c5ee5aa6617573c13fbaddbf109b2"
+      },
+      "source_drift": true,
+      "dependencies": [
+        {
+          "node": "Dispatch WF03",
+          "target_id": "6tHziLEHudpdk5hk",
+          "wait_for_subworkflow": false
+        },
+        {
+          "node": "Dispatch WF06",
+          "target_id": "oBliSIngBBWlmj17",
+          "wait_for_subworkflow": false
+        },
+        {
+          "node": "Dispatch WF07",
+          "target_id": "NwyqBStHsct30JQZ",
+          "wait_for_subworkflow": false
+        }
+      ],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": {
+        "status": "BLOCKED_UPDATE",
+        "builder_file": "n8n/target/pending/wf08.builder.ts",
+        "details": {
+          "key": "wf08",
+          "status": "BLOCKED_UPDATE",
+          "target_id": "K8yUTKNLA2WyHJUU",
+          "source_snapshot_sha256": "77aebfe8aa20601abe01904649b4ad3faeb110974fbb4a1a31c0de627f128226",
+          "current_source_sha256": "4cd48f6fc30c40d47e1d1bd2d6e85a02f035b37403cffc57508903e0d4f007c1",
+          "current_builder_sha256": "59b26511fede82ce34671afbfe7e2c342cf6d95158c52cc7a7da09f279feeded",
+          "changed_nodes": [
+            "Protected Recovery Test"
+          ],
+          "connections_changed": false,
+          "target_updated": false
+        },
+        "sdk_validation": {
+          "key": "wf08",
+          "status": "VALIDATED_NOT_DEPLOYED",
+          "target_test_status": "NOT_RUN",
+          "builder_sha256": "59b26511fede82ce34671afbfe7e2c342cf6d95158c52cc7a7da09f279feeded",
+          "validation": {
+            "valid": true,
+            "nodeCount": 17,
+            "warnings": [
+              {
+                "code": "PLAIN_GENERIC_AUTH",
+                "message": "'Recover Due Work and SLA' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+                "nodeName": "Recover Due Work and SLA"
+              },
+              {
+                "code": "PLAIN_GENERIC_AUTH",
+                "message": "'Send Protected Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+                "nodeName": "Send Protected Wakeup"
+              },
+              {
+                "code": "PLAIN_GENERIC_AUTH",
+                "message": "'Acknowledge Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+                "nodeName": "Acknowledge Wakeup"
+              },
+              {
+                "code": "INVALID_EXPRESSION_PATH",
+                "message": "'Send Protected Wakeup' parameter 'url' uses $json.resume_url but no predecessor outputs this field.",
+                "nodeName": "Send Protected Wakeup"
+              },
+              {
+                "code": "INVALID_EXPRESSION_PATH",
+                "message": "'Wakeup Accepted' parameter 'conditions.conditions[0].leftValue' uses $json.statusCode but no predecessor outputs this field.",
+                "nodeName": "Wakeup Accepted"
+              },
+              {
+                "code": "INVALID_EXPRESSION_PATH",
+                "message": "'Acknowledge Wakeup' parameter 'jsonBody' uses $('Due Wakeups').item.json.scope_id but 'Due Wakeups' doesn't output this field.",
+                "nodeName": "Acknowledge Wakeup"
+              }
+            ]
+          }
+        },
+        "validation_matches_builder": true,
+        "sdk_status": "VALIDATED_NOT_DEPLOYED"
+      }
+    },
+    {
+      "key": "wf09",
+      "id": "KF1ttQVhDbDHBDmY",
+      "name": "APIC | WF09 | Error and Dead Letter Handler",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/KF1ttQVhDbDHBDmY",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "5c9e05ee-46db-4f74-9e28-e0c669b1eb9b",
+      "created_at": "2026-09-07T11:35:15.695Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf09.json",
+      "builder_file": "n8n/target/wf09.builder.ts",
+      "export_file": "n8n/target/wf09.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "KF1ttQVhDbDHBDmY",
+        "name": "APIC | WF09 | Error and Dead Letter Handler",
+        "nodeCount": 7,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/KF1ttQVhDbDHBDmY",
+        "note": "HTTP Request nodes (Record Error and Classify Retry) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Record Error and Classify Retry' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Record Error and Classify Retry"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Automatic Execution Error",
+            "type": "n8n-nodes-base.errorTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Protected Error Harness",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Safe Error Metadata",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Record Error and Classify Retry",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 7,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Record Error and Classify Retry' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Record Error and Classify Retry"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Automatic Execution Error",
+            "type": "n8n-nodes-base.errorTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Protected Error Harness",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Safe Error Metadata",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Record Error and Classify Retry",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 6,
+        "requested_node_count": 7,
+        "returned_node_count": 7,
+        "edge_count": 4,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Protected Error Harness",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Webhook Intake"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Record Error and Classify Retry",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "0f16d4d337b3a8e35bc0fdc791695f639a4f68551a56a18021b8d2fd3ff77497",
+        "export_sha256": "b031b0eb63c3afc9f7bdebea9aba4e76bef2716a2acf18696c02472ba4c33402",
+        "current_source_file_sha256": "4f723d143eacecc03859f6213703fd0c87a3f66b8f27ddbd9054ae095035018c",
+        "source_snapshot_sha256": "09e8a3f4239208b76c413f3fe6d065ca9e9cdf4ab2037a9e6156997e6b1d7ce3",
+        "expected_graph_sha256": "d243610a62b9df4f10dcf10d5828756791a54cc2087edea9fbfbf326cd4944c1",
+        "readback_graph_sha256": "ef959da7f1e9c6f82e10dc00d8a1df6a1bc71c14e5c6b6b98e85c487a86dc842"
+      },
+      "source_drift": false,
+      "dependencies": [],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner"
+      },
+      "pending_update": null
+    },
+    {
+      "key": "wf10",
+      "id": "anfiXs99aCeeg1g4",
+      "name": "APIC | WF10 | Daily Management Digest",
+      "url": "https://mvstnz1.app.n8n.cloud/workflow/anfiXs99aCeeg1g4",
+      "active": false,
+      "active_version_id": null,
+      "version_id": "2c3b6e73-5012-4e09-b6a4-1c0b220260b1",
+      "created_at": "2026-09-07T11:39:43.563Z",
+      "status": "BLOCKED",
+      "implementation_status": "IMPLEMENTED",
+      "configuration_status": "BLOCKED",
+      "target_test_status": "NOT_RUN",
+      "execution_ids": [],
+      "source_file": "n8n/workflows/wf10.json",
+      "builder_file": "n8n/target/wf10.builder.ts",
+      "export_file": "n8n/target/wf10.json",
+      "precreation_search": {
+        "data": [],
+        "count": 0
+      },
+      "reused": false,
+      "create_result": {
+        "workflowId": "anfiXs99aCeeg1g4",
+        "name": "APIC | WF10 | Daily Management Digest",
+        "nodeCount": 7,
+        "url": "https://mvstnz1.app.n8n.cloud/workflow/anfiXs99aCeeg1g4",
+        "note": "HTTP Request nodes (Commit Consistent Sandbox Digest) were skipped during credential auto-assignment. Their credentials must be configured manually.",
+        "autoAssignedCredentials": [],
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Consistent Sandbox Digest' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Consistent Sandbox Digest"
+          }
+        ]
+      },
+      "source_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Daily at 08 Bangkok",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Protected Digest Test",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Digest Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Commit Consistent Sandbox Digest",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          }
+        ]
+      },
+      "sdk_validation": {
+        "valid": true,
+        "nodeCount": 7,
+        "warnings": [
+          {
+            "code": "PLAIN_GENERIC_AUTH",
+            "message": "'Commit Consistent Sandbox Digest' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+            "nodeName": "Commit Consistent Sandbox Digest"
+          }
+        ]
+      },
+      "readback_nodes_validation": {
+        "valid": true,
+        "results": [
+          {
+            "index": 0,
+            "name": "Purpose",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          },
+          {
+            "index": 1,
+            "name": "Daily at 08 Bangkok",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "valid": true
+          },
+          {
+            "index": 2,
+            "name": "Workflow Input",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "valid": true
+          },
+          {
+            "index": 3,
+            "name": "Protected Digest Test",
+            "type": "n8n-nodes-base.webhook",
+            "valid": true
+          },
+          {
+            "index": 4,
+            "name": "Digest Context",
+            "type": "n8n-nodes-base.code",
+            "valid": true
+          },
+          {
+            "index": 5,
+            "name": "Commit Consistent Sandbox Digest",
+            "type": "n8n-nodes-base.httpRequest",
+            "valid": true
+          },
+          {
+            "index": 6,
+            "name": "Target Configuration BLOCKED",
+            "type": "n8n-nodes-base.stickyNote",
+            "valid": true
+          }
+        ]
+      },
+      "readback_comparison": {
+        "valid": true,
+        "errors": [],
+        "source_node_count": 6,
+        "requested_node_count": 7,
+        "returned_node_count": 7,
+        "edge_count": 4,
+        "code_runtime_strings_preserved": true,
+        "auth_parameters_preserved": true,
+        "extra_sticky_notes": [],
+        "credential_requirements": [
+          {
+            "node": "Protected Digest Test",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Webhook Intake"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          },
+          {
+            "node": "Commit Consistent Sandbox Digest",
+            "required": {
+              "httpHeaderAuth": {
+                "name": "APIC Operations Service"
+              }
+            },
+            "returned": {},
+            "status": "BLOCKED_MISSING_CREDENTIAL"
+          }
+        ]
+      },
+      "execution_search": {
+        "data": [],
+        "count": 0,
+        "estimated": false
+      },
+      "settings_requested": {
+        "executionOrder": "v1",
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "settings_observed": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+      },
+      "settings_status": "BLOCKED",
+      "hashes": {
+        "builder_sha256": "a824bd3bf0601720a41768b458409582a1a88c947a0e34d80897336f14c62e6e",
+        "export_sha256": "1993041993af4adf2d646ef54b7c515e07e4d51e29a26c6909a5af6a7f01f521",
+        "current_source_file_sha256": "1b2fac8a0fde97b8c52a7b0ec85677ac56c12257572e2cca3cd444ac721ee00b",
+        "source_snapshot_sha256": "0cd63e26ea4be3a66ac6fba63e03e355528fe5c62dcf1d89f5baee2370cb35fc",
+        "expected_graph_sha256": "6360e26d0edad0fec1c1dd9301bd285020d9b7dcf02976f789b81f55e7a5c541",
+        "readback_graph_sha256": "348bdc95e58d4642f29c0788b54de05e48331b207239cb7e0a4fe964c702eb3e"
+      },
+      "source_drift": false,
+      "dependencies": [],
+      "missing_settings": {
+        "timezone": "Asia/Bangkok",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": "KF1ttQVhDbDHBDmY"
+      },
+      "pending_update": null
+    }
+  ],
+  "sanitization": {
+    "excluded": [
+      "credential IDs and values",
+      "pinned data",
+      "personal project display names and owner fields",
+      "scope permissions",
+      "connector metadata"
+    ],
+    "preserved": [
+      "own target IDs and node IDs",
+      "node type versions, names, runtime strings, edges, parameters",
+      "safe project credential requirement names",
+      "safe version timestamps"
+    ],
+    "source_snapshot": "Normalized local inputs: logical workflow keys replace local workflow IDs, credential IDs and node IDs removed. This is not a target export."
+  },
+  "status_breakdown": {
+    "IMPLEMENTED": [
+      "Ten full inactive/unpublished target core workflows",
+      "Actual target IDs in all Execute Sub-workflow references",
+      "Ten builders, sanitized readbacks, expected graphs and configuration blockers"
+    ],
+    "LOCAL_TESTED": [
+      "Exact node/edge/runtime-string/auth-parameter comparisons with target readbacks"
+    ],
+    "TARGET_TESTED": [
+      "MCP SDK and node configuration validation",
+      "Creation and full readback only; not runtime testing"
+    ],
+    "BLOCKED": [
+      "Credentials",
+      "Authorized reachable HTTPS origins",
+      "Workflow settings and shared unpublished WF09",
+      "Execution approval and user prohibition"
+    ],
+    "NOT_RUN": [
+      "Target runtime/E2E",
+      "Publication/activation",
+      "Live LLM evaluation",
+      "Screenshots",
+      "Runtime redeployment/idempotent update"
+    ]
+  },
+  "rollback": {
+    "performed": false,
+    "instructions": "Leave all ten workflows inactive for zero runtime effects. If cleanup is later explicitly authorized, archive only the ten manifest IDs, preferably callers before dependencies. Never archive the existing M0 probe or foreign workflows. No backend or dashboard rollback required."
+  },
+  "local_verification": {
+    "status": "LOCAL_TESTED_WITH_SOURCE_DRIFT",
+    "command": "rtk proxy node n8n/target/verify.cjs",
+    "checked_at": "2026-09-07T12:18:46.353Z",
+    "workflow_count": 10,
+    "passed_readback_comparisons": 10,
+    "total_source_nodes": 86,
+    "total_target_nodes": 96,
+    "total_edges": 67,
+    "source_drift": [
+      "wf04",
+      "wf08"
+    ],
+    "duplicate_names": 0,
+    "missing_target_references": 0,
+    "credential_bindings": 0,
+    "runtime_executions": 0,
+    "target_test_status": "NOT_RUN",
+    "checks": [
+      {
+        "key": "wf01",
+        "id": "chlrLWx22aB9AELo",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 7,
+        "edge_count": 4,
+        "credential_bindings": 0,
+        "builder_sha256": "e8eeebdc06610b58582569a772e071a5d3aee23a0a1a1267abeef2409d164506",
+        "export_sha256": "08038cb6301e8aa763a02a37cbf79b8e544ae942112af1b9bbfa50b673ff3f0b",
+        "current_source_file_sha256": "f5193966c83da9775f498d5223591e505a2562e33da361cb23cbb7908367a481",
+        "source_snapshot_sha256": "8d65aad4c23af487591bd9c1cd430a4805149b1b6239551737b643772ea383f7",
+        "expected_graph_sha256": "f2f9943fc28833abca0e6ceb735ce70252c89defad31a9463abcce38c28c24c2",
+        "readback_graph_sha256": "b99dd60a7fd7df73f33303c72c08f06769b45bde0c8470cfec3abb2a97f7beae"
+      },
+      {
+        "key": "wf02",
+        "id": "BGz4AwLb1Y6S4Zfv",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 11,
+        "edge_count": 7,
+        "credential_bindings": 0,
+        "builder_sha256": "e5fd7c5ac8415f7ff2fb4c0c5899fad569bbb34f50088b3674650cfb74612d34",
+        "export_sha256": "9c670d640629b8ba6764b503304bb4398ce6ddd3903c7f336347694e02a59300",
+        "current_source_file_sha256": "eb00c5e23ec16d57516f6bc2e2d2cc63e989c683e86491a4212018b341ad20d4",
+        "source_snapshot_sha256": "f71147ddcf84a441e6bd8c92229c88006a2bb82624b5ad6b077715e5ba8211fe",
+        "expected_graph_sha256": "e09f0c713e9ea45d9b0430ad2e775ea2c6520bb801ad4c3639ff129099f9426b",
+        "readback_graph_sha256": "75a66e1c848da22bf39bbdf67e800f297a8cc3a48acb9383bd12faab71110e95"
+      },
+      {
+        "key": "wf03",
+        "id": "6tHziLEHudpdk5hk",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 14,
+        "edge_count": 12,
+        "credential_bindings": 0,
+        "builder_sha256": "8dec1f2ccb30f5f211c504ed8e76513678eda663da40b72677f140c0216fbdac",
+        "export_sha256": "6f60fa0f4b00e99c3d866e231186987117a2ba0d07462d021478bb24eb103aa5",
+        "current_source_file_sha256": "aa856c108fc05e1546017c9c17e30d239198c7086a54ad2fd9cfabdf199e28ee",
+        "source_snapshot_sha256": "57873231e6431fc3bb90a7d11ebb2013feb3acd6123ef824b3c77a34983732a1",
+        "expected_graph_sha256": "3b1c06ee8aca19353891b46b46eff5a5b3d862dc277e45b7ceb22bbe3b47e1a3",
+        "readback_graph_sha256": "3c2ea37dbe5820894b9e14daf6c1eb00df503beaacf66a98f38a34553dc148bf"
+      },
+      {
+        "key": "wf04",
+        "id": "JidtBtBq79j2UeUU",
+        "valid": true,
+        "source_drift": true,
+        "node_count": 7,
+        "edge_count": 4,
+        "credential_bindings": 0,
+        "builder_sha256": "d022511e91f1bcc84bff29dae860dceecf3c230fa0cb0fc3526eb3a2289d67b4",
+        "export_sha256": "455b8d9f8863eeb467242895f6543777d44ff512293166088c46547ec963ae0f",
+        "current_source_file_sha256": "12195532637d4bb8a3b12fcd9adb67f4d0a8504c362d9f40fda6f1df01a57184",
+        "source_snapshot_sha256": "5edcf320f2f3c111b96b09b0288e84efbcc11b4c75e2581c80ff428887028ccf",
+        "expected_graph_sha256": "fd63a7497e9d613a80b347b4cf5eca00aa70295340bc0b0d92eda997df59a586",
+        "readback_graph_sha256": "ab33f89c65dcbf12bf44912b587e5915432765ddd0e81543b669acf19d8ac35e"
+      },
+      {
+        "key": "wf05",
+        "id": "DaGeYQsYvTTBkzpA",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 7,
+        "edge_count": 4,
+        "credential_bindings": 0,
+        "builder_sha256": "da0694cfaf5f40cc9297bfcb10d1497d8b87396a0e55e8322e0accf1770dce03",
+        "export_sha256": "037c44531d0e6b9b2e2e2c094265018ba8626e7ac80aee6e796b11d2f8979513",
+        "current_source_file_sha256": "d9eabda44261d00fd7fcc58770e2e48a4eb4f120d5a9421d353a4a1f356fd88b",
+        "source_snapshot_sha256": "dc7653237bcb9b8eddb0575939347d73c77ec7c1d65ac09c4b1ae7d2bbc09ef1",
+        "expected_graph_sha256": "21e79edfe3c91b1e0761797826e3c586970db97bf420f2ace47fbcea052f3519",
+        "readback_graph_sha256": "b1cefc4dd6f71a883e4cbcb09efa3254747bc49943479a14deae6705f7b246c1"
+      },
+      {
+        "key": "wf06",
+        "id": "oBliSIngBBWlmj17",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 11,
+        "edge_count": 9,
+        "credential_bindings": 0,
+        "builder_sha256": "439e044dfc35d34849d068c562e1185034f77505f5f33e2bf6412ca6729096c3",
+        "export_sha256": "c351e53c2ebda93b371494011e03ef3e9b1f26904475c31dce917e336207ccc4",
+        "current_source_file_sha256": "1ab88ed2ff7d552de66e2fb6472dee6b3eee1355ad83c3a55ba3e95f3fb40912",
+        "source_snapshot_sha256": "cc56cb90aaee1252dcb16cf49d39c6d40d196b4ee4cd480776d016b9c7e3220b",
+        "expected_graph_sha256": "a36aef29dd09656a44bb0a3467eeefa701229af2eb643e00d97ef061ce02e0ee",
+        "readback_graph_sha256": "53db7675a53ef7596459eb45bdadb1f87355ca355a6c9c5f9a90dcdfc58bdfb9"
+      },
+      {
+        "key": "wf07",
+        "id": "NwyqBStHsct30JQZ",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 8,
+        "edge_count": 5,
+        "credential_bindings": 0,
+        "builder_sha256": "46b0ad17a39c6c95634246b94e09020f2af706f7a65ee5545d1160785844664c",
+        "export_sha256": "3e4325bfb8922fadc038e0bc1663fac13ba7c8aa8978f30075f421c6032bf745",
+        "current_source_file_sha256": "6b75fff73465cdafd06a2c460142330a11bd5781ac64e257bb8ab553909563f1",
+        "source_snapshot_sha256": "96f7f904afccf473d765199bb933ec524a8beb7931bb6661ab3429c9b07a901f",
+        "expected_graph_sha256": "d17e3a818d77ec864cfaec2164c54c41899bd23f3f5fae7eaa797698f77590ef",
+        "readback_graph_sha256": "1503f4fe467f86f7e676dcc5d20b5c045e1bc8d33a7ba007fc0ba045b615e754"
+      },
+      {
+        "key": "wf08",
+        "id": "K8yUTKNLA2WyHJUU",
+        "valid": true,
+        "source_drift": true,
+        "node_count": 17,
+        "edge_count": 14,
+        "credential_bindings": 0,
+        "builder_sha256": "3538e16b66387f55e8ec20a27339a55a2ef8a6870ded4491ebfe4a336bc9d292",
+        "export_sha256": "1b079fbf527fbceffb801965d4e48416289f59f94b0d7b90bd9eca0534b4cf3e",
+        "current_source_file_sha256": "4cd48f6fc30c40d47e1d1bd2d6e85a02f035b37403cffc57508903e0d4f007c1",
+        "source_snapshot_sha256": "77aebfe8aa20601abe01904649b4ad3faeb110974fbb4a1a31c0de627f128226",
+        "expected_graph_sha256": "80d91ef417740f5a043654c5e83aeab74301ab999e527f9070517db6cec1587c",
+        "readback_graph_sha256": "15bd5bb810a50bdf6dba307dcee8bcbe312c5ee5aa6617573c13fbaddbf109b2"
+      },
+      {
+        "key": "wf09",
+        "id": "KF1ttQVhDbDHBDmY",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 7,
+        "edge_count": 4,
+        "credential_bindings": 0,
+        "builder_sha256": "0f16d4d337b3a8e35bc0fdc791695f639a4f68551a56a18021b8d2fd3ff77497",
+        "export_sha256": "b031b0eb63c3afc9f7bdebea9aba4e76bef2716a2acf18696c02472ba4c33402",
+        "current_source_file_sha256": "4f723d143eacecc03859f6213703fd0c87a3f66b8f27ddbd9054ae095035018c",
+        "source_snapshot_sha256": "09e8a3f4239208b76c413f3fe6d065ca9e9cdf4ab2037a9e6156997e6b1d7ce3",
+        "expected_graph_sha256": "d243610a62b9df4f10dcf10d5828756791a54cc2087edea9fbfbf326cd4944c1",
+        "readback_graph_sha256": "ef959da7f1e9c6f82e10dc00d8a1df6a1bc71c14e5c6b6b98e85c487a86dc842"
+      },
+      {
+        "key": "wf10",
+        "id": "anfiXs99aCeeg1g4",
+        "valid": true,
+        "source_drift": false,
+        "node_count": 7,
+        "edge_count": 4,
+        "credential_bindings": 0,
+        "builder_sha256": "a824bd3bf0601720a41768b458409582a1a88c947a0e34d80897336f14c62e6e",
+        "export_sha256": "1993041993af4adf2d646ef54b7c515e07e4d51e29a26c6909a5af6a7f01f521",
+        "current_source_file_sha256": "1b2fac8a0fde97b8c52a7b0ec85677ac56c12257572e2cca3cd444ac721ee00b",
+        "source_snapshot_sha256": "0cd63e26ea4be3a66ac6fba63e03e355528fe5c62dcf1d89f5baee2370cb35fc",
+        "expected_graph_sha256": "6360e26d0edad0fec1c1dd9301bd285020d9b7dcf02976f789b81f55e7a5c541",
+        "readback_graph_sha256": "348bdc95e58d4642f29c0788b54de05e48331b207239cb7e0a4fe964c702eb3e"
+      }
+    ]
+  }
+}

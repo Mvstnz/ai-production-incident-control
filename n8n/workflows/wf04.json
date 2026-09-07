@@ -1,0 +1,324 @@
+{
+  "id": "APICWF0400000001",
+  "name": "APIC | WF04 | ERP Impact Analysis",
+  "active": false,
+  "nodes": [
+    {
+      "id": "378a4688-0da6-5d22-8b3c-928949ca4d41",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF04 · ERP Impact Analysis\nRead one immutable ERP snapshot → pure baseline/incident allocation → persist evidence. No formula duplication in n8n.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "2c903450-bcfb-5754-b48b-322531f27d2b",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "126908b2-401b-5583-b4db-c36b4de0dd04",
+      "name": "Impact Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "9beac2ca-9469-579d-9bdb-503502710608",
+      "name": "Read Immutable ERP Snapshot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "url": "={{ 'http://mock-erp:8001/erp/v1/snapshots/'+$json.snapshot_id+'?scope_id='+$json.scope_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicErpRead0001",
+          "name": "APIC ERP Read"
+        }
+      }
+    },
+    {
+      "id": "c8a13be5-3c0e-5827-8f9a-f3102486c5c4",
+      "name": "ERP Snapshot Read Succeeded",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7091eadc-2d9f-5972-af44-28cc05078269",
+              "leftValue": "={{ $json.statusCode>=200 && $json.statusCode<300 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "f9643413-dada-5188-a407-f473fa64b4bb",
+      "name": "Calculate Temporal Impact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/impact/evaluate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {snapshot:$json.body,facts:$('Impact Context').first().json.facts} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "a3e58ffe-6c21-5bcb-af12-3344281b1a6b",
+      "name": "Persist Impact Evidence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1620,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/impact/save",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {...$('Impact Context').first().json,impact:$json} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "47bc5e5f-acad-5967-a224-b5ef8be35a8e",
+      "name": "Preserve ERP Retry Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1890,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const response=$json; const status=Number(response.statusCode); const raw=response.headers?.['retry-after']; const seconds=raw==null?null:Number(raw); return [{json:{...$('Impact Context').first().json,error_class:status===429||status>=500?'TRANSIENT':'PERMANENT',retry_after:Number.isFinite(seconds)?seconds:null,message:'ERP snapshot HTTP '+status}}];"
+      }
+    },
+    {
+      "id": "b990d3b8-fcdb-5ed4-98fa-c917da134d77",
+      "name": "Persist Failed Snapshot Read",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2160,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/jobs/fail",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "1cec6854-cadb-5af3-a001-a0baade76f23",
+      "name": "Stop Failed Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2430,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "throw new Error('ERP snapshot read failed; retry metadata durably recorded');"
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Impact Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Impact Context": {
+      "main": [
+        [
+          {
+            "node": "Read Immutable ERP Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Immutable ERP Snapshot": {
+      "main": [
+        [
+          {
+            "node": "ERP Snapshot Read Succeeded",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ERP Snapshot Read Succeeded": {
+      "main": [
+        [
+          {
+            "node": "Calculate Temporal Impact",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preserve ERP Retry Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Temporal Impact": {
+      "main": [
+        [
+          {
+            "node": "Persist Impact Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preserve ERP Retry Metadata": {
+      "main": [
+        [
+          {
+            "node": "Persist Failed Snapshot Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Failed Snapshot Read": {
+      "main": [
+        [
+          {
+            "node": "Stop Failed Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "pinData": {},
+  "tags": []
+}

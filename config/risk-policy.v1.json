@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "classification": "Synthetic demonstration policy; not a probability",
+  "factors": {
+    "disruption": {"field": "disruption_days", "bands": [{"lte": 0, "points": 0}, {"lte": 2, "points": 10}, {"lte": 5, "points": 15}, {"lte": 7, "points": 20}, {"points": 25}]},
+    "value": {"field": "affected_open_order_value_cents", "bands": [{"lte": 0, "points": 0}, {"lt": 2500000, "points": 5}, {"lt": 5000000, "points": 10}, {"lt": 10000000, "points": 15}, {"points": 20}]},
+    "urgency": {"field": "hours_to_first_relevant_demand", "bands": [{"lte": 24, "points": 20}, {"lte": 72, "points": 16}, {"lte": 168, "points": 10}, {"points": 0}]},
+    "resource_gap": {"field": "uncovered_resource_ratio", "bands": [{"lte": 0, "points": 0}, {"lt": 0.25, "points": 5}, {"lt": 0.5, "points": 8}, {"lt": 0.75, "points": 12}, {"points": 15}]},
+    "alternative": {"field": "qualified_alternative_available", "boolean_points": {"true": 0, "false": 10}},
+    "strategic_customer": {"field": "strategic_customer_affected", "boolean_points": {"true": 10, "false": 0}}
+  },
+  "severity": [{"lte": 24, "name": "LOW"}, {"lte": 49, "name": "MEDIUM"}, {"lte": 74, "name": "HIGH"}, {"lte": 100, "name": "CRITICAL"}],
+  "hard_overrides": {"VERIFIED_DEFECTIVE_LOT_PENDING_SHIPMENT": "CRITICAL"}
+}

@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-09-07T12:29:52.486963+00:00",
+  "profile": "DEMO_LOCAL",
+  "n8n": "2.37.10",
+  "target_n8n_release": null,
+  "target_note": "Node schema versions exposed; target release not exposed by MCP.",
+  "docker_engine": "29.2.1",
+  "host_node": "v26.7.0",
+  "host_python": "Python 3.12.10",
+  "rtk": "rtk 0.43.0",
+  "images": {
+    "postgres:17.6": [
+      "postgres@sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929"
+    ],
+    "n8nio/n8n:2.37.10": [
+      "n8nio/n8n@sha256:307d6065be25619aa24cfc63a7c2f04ca56d084a08c05c8e9f189a89f353b1ec"
+    ],
+    "n8nio/runners:2.37.10": [
+      "n8nio/runners@sha256:63bda67eac04e5a2a42683730e0d43deed7e463a92f5bfca2090d0189a909c42"
+    ],
+    "axllent/mailpit:v1.27.4": [
+      "axllent/mailpit@sha256:df6c2541907e1be6fac21f509927cf6ed771617a1f4b361ef66d97bd05593d2d"
+    ],
+    "python:3.12.10-slim": {
+      "registry_digest": "sha256:fd95fa221297a88e1cf49c55ec1828edd7c5a428187e67b5d1805692d11588db",
+      "source": "docker buildx imagetools inspect; pinned build-stage tag"
+    },
+    "node:24.12.0-bookworm-slim": {
+      "registry_digest": "sha256:7326fb2dbdce998edd72140946851be64ef4a643e8715e138ca467e8e9d92c99",
+      "source": "docker buildx imagetools inspect; pinned build-stage tag"
+    },
+    "nginx:1.28.0-alpine": {
+      "registry_digest": "sha256:30f1c0d78e0ad60901648be663a710bdadf19e4c10ac6782c235200619158284",
+      "source": "docker buildx imagetools inspect; pinned build-stage tag"
+    }
+  },
+  "locks": {
+    "backend/requirements.lock.txt": "9e4fcbf378ca823eed066c5667c233f426d7a06d11420b4dd80c2d9cbcae924d",
+    "package-lock.json": "25f116af79930324c802c61b9a73e0dd025bc7869a0eeb9eba9bb3319b416779"
+  },
+  "node_versions": {
+    "webhook": 2.1,
+    "formTrigger": 2.6,
+    "httpRequest": 4.5,
+    "executeWorkflow": 1.3,
+    "wait": 1.1,
+    "scheduleTrigger": 1.4,
+    "code": 2
+  }
+}

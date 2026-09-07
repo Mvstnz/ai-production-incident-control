@@ -1,0 +1,261 @@
+{
+  "profile": "DEMO_LOCAL",
+  "started_at": "2026-09-07T11:35:35.067406+00:00",
+  "tests": [
+    {
+      "name": "hero_baseline_and_proposed_partial",
+      "criteria": [
+        "AC03",
+        "AC04"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "5205335c-ebb5-43a7-aa45-5277d7d0682c",
+        "incident_id": "ec37285d-8401-4a8d-b5d2-14fe9964f022",
+        "revision": 1,
+        "status": "WAITING_APPROVAL",
+        "risk_score": 88,
+        "severity": "CRITICAL",
+        "shortage": 24,
+        "affected_value_cents": 12640000,
+        "jobs": [
+          {
+            "id": "499ef765-6819-4a7a-890d-b7bbe5c25816",
+            "source_event_id": "9a418e6b-b1ab-4a13-a97b-0556ccb3acdf",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:35:38.713166+00:00",
+            "execution_id": "291",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          }
+        ]
+      },
+      "duration_seconds": 3.563
+    },
+    {
+      "name": "approval_replay_early_decision_and_delivery",
+      "criteria": [
+        "AC14",
+        "AC15",
+        "AC27"
+      ],
+      "status": "FAIL",
+      "error": "(500, '{\"code\":0,\"message\":\"No item to return was found\"}')",
+      "duration_seconds": 0.719
+    },
+    {
+      "name": "confirmed_split_replaces_supply_and_revises",
+      "criteria": [
+        "AC05",
+        "AC08"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "5205335c-ebb5-43a7-aa45-5277d7d0682c",
+        "incident_id": "ec37285d-8401-4a8d-b5d2-14fe9964f022",
+        "revision": 2,
+        "status": "WAITING_APPROVAL",
+        "risk_score": 69,
+        "severity": "HIGH",
+        "shortage": 14,
+        "affected_value_cents": 5440000,
+        "jobs": [
+          {
+            "id": "499ef765-6819-4a7a-890d-b7bbe5c25816",
+            "source_event_id": "9a418e6b-b1ab-4a13-a97b-0556ccb3acdf",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:35:38.713166+00:00",
+            "execution_id": "291",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          },
+          {
+            "id": "8071b2bf-3de7-451c-9658-fc316ea21672",
+            "source_event_id": "eb720b49-178e-4bd0-a6a1-2e547724ec6e",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:35:40.931686+00:00",
+            "execution_id": "305",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          }
+        ]
+      },
+      "duration_seconds": 1.625
+    },
+    {
+      "name": "parallel_deduplication_and_cross_channel_correlation",
+      "criteria": [
+        "AC06",
+        "AC07"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "2ed21538-5eab-4458-b3b6-3aa5c5a62b5f",
+        "parallel_requests": 10,
+        "unique_source_events": 1,
+        "unique_jobs": 1,
+        "linked_sources": 3,
+        "revision": 1,
+        "jobs": [
+          {
+            "id": "557447f1-5e97-4812-97a2-e462af72ac59",
+            "source_event_id": "f1f9e72f-6994-47dc-8976-57e5aafa38f4",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:35:42.396595+00:00",
+            "execution_id": "309",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          },
+          {
+            "id": "90897238-cd39-4cc6-b5e9-a719f362036e",
+            "source_event_id": "9a5c996c-06b2-491a-b023-10cd2522f812",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:35:46.224585+00:00",
+            "execution_id": "331",
+            "workflow_id": "APICWF0300000001",
+            "last_error": null
+          },
+          {
+            "id": "f6069347-37f5-48ad-bc42-9c737d907b7f",
+            "source_event_id": "d0d63de8-1eca-4452-931a-97fd280f27a6",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:35:44.012867+00:00",
+            "execution_id": "317",
+            "workflow_id": "APICWF0300000001",
+            "last_error": null
+          }
+        ]
+      },
+      "duration_seconds": 5.515
+    },
+    {
+      "name": "machine_approved_mock_erp_reschedule",
+      "criteria": [
+        "AC24"
+      ],
+      "status": "FAIL",
+      "error": "(500, '{\"code\":0,\"message\":\"No item to return was found\"}')",
+      "duration_seconds": 2.532
+    },
+    {
+      "name": "quality_trace_and_quality_manager_approval",
+      "criteria": [
+        "AC25"
+      ],
+      "status": "FAIL",
+      "error": "(500, '{\"code\":0,\"message\":\"No item to return was found\"}')",
+      "duration_seconds": 2.172
+    },
+    {
+      "name": "ambiguous_input_requires_clarification",
+      "criteria": [
+        "AC09"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "fe609f3b-4427-4b4b-87d3-37900e5532d2",
+        "source_status": "MANUAL_REVIEW",
+        "review_reasons": [
+          "Unknown free text: fixture mode supports the exact supplied synthetic email only; live AI or structured input required"
+        ],
+        "jobs": [
+          {
+            "id": "638d513d-aa38-41da-aac6-045db46abee1",
+            "source_event_id": "0be69c60-aec3-4462-bc0b-18ae51a68afd",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:35:52.225020+00:00",
+            "execution_id": "359",
+            "workflow_id": "APICWF0300000001",
+            "last_error": null
+          }
+        ]
+      },
+      "duration_seconds": 1.485
+    },
+    {
+      "name": "accepted_write_timeout_does_not_resend",
+      "criteria": [
+        "AC19"
+      ],
+      "status": "FAIL",
+      "error": "(500, '{\"code\":0,\"message\":\"No item to return was found\"}')",
+      "duration_seconds": 1.937
+    },
+    {
+      "name": "daily_digest_is_idempotent",
+      "criteria": [
+        "AC28"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "5205335c-ebb5-43a7-aa45-5277d7d0682c",
+        "digest_id": "62ad7c60-33d3-4f64-a5ce-84ca8c12ad56",
+        "digest": {
+          "clock": "2026-10-10T01:00:00+00:00",
+          "ai_mode": "simulated AI",
+          "profile": "DEMO_LOCAL",
+          "currency": "EUR",
+          "timezone": "Asia/Bangkok",
+          "aggregation": "union of unique open sales positions",
+          "sla_breaches": 0,
+          "open_incidents": 1,
+          "pending_approvals": 1,
+          "critical_incidents": 0,
+          "affected_open_order_value_cents": 5440000
+        },
+        "kpi": {
+          "open_incidents": 1,
+          "critical_incidents": 0,
+          "affected_open_order_value_cents": 5440000,
+          "pending_approvals": 1,
+          "sla_breaches": 0,
+          "currency": "EUR",
+          "clock": "2026-10-10T01:00:00+00:00",
+          "timezone": "Asia/Bangkok",
+          "ai_mode": "simulated AI",
+          "profile": "DEMO_LOCAL",
+          "aggregation": "union of unique open sales positions"
+        }
+      },
+      "duration_seconds": 0.516
+    },
+    {
+      "name": "runtime_auth_csrf_scope_boundaries",
+      "criteria": [
+        "AC18",
+        "AC34"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "viewer_denied": 403,
+        "missing_csrf_denied": 403,
+        "nonmember_scope_denied": 403
+      },
+      "duration_seconds": 0.156
+    }
+  ],
+  "scopes": [
+    "5205335c-ebb5-43a7-aa45-5277d7d0682c",
+    "2ed21538-5eab-4458-b3b6-3aa5c5a62b5f",
+    "627837ae-1a27-480b-8841-a7140c75d19b",
+    "f60139f6-176e-4c04-ab86-7f7188a06d5e",
+    "fe609f3b-4427-4b4b-87d3-37900e5532d2",
+    "f03e6ae1-d81c-49b3-918d-5ea4e5ec2f32"
+  ],
+  "target_tests": "NOT_RUN",
+  "finished_at": "2026-09-07T11:35:56.169488+00:00"
+}

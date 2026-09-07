@@ -1,0 +1,440 @@
+{
+  "id": "APICWF0300000001",
+  "name": "APIC | WF03 | Normalize Verify and Correlate",
+  "active": true,
+  "nodes": [
+    {
+      "id": "3061bf2a-6284-5508-9735-60d54a12d2b9",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF03 · Normalize Verify and Correlate\nClaim due job → extract supported fixture or structured facts → verify ERP identity → correlate immutable revision. Unknown input requires manual review.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "be6465fb-6624-5afc-8610-a626dd6b9c8c",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "ef67ae0c-493f-5eea-84dc-6711b53ede8a",
+      "name": "Execution Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "66ffc132-bfa1-5434-a209-63892c13aae9",
+      "name": "Claim Analysis Job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/jobs/claim",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {job_id:$json.job_id,owner:'n8n:'+$execution.id,limit:1,execution_id:$execution.id,workflow_id:$workflow.id} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "cd6bc552-7e74-5005-878c-126745e0d05f",
+      "name": "Claimed Job",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return ($input.first().json.items||[]).map(j=>({json:{...j,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "824b43c8-5222-55da-b56e-b6b7beefc017",
+      "name": "Load Source and Snapshot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/jobs/context",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "4d29831a-b4eb-5a73-92ec-76ca14333d57",
+      "name": "Fixture or Structured Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1620,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/extract",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {envelope:$json.envelope,snapshot:$json.snapshot} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "4f2d11d4-289d-5842-8219-9a0aa234bae8",
+      "name": "Bind Extraction",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1890,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return [{json:{...$('Load Source and Snapshot').first().json,extraction:$input.first().json}}];"
+      }
+    },
+    {
+      "id": "db8ee29d-bca6-5a54-aa92-7efae1d88dd1",
+      "name": "Verify and Correlate Revision",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2160,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/incidents/correlate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "b3af873f-dd82-56c9-b5df-fe42b607d1e2",
+      "name": "Current Verified Revision",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2430,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bf122387-85b6-574b-96e6-b4345942f94e",
+              "leftValue": "={{ !$json.skip_analysis && $json.status!=='MANUAL_REVIEW' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "61645e9b-ed24-579c-b941-69dee108316e",
+      "name": "ERP Impact Analysis",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2700,
+        200
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "APICWF0400000001"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    },
+    {
+      "id": "62c7fc3b-20d8-5751-a609-289be5776685",
+      "name": "Risk and Action Plan",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2970,
+        200
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "APICWF0500000001"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    },
+    {
+      "id": "5c0830a2-2a3e-5d43-b9ea-3cd6c1635855",
+      "name": "Complete Analysis Job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        3240,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/jobs/complete",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Execution Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Context": {
+      "main": [
+        [
+          {
+            "node": "Claim Analysis Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim Analysis Job": {
+      "main": [
+        [
+          {
+            "node": "Claimed Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claimed Job": {
+      "main": [
+        [
+          {
+            "node": "Load Source and Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Source and Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Fixture or Structured Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fixture or Structured Extraction": {
+      "main": [
+        [
+          {
+            "node": "Bind Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bind Extraction": {
+      "main": [
+        [
+          {
+            "node": "Verify and Correlate Revision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify and Correlate Revision": {
+      "main": [
+        [
+          {
+            "node": "Current Verified Revision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ERP Impact Analysis": {
+      "main": [
+        [
+          {
+            "node": "Risk and Action Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Risk and Action Plan": {
+      "main": [
+        [
+          {
+            "node": "Complete Analysis Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Current Verified Revision": {
+      "main": [
+        [
+          {
+            "node": "ERP Impact Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Complete Analysis Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "versionId": "91405835-72ad-4b19-8d59-a83471c0e7c4",
+  "activeVersionId": "91405835-72ad-4b19-8d59-a83471c0e7c4",
+  "pinData": {},
+  "tags": []
+}

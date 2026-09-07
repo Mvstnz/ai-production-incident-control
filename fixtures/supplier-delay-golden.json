@@ -1,0 +1,162 @@
+{
+  "schema_version": "planning-fixture-v1",
+  "description": "Synthetic specification fixture. Expected values are not proof of a working application.",
+  "scenario_id": "supplier-delay-golden",
+  "timezone": "Asia/Bangkok",
+  "analysis_as_of": "2026-10-12T08:00:00+07:00",
+  "supplier": {
+    "id": "SUP-APC",
+    "name": "Asia Precision Components"
+  },
+  "purchase_order": {
+    "number": "4500192",
+    "item": "10",
+    "material": "SHAFT-DN300",
+    "site": "DEMO-PLANT",
+    "open_quantity": 40,
+    "unit": "pcs"
+  },
+  "inventory": {
+    "physical": 18,
+    "quality_blocked": 4,
+    "other_reserved": 0,
+    "nettable": 14
+  },
+  "baseline_supply": [
+    {
+      "quantity": 40,
+      "at": "2026-10-12T08:00:00+07:00",
+      "status": "CONFIRMED"
+    }
+  ],
+  "initial_incident_supply": [
+    {
+      "quantity": 40,
+      "at": "2026-10-19T08:00:00+07:00",
+      "status": "CONFIRMED"
+    }
+  ],
+  "unconfirmed_partial": {
+    "quantity": 10,
+    "at": "2026-10-13T08:00:00+07:00",
+    "status": "PROPOSED",
+    "included_in_total_40": true
+  },
+  "revised_confirmed_supply": [
+    {
+      "quantity": 10,
+      "at": "2026-10-13T08:00:00+07:00",
+      "status": "CONFIRMED"
+    },
+    {
+      "quantity": 30,
+      "at": "2026-10-19T08:00:00+07:00",
+      "status": "CONFIRMED"
+    }
+  ],
+  "confirmed_timely_alternative": false,
+  "production_calendar": "continuous_7_day_demo_calendar",
+  "production_lead_hours_after_full_supply": 48,
+  "demands": [
+    {
+      "production_order": "PRD-1001",
+      "quantity": 10,
+      "at": "2026-10-12T09:00:00+07:00",
+      "sales_order_item": "SO-1001/10",
+      "sales_quantity": 10,
+      "unit_price_minor": 300000,
+      "currency": "EUR",
+      "customer_id": "CUST-1",
+      "strategic": false,
+      "customer_due": "2026-10-15T23:59:59+07:00",
+      "partial_delivery_allowed": false
+    },
+    {
+      "production_order": "PRD-1002",
+      "quantity": 12,
+      "at": "2026-10-14T08:00:00+07:00",
+      "sales_order_item": "SO-1002/10",
+      "sales_quantity": 12,
+      "unit_price_minor": 400000,
+      "currency": "EUR",
+      "customer_id": "CUST-2",
+      "strategic": false,
+      "customer_due": "2026-10-17T23:59:59+07:00",
+      "partial_delivery_allowed": false
+    },
+    {
+      "production_order": "PRD-1003",
+      "quantity": 16,
+      "at": "2026-10-16T08:00:00+07:00",
+      "sales_order_item": "SO-1003/10",
+      "sales_quantity": 16,
+      "unit_price_minor": 490000,
+      "currency": "EUR",
+      "customer_id": "CUST-3",
+      "strategic": true,
+      "customer_due": "2026-10-19T23:59:59+07:00",
+      "partial_delivery_allowed": false
+    }
+  ],
+  "expected_initial": {
+    "relevant_demand_quantity": 38,
+    "timely_covered_quantity": 14,
+    "shortage_quantity": 24,
+    "shortage_by_production_order": {
+      "PRD-1001": 0,
+      "PRD-1002": 8,
+      "PRD-1003": 16
+    },
+    "referenced_production_orders": 3,
+    "under_supplied_production_orders": 2,
+    "at_risk_sales_order_items": [
+      "SO-1002/10",
+      "SO-1003/10"
+    ],
+    "at_risk_customer_count": 2,
+    "at_risk_order_value_minor": 12640000,
+    "currency": "EUR",
+    "risk_policy_version": "portfolio-v1",
+    "risk_factors": [
+      20,
+      20,
+      10,
+      15,
+      10,
+      10
+    ],
+    "risk_score": 85,
+    "severity": "CRITICAL"
+  },
+  "expected_revised": {
+    "relevant_demand_quantity": 38,
+    "timely_covered_quantity": 24,
+    "shortage_quantity": 14,
+    "shortage_by_production_order": {
+      "PRD-1001": 0,
+      "PRD-1002": 0,
+      "PRD-1003": 14
+    },
+    "referenced_production_orders": 3,
+    "under_supplied_production_orders": 1,
+    "at_risk_sales_order_items": [
+      "SO-1003/10"
+    ],
+    "at_risk_customer_count": 1,
+    "at_risk_order_value_minor": 7840000,
+    "currency": "EUR",
+    "risk_policy_version": "portfolio-v1",
+    "risk_factors": [
+      20,
+      15,
+      5,
+      10,
+      10,
+      10
+    ],
+    "risk_score": 70,
+    "severity": "HIGH",
+    "same_incident_new_revision": true,
+    "old_approvals_valid": false
+  }
+}

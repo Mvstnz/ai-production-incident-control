@@ -1,0 +1,228 @@
+{
+  "id": "NwyqBStHsct30JQZ",
+  "name": "APIC | WF07 | Action Execution",
+  "active": false,
+  "isArchived": false,
+  "versionId": "e37202d8-0278-447f-8dce-4cdd32bb7f99",
+  "activeVersionId": null,
+  "createdAt": "2026-09-07T11:36:37.435Z",
+  "updatedAt": "2026-09-07T11:36:37.435Z",
+  "description": "apic-portfolio: Action Execution. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+  "nodes": [
+    {
+      "id": "f4124d09-3bb1-46c7-adaa-fe5dac08991d",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF07 · Action Execution\nAtomic claim rechecks exact current authorization. Adapter supports only local effects; accepted-but-timed-out write is UNKNOWN_OUTCOME and cannot blindly retry. Notification never resolves incident.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "599dc306-1a4e-48fb-9fbb-88baa0bbe3ba",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "3f48ac33-4353-4c40-9b0c-4ecfa7afbc6d",
+      "name": "Action Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "97bdc995-d93a-4cec-a867-1b6f5990d8e7",
+      "name": "Claim Authorized Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://configure-apic-ops.invalid/internal/actions/claim",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "f1ebf784-b187-47d4-9980-c09aa02f52f7",
+      "name": "May Execute Exact Payload",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b2442fd3-5663-5882-a86c-6c51ae9afa2a",
+              "leftValue": "={{ $json.can_execute===true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "783094be-ea51-4710-a01e-0b2466a2534b",
+      "name": "Execute Controlled Sandbox Adapter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://configure-apic-ops.invalid/internal/actions/execute",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {scope_id:$('Action Context').first().json.scope_id,action_id:$json.action_id,claim_token:$json.claim_token,execution_id:$execution.id,workflow_id:$workflow.id} }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "99cfea7e-68c0-4b96-b49b-3116b68bfd70",
+      "name": "Known Action Outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{action_id:i.json.action_id,status:i.json.status,provider_reference:i.json.provider_reference||null}}));"
+      }
+    },
+    {
+      "id": "699b5700-8b65-4b29-9e8e-c46dbb1ad1f8",
+      "name": "Target Configuration BLOCKED",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -720
+      ],
+      "parameters": {
+        "content": "## BLOCKED — inactive / unpublished\nConfigure authorized Operations and ERP HTTPS endpoints and missing APIC credentials before any separately authorized execution.\n\nhttps://configure-apic-ops.invalid and https://configure-apic-erp.invalid are deliberately non-routable configuration placeholders. Preserve every endpoint path. Dynamic wakeup URLs must be backend-validated for the authorized n8n host and protected by APIC Webhook Intake.\n\nWorkflow settings (Asia/Bangkok, caller policy, retention and shared WF09 error routing) are pending: no documented SDK creation settings; update is blocked by the approval gate. WF09 must remain unpublished. No runtime test has run.",
+        "width": 980,
+        "height": 390,
+        "color": 3
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Action Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action Context": {
+      "main": [
+        [
+          {
+            "node": "Claim Authorized Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim Authorized Action": {
+      "main": [
+        [
+          {
+            "node": "May Execute Exact Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "May Execute Exact Payload": {
+      "main": [
+        [
+          {
+            "node": "Execute Controlled Sandbox Adapter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Controlled Sandbox Adapter": {
+      "main": [
+        [
+          {
+            "node": "Known Action Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "tags": []
+}
+

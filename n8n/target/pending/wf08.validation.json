@@ -1,0 +1,43 @@
+{
+  "key": "wf08",
+  "status": "VALIDATED_NOT_DEPLOYED",
+  "target_test_status": "NOT_RUN",
+  "builder_sha256": "59b26511fede82ce34671afbfe7e2c342cf6d95158c52cc7a7da09f279feeded",
+  "validation": {
+    "valid": true,
+    "nodeCount": 17,
+    "warnings": [
+      {
+        "code": "PLAIN_GENERIC_AUTH",
+        "message": "'Recover Due Work and SLA' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+        "nodeName": "Recover Due Work and SLA"
+      },
+      {
+        "code": "PLAIN_GENERIC_AUTH",
+        "message": "'Send Protected Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+        "nodeName": "Send Protected Wakeup"
+      },
+      {
+        "code": "PLAIN_GENERIC_AUTH",
+        "message": "'Acknowledge Wakeup' creates a new httpHeaderAuth credential. Set genericAuthType to 'httpTemplatedCustomAuth' instead — `Authorization: Bearer <token>` becomes the template {\"headers\":{\"Authorization\":\"Bearer {{api_key}}\"}} — or credential setup will reject it. Plain generic types are only for reusing an existing credential.",
+        "nodeName": "Acknowledge Wakeup"
+      },
+      {
+        "code": "INVALID_EXPRESSION_PATH",
+        "message": "'Send Protected Wakeup' parameter 'url' uses $json.resume_url but no predecessor outputs this field.",
+        "nodeName": "Send Protected Wakeup"
+      },
+      {
+        "code": "INVALID_EXPRESSION_PATH",
+        "message": "'Wakeup Accepted' parameter 'conditions.conditions[0].leftValue' uses $json.statusCode but no predecessor outputs this field.",
+        "nodeName": "Wakeup Accepted"
+      },
+      {
+        "code": "INVALID_EXPRESSION_PATH",
+        "message": "'Acknowledge Wakeup' parameter 'jsonBody' uses $('Due Wakeups').item.json.scope_id but 'Due Wakeups' doesn't output this field.",
+        "nodeName": "Acknowledge Wakeup"
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,107 @@
+{
+  "profile": "DEMO_LOCAL",
+  "method": "Actual CUA-controlled Chromium UI, real local services; no mocked API",
+  "checks": [
+    {
+      "name": "guided_supplier_demo",
+      "status": "PASS",
+      "source_event_id": "cd7ebcdb-4f48-4978-92e0-ffff8687028d",
+      "job_id": "8df008a9-7897-40f8-9ef3-1de8b9ab27de",
+      "incident_id": "213a1ccf-e413-4829-b98c-8c211eff3f06",
+      "observed": {
+        "required": 38,
+        "covered": 14,
+        "shortage": 24,
+        "reviewed_orders": 3,
+        "affected_orders": 2,
+        "value_eur": 126400,
+        "score": 88,
+        "severity": "CRITICAL"
+      }
+    },
+    {
+      "name": "exact_approval_via_UI",
+      "status": "PASS",
+      "role": "production_manager",
+      "plan_version": 1,
+      "plan_hash": "9f25dc986e2d7b7072e2182f65fca16f6c7fc77e1d04ea2901ebc00e23a0487e",
+      "observed": "Approve disabled before rationale/checkbox; explicit review submitted; pending approvals became zero; supplier action succeeded once; incident remains MONITORING",
+      "action_id": "8744b239-be32-4fe1-8ef8-45fbdcbac1b9",
+      "workflow_id": "APICWF0700000001",
+      "execution_id": "670"
+    },
+    {
+      "name": "four_persisted_views",
+      "status": "PASS",
+      "views": [
+        "Overview",
+        "Incident detail",
+        "Approval inbox",
+        "Reliability"
+      ],
+      "screenshots": [
+        "evidence/screenshots/dashboard-overview.png",
+        "evidence/screenshots/dashboard-incident.png",
+        "evidence/screenshots/dashboard-approval.png",
+        "evidence/screenshots/dashboard-reliability.png"
+      ]
+    },
+    {
+      "name": "n8n_canvas_matches_dashboard_action",
+      "status": "PASS",
+      "criteria": [
+        "AC36"
+      ],
+      "workflow_id": "APICWF0700000001",
+      "execution_id": "670",
+      "n8n_status": "Succeeded",
+      "n8n_duration": "399ms",
+      "dashboard_status": "Succeeded",
+      "dashboard_attempts": 1,
+      "screenshot": "evidence/screenshots/n8n-action-execution-670.png"
+    },
+    {
+      "name": "viewer_isolation_and_disabled_demo_mutations",
+      "status": "PASS",
+      "observed": "Viewer sees only shared default scope; all three guided scenario buttons disabled with read-only explanation",
+      "screenshot": "evidence/screenshots/dashboard-viewer.png"
+    },
+    {
+      "name": "responsive_menu_open_and_overflow",
+      "status": "PASS",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "observed_document_width": 375,
+      "keyboard": "Enter opened navigation",
+      "screenshot": "evidence/screenshots/dashboard-mobile-menu.png"
+    },
+    {
+      "name": "scope_survives_reload",
+      "status": "PASS",
+      "note": "Initial failure found and source fixed; final rebuilt-browser retest pending",
+      "observed": "After new build, selecting authorized fff6c8fa scope then reloading incident213a1ccf retained that scope, MONITORING and88/126400values."
+    },
+    {
+      "name": "mobile_escape_closes_and_restores_focus",
+      "status": "PASS",
+      "note": "Initial Escape failure found and source fixed; final rebuilt-browser retest pending",
+      "observed": "At390x844, Enter opened navigation; Escape set aria-expanded=false and focus returned to Toggle navigation."
+    },
+    {
+      "name": "desktop_breakpoint",
+      "status": "PASS",
+      "viewport_width": 1280,
+      "document_width": 1265,
+      "mobile_toggle_visible": false
+    },
+    {
+      "name": "obsolete_wakeup_reconciled",
+      "status": "PASS",
+      "observed": "Same hero scope Reliability now shows Wakeup Delivered. Earlier reliability screenshot predates this cleanup."
+    }
+  ],
+  "limits": "Local visual checks only. No cloud execution or live LLM evaluation implied. Original reload/Escape failures fixed and retested.",
+  "screenshot_review": "All retained screenshots visually inspected for synthetic data and secret exposure. Re-capture of updated Reliability failed; original captured view retained. Canvas670 recaptured after desktop breakpoint test."
+}

@@ -1,0 +1,795 @@
+{
+  "status": "PASS",
+  "criteria": [
+    "AC02"
+  ],
+  "started_at": "2026-09-07T12:31:28.111228+00:00",
+  "finished_at": "2026-09-07T12:34:25.024196+00:00",
+  "scope_count": 30,
+  "unchanged_scope_job_action_ids": true,
+  "persistent_secrets_unchanged": true,
+  "workflow_ids": "All ten exact published IDs read back once; see local-readback.json",
+  "before": [
+    {
+      "scope_id": "01c1bb66-7435-488f-9cf2-14e5e2ecafd0",
+      "jobs": [
+        "f10a8238-ef60-4d99-a9b2-31f7ad683e10"
+      ],
+      "incidents": [
+        "0b694fd0-f0ce-4efe-bbc6-db51d5623d45"
+      ],
+      "actions": [
+        "158b5425-2189-4df8-a67a-86815d3512f7",
+        "ffbda171-5902-49b0-bd87-f784506b7bb8"
+      ]
+    },
+    {
+      "scope_id": "160c0a89-e6c7-4d89-97f4-9ad4db69d2bf",
+      "jobs": [
+        "1e3b5241-b461-49a3-8642-41473159ffa0",
+        "d3a5fd58-bcd5-48ec-bd94-3ada0ad27e73"
+      ],
+      "incidents": [
+        "a118c489-8642-43a9-8079-84049ab200b4"
+      ],
+      "actions": [
+        "87639d5a-7553-4b06-815d-fff82d3915cd",
+        "93effe41-a7d4-41f4-8412-8ca2611cdc07",
+        "9f4dd26a-b478-4a85-b80e-71272b5f5aea",
+        "c51f283d-3b36-4294-892c-bdc0a0f4bbbd"
+      ]
+    },
+    {
+      "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+      "jobs": [
+        "f9390c96-6514-41eb-9c87-aaf717187365"
+      ],
+      "incidents": [
+        "357bc116-d387-43c9-8e26-d2fb0a4fc73a"
+      ],
+      "actions": [
+        "07eb25e5-591f-4f0b-8858-49319a58f5b1",
+        "2e6054d4-05bc-40de-935e-9e1edc33bc72",
+        "345f52ef-a367-410f-b209-22817f379416",
+        "baa891c0-b5a6-4c1a-bef4-be78cd5679d3"
+      ]
+    },
+    {
+      "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+      "jobs": [
+        "766822f7-3097-475f-9ded-5ebc417b8f12"
+      ],
+      "incidents": [
+        "d5797536-78fb-45da-993f-07a33b0abf91"
+      ],
+      "actions": [
+        "c2c23c78-27c6-45bd-858c-f080d37d8c67",
+        "c8b99656-a99e-4621-8fc4-39b227caaa0b"
+      ]
+    },
+    {
+      "scope_id": "272926a9-c50e-4e43-836c-80d57b19f489",
+      "jobs": [],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "2ed21538-5eab-4458-b3b6-3aa5c5a62b5f",
+      "jobs": [
+        "557447f1-5e97-4812-97a2-e462af72ac59",
+        "90897238-cd39-4cc6-b5e9-a719f362036e",
+        "f6069347-37f5-48ad-bc42-9c737d907b7f"
+      ],
+      "incidents": [
+        "8d59d305-4538-41e0-b8c6-d15b80190a79"
+      ],
+      "actions": [
+        "186d42d6-2ece-41f5-a33e-c7b38377d63b",
+        "2fd748ab-3b93-4627-b2ee-44fcd8758eeb"
+      ]
+    },
+    {
+      "scope_id": "4d317e75-f4f5-483b-a877-472941c59706",
+      "jobs": [
+        "1b281ba1-90e1-4101-8fac-647da6b1f73d"
+      ],
+      "incidents": [
+        "5f1177fc-0e89-4a0c-971a-7133e034c2d8"
+      ],
+      "actions": [
+        "0718a862-f273-4862-931a-f8e9cd8f59ad",
+        "fe28bacd-8641-4e5a-8614-9007e1a46762"
+      ]
+    },
+    {
+      "scope_id": "5205335c-ebb5-43a7-aa45-5277d7d0682c",
+      "jobs": [
+        "499ef765-6819-4a7a-890d-b7bbe5c25816",
+        "8071b2bf-3de7-451c-9658-fc316ea21672"
+      ],
+      "incidents": [
+        "ec37285d-8401-4a8d-b5d2-14fe9964f022"
+      ],
+      "actions": [
+        "5334a463-b5cd-407d-ba4e-5437a567238b",
+        "537520c6-563f-451e-9a73-99c1b0397c9a",
+        "7107fe7f-87cb-42a0-b3a6-f70f02963fa0",
+        "76f5b75e-cc61-4c6a-bacd-250e2844d0de"
+      ]
+    },
+    {
+      "scope_id": "627837ae-1a27-480b-8841-a7140c75d19b",
+      "jobs": [
+        "7a776e38-dfd9-4234-8b05-cb945983b544"
+      ],
+      "incidents": [
+        "cd68421b-fe14-4b61-8d4f-9d84917ebaba"
+      ],
+      "actions": [
+        "5ef2df56-ec37-423e-a368-404142861b78",
+        "d84a740b-88b4-4c13-b302-668aee8f2e36"
+      ]
+    },
+    {
+      "scope_id": "71d93be7-8a33-4f0e-ac50-f8d53f003d1c",
+      "jobs": [
+        "d438c86f-0aa8-44b4-b54b-c4b23ca42356"
+      ],
+      "incidents": [
+        "581c9131-7e8c-4adc-b80a-ecc7e17c9a19"
+      ],
+      "actions": [
+        "62769e87-ca7c-44bb-988b-4861424f758b",
+        "b7447b4a-237e-46f7-b458-49feb0f9add2"
+      ]
+    },
+    {
+      "scope_id": "7301ee8f-0cdb-4944-87df-278bd2f795bc",
+      "jobs": [
+        "389d6013-3c7f-4a15-b08a-fc4d474ea89a"
+      ],
+      "incidents": [
+        "a009a5b0-68ec-47a9-9c69-52c7bc7debb0"
+      ],
+      "actions": [
+        "6f2abdf5-53a1-4e07-bff3-25c5fac121f3",
+        "88b196bf-704e-47a5-a5d6-b65a210cc1d6"
+      ]
+    },
+    {
+      "scope_id": "7bed971b-5e56-405d-af81-4bcd8e0fe014",
+      "jobs": [
+        "109b9ecf-2bee-4720-bb1c-c84daf179cc5",
+        "9d34ab5f-6011-46ba-8377-ba85502a7ece"
+      ],
+      "incidents": [
+        "20101190-7c7e-4154-8136-90712519f316"
+      ],
+      "actions": [
+        "16ef6d02-2f5c-45fa-9303-96621db6819a",
+        "92f22374-2cbf-4368-aa89-6739f36002c4"
+      ]
+    },
+    {
+      "scope_id": "7c6817a8-c5f6-49ee-bc23-f850c59cd288",
+      "jobs": [
+        "8867e30e-8e7d-4998-ab9a-0ae8569f9938"
+      ],
+      "incidents": [
+        "d152c4e6-43f0-4eff-935c-d0068aa2a342"
+      ],
+      "actions": [
+        "47e0634b-cbe5-4194-9e67-9c8e35072507",
+        "4ca0d0e8-e88e-46bc-b6a2-1c5c9b0b3e81"
+      ]
+    },
+    {
+      "scope_id": "928d1daf-6ffe-54e4-8cf3-5d4032986821",
+      "jobs": [],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "95609856-5380-43f2-be9c-80bc4bdb17ef",
+      "jobs": [
+        "4d011802-d810-4b2d-a698-ba9d1c2d78fb"
+      ],
+      "incidents": [
+        "b21c2f4c-a3c7-4592-ad5d-933f8a1dd79b"
+      ],
+      "actions": [
+        "276eb318-71a9-42aa-88b9-7209f0924271",
+        "2df69e98-19e3-46de-af27-bb50479aded5"
+      ]
+    },
+    {
+      "scope_id": "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+      "jobs": [
+        "b73bea27-90f1-4062-b29f-814d011d8fdc"
+      ],
+      "incidents": [
+        "31635b9d-2f0c-4217-bd3a-58680629ae49"
+      ],
+      "actions": [
+        "6fd38337-5fd4-4f30-b0f1-a1163cdb4d86",
+        "c71d7809-1bb5-4865-b10d-d2775e91e227"
+      ]
+    },
+    {
+      "scope_id": "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+      "jobs": [
+        "74054b29-55ea-4673-9f66-886904498cc6",
+        "df394336-8d3c-4c47-b0a1-9a59a1b6e41d"
+      ],
+      "incidents": [
+        "4f3793b6-81af-48a3-b6e6-c8bae9dc294e"
+      ],
+      "actions": [
+        "4aca08be-a497-4658-b139-0be34ce1b5e1",
+        "88280c29-ce6e-4551-b93b-a31ddde2b1ad",
+        "d48071a2-ca7c-4c69-a89e-15ba96238e4b",
+        "fa29f1f6-3f6e-4fff-ac32-e7c4bebffc92"
+      ]
+    },
+    {
+      "scope_id": "a31ac718-e8b7-41c6-812c-8077577f3d25",
+      "jobs": [
+        "bd900dd0-dcec-4458-a1a7-bd57ca5dee95"
+      ],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "a42f4463-a29a-45ef-bf8a-4239d1449a13",
+      "jobs": [
+        "23a22d6a-31e8-4733-82e2-192a522b48a2",
+        "ac70a62d-c29c-4e66-bc75-086a42cc0b3d"
+      ],
+      "incidents": [
+        "71360e9d-2b79-411b-a3f9-e56bb85c72d9"
+      ],
+      "actions": [
+        "2d27ac6a-215f-4daa-a0e6-4d4392456d59",
+        "4280868a-4726-480f-9875-9972d9347e5b",
+        "c9e44d7a-50c7-4099-a136-1926aa52ed78",
+        "f8887f77-18ae-4d7a-b26b-633120d4d068"
+      ]
+    },
+    {
+      "scope_id": "b39d2cb7-a28c-422d-8d87-17d1fc3a8b4c",
+      "jobs": [
+        "91fc723a-80cb-4397-a8e8-990d210e8868",
+        "b1791bd2-726b-41e4-8ca3-30b0df38d577",
+        "eb6c029e-61df-446f-bd8e-a80caf07822c"
+      ],
+      "incidents": [
+        "31dc2e84-79e5-4c02-82e4-9c8fbcf4f24d"
+      ],
+      "actions": [
+        "ae14738b-db22-4cdc-9a40-32926aad92da",
+        "f5f5f97d-e900-4b60-9017-24bbfd1fa539"
+      ]
+    },
+    {
+      "scope_id": "d67d71d3-3e86-4a4f-8b98-4ea28590530b",
+      "jobs": [
+        "de86ee9d-b158-4662-a2f3-6e1d9e9025cc"
+      ],
+      "incidents": [
+        "51ac213a-719a-438b-9ebc-1cba99a3526d"
+      ],
+      "actions": [
+        "3c028e90-c172-448e-a68d-3a0ed35dba40",
+        "6dd01334-4195-4214-aea2-a791b075583c"
+      ]
+    },
+    {
+      "scope_id": "d8b57bad-f547-4946-b97c-54c1fbd2f458",
+      "jobs": [
+        "efea2853-4457-4db4-913e-82e0e1fb5144"
+      ],
+      "incidents": [
+        "a7b0e569-cf4e-4858-b586-df93daee33c5"
+      ],
+      "actions": [
+        "37dfb9a5-8a00-4242-9121-d27d788327cd",
+        "f2b653f8-2d64-4cb0-847c-d08f0e6a233c"
+      ]
+    },
+    {
+      "scope_id": "ebba5602-a845-439c-8a97-7718d5bed716",
+      "jobs": [
+        "687d48d2-a8cc-4490-9383-0b4719369ca3"
+      ],
+      "incidents": [
+        "ad9bda02-3add-43cc-a87c-c5d97671b8d3"
+      ],
+      "actions": [
+        "46d7d0df-e065-4c79-9921-8c61b4fd350f",
+        "d7c01a3b-354d-44a4-a81b-5eb9dd4e1272"
+      ]
+    },
+    {
+      "scope_id": "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+      "jobs": [
+        "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+        "b380468e-85ba-45e8-88d3-cb8e3a058b98"
+      ],
+      "incidents": [
+        "30f610ec-13ef-4418-8a20-973064912565"
+      ],
+      "actions": [
+        "8cf74e3e-3bc3-4b39-9825-7bc1a4961944",
+        "a65f540f-6a5f-467d-80aa-f8589c8f752a"
+      ]
+    },
+    {
+      "scope_id": "f03e6ae1-d81c-49b3-918d-5ea4e5ec2f32",
+      "jobs": [
+        "503eef88-84ee-4702-a0d6-463b46422fc4"
+      ],
+      "incidents": [
+        "5491c316-f0cf-4065-910d-b1c2ec253100"
+      ],
+      "actions": [
+        "25fd9ed8-6e32-45df-b4cb-96deab80b758",
+        "c55ae6bf-134e-45e6-9ac9-9becd4068085"
+      ]
+    },
+    {
+      "scope_id": "f2a602cd-97e8-4b7b-8fe7-f77dc10ba1bc",
+      "jobs": [
+        "a38fca36-6f75-4a2a-892a-c5b26f82a84a"
+      ],
+      "incidents": [
+        "3c0ffd77-5c8d-4657-bd59-8ef9a6b5fa92"
+      ],
+      "actions": [
+        "0667bd1a-5dfa-46c7-8bb4-c1588068ca8c",
+        "0abae20a-34b6-48bf-9f12-6e89611e66fd"
+      ]
+    },
+    {
+      "scope_id": "f60139f6-176e-4c04-ab86-7f7188a06d5e",
+      "jobs": [
+        "210eb45b-068f-43cb-a973-e611f3fd38a5"
+      ],
+      "incidents": [
+        "671b6b62-df50-4c05-8d49-4cb6557613d8"
+      ],
+      "actions": [
+        "d9dcca56-80fb-4940-b517-7d122d301740",
+        "ee06c416-95fb-453b-87f0-8475761a5bd0"
+      ]
+    },
+    {
+      "scope_id": "f7f6440e-cfc2-46eb-901b-5a3763ff4cdb",
+      "jobs": [
+        "27997a7a-a3d5-4b05-b3ae-326b01122a16",
+        "ba9378d7-b6a9-4383-81e0-2d656b761eb0"
+      ],
+      "incidents": [
+        "ed77305a-b919-45b7-b20a-02f2ab021ec1"
+      ],
+      "actions": [
+        "05306936-46f9-4a99-b23c-e65a92660783",
+        "84cc00d5-cab3-45df-8e9d-ee2ebb5fe7b6",
+        "94824221-9e57-44c7-8e66-014f0b336cdd",
+        "b067bbfd-27eb-4040-abde-7dacc215318a"
+      ]
+    },
+    {
+      "scope_id": "fe609f3b-4427-4b4b-87d3-37900e5532d2",
+      "jobs": [
+        "638d513d-aa38-41da-aac6-045db46abee1"
+      ],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "fff6c8fa-e1ce-4808-9942-0cb91ac06216",
+      "jobs": [
+        "8df008a9-7897-40f8-9ef3-1de8b9ab27de"
+      ],
+      "incidents": [
+        "213a1ccf-e413-4829-b98c-8c211eff3f06"
+      ],
+      "actions": [
+        "8744b239-be32-4fe1-8ef8-45fbdcbac1b9",
+        "bf4f19e2-a27b-4adf-91ff-5b8026397927"
+      ]
+    }
+  ],
+  "after": [
+    {
+      "scope_id": "01c1bb66-7435-488f-9cf2-14e5e2ecafd0",
+      "jobs": [
+        "f10a8238-ef60-4d99-a9b2-31f7ad683e10"
+      ],
+      "incidents": [
+        "0b694fd0-f0ce-4efe-bbc6-db51d5623d45"
+      ],
+      "actions": [
+        "158b5425-2189-4df8-a67a-86815d3512f7",
+        "ffbda171-5902-49b0-bd87-f784506b7bb8"
+      ]
+    },
+    {
+      "scope_id": "160c0a89-e6c7-4d89-97f4-9ad4db69d2bf",
+      "jobs": [
+        "1e3b5241-b461-49a3-8642-41473159ffa0",
+        "d3a5fd58-bcd5-48ec-bd94-3ada0ad27e73"
+      ],
+      "incidents": [
+        "a118c489-8642-43a9-8079-84049ab200b4"
+      ],
+      "actions": [
+        "87639d5a-7553-4b06-815d-fff82d3915cd",
+        "93effe41-a7d4-41f4-8412-8ca2611cdc07",
+        "9f4dd26a-b478-4a85-b80e-71272b5f5aea",
+        "c51f283d-3b36-4294-892c-bdc0a0f4bbbd"
+      ]
+    },
+    {
+      "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+      "jobs": [
+        "f9390c96-6514-41eb-9c87-aaf717187365"
+      ],
+      "incidents": [
+        "357bc116-d387-43c9-8e26-d2fb0a4fc73a"
+      ],
+      "actions": [
+        "07eb25e5-591f-4f0b-8858-49319a58f5b1",
+        "2e6054d4-05bc-40de-935e-9e1edc33bc72",
+        "345f52ef-a367-410f-b209-22817f379416",
+        "baa891c0-b5a6-4c1a-bef4-be78cd5679d3"
+      ]
+    },
+    {
+      "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+      "jobs": [
+        "766822f7-3097-475f-9ded-5ebc417b8f12"
+      ],
+      "incidents": [
+        "d5797536-78fb-45da-993f-07a33b0abf91"
+      ],
+      "actions": [
+        "c2c23c78-27c6-45bd-858c-f080d37d8c67",
+        "c8b99656-a99e-4621-8fc4-39b227caaa0b"
+      ]
+    },
+    {
+      "scope_id": "272926a9-c50e-4e43-836c-80d57b19f489",
+      "jobs": [],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "2ed21538-5eab-4458-b3b6-3aa5c5a62b5f",
+      "jobs": [
+        "557447f1-5e97-4812-97a2-e462af72ac59",
+        "90897238-cd39-4cc6-b5e9-a719f362036e",
+        "f6069347-37f5-48ad-bc42-9c737d907b7f"
+      ],
+      "incidents": [
+        "8d59d305-4538-41e0-b8c6-d15b80190a79"
+      ],
+      "actions": [
+        "186d42d6-2ece-41f5-a33e-c7b38377d63b",
+        "2fd748ab-3b93-4627-b2ee-44fcd8758eeb"
+      ]
+    },
+    {
+      "scope_id": "4d317e75-f4f5-483b-a877-472941c59706",
+      "jobs": [
+        "1b281ba1-90e1-4101-8fac-647da6b1f73d"
+      ],
+      "incidents": [
+        "5f1177fc-0e89-4a0c-971a-7133e034c2d8"
+      ],
+      "actions": [
+        "0718a862-f273-4862-931a-f8e9cd8f59ad",
+        "fe28bacd-8641-4e5a-8614-9007e1a46762"
+      ]
+    },
+    {
+      "scope_id": "5205335c-ebb5-43a7-aa45-5277d7d0682c",
+      "jobs": [
+        "499ef765-6819-4a7a-890d-b7bbe5c25816",
+        "8071b2bf-3de7-451c-9658-fc316ea21672"
+      ],
+      "incidents": [
+        "ec37285d-8401-4a8d-b5d2-14fe9964f022"
+      ],
+      "actions": [
+        "5334a463-b5cd-407d-ba4e-5437a567238b",
+        "537520c6-563f-451e-9a73-99c1b0397c9a",
+        "7107fe7f-87cb-42a0-b3a6-f70f02963fa0",
+        "76f5b75e-cc61-4c6a-bacd-250e2844d0de"
+      ]
+    },
+    {
+      "scope_id": "627837ae-1a27-480b-8841-a7140c75d19b",
+      "jobs": [
+        "7a776e38-dfd9-4234-8b05-cb945983b544"
+      ],
+      "incidents": [
+        "cd68421b-fe14-4b61-8d4f-9d84917ebaba"
+      ],
+      "actions": [
+        "5ef2df56-ec37-423e-a368-404142861b78",
+        "d84a740b-88b4-4c13-b302-668aee8f2e36"
+      ]
+    },
+    {
+      "scope_id": "71d93be7-8a33-4f0e-ac50-f8d53f003d1c",
+      "jobs": [
+        "d438c86f-0aa8-44b4-b54b-c4b23ca42356"
+      ],
+      "incidents": [
+        "581c9131-7e8c-4adc-b80a-ecc7e17c9a19"
+      ],
+      "actions": [
+        "62769e87-ca7c-44bb-988b-4861424f758b",
+        "b7447b4a-237e-46f7-b458-49feb0f9add2"
+      ]
+    },
+    {
+      "scope_id": "7301ee8f-0cdb-4944-87df-278bd2f795bc",
+      "jobs": [
+        "389d6013-3c7f-4a15-b08a-fc4d474ea89a"
+      ],
+      "incidents": [
+        "a009a5b0-68ec-47a9-9c69-52c7bc7debb0"
+      ],
+      "actions": [
+        "6f2abdf5-53a1-4e07-bff3-25c5fac121f3",
+        "88b196bf-704e-47a5-a5d6-b65a210cc1d6"
+      ]
+    },
+    {
+      "scope_id": "7bed971b-5e56-405d-af81-4bcd8e0fe014",
+      "jobs": [
+        "109b9ecf-2bee-4720-bb1c-c84daf179cc5",
+        "9d34ab5f-6011-46ba-8377-ba85502a7ece"
+      ],
+      "incidents": [
+        "20101190-7c7e-4154-8136-90712519f316"
+      ],
+      "actions": [
+        "16ef6d02-2f5c-45fa-9303-96621db6819a",
+        "92f22374-2cbf-4368-aa89-6739f36002c4"
+      ]
+    },
+    {
+      "scope_id": "7c6817a8-c5f6-49ee-bc23-f850c59cd288",
+      "jobs": [
+        "8867e30e-8e7d-4998-ab9a-0ae8569f9938"
+      ],
+      "incidents": [
+        "d152c4e6-43f0-4eff-935c-d0068aa2a342"
+      ],
+      "actions": [
+        "47e0634b-cbe5-4194-9e67-9c8e35072507",
+        "4ca0d0e8-e88e-46bc-b6a2-1c5c9b0b3e81"
+      ]
+    },
+    {
+      "scope_id": "928d1daf-6ffe-54e4-8cf3-5d4032986821",
+      "jobs": [],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "95609856-5380-43f2-be9c-80bc4bdb17ef",
+      "jobs": [
+        "4d011802-d810-4b2d-a698-ba9d1c2d78fb"
+      ],
+      "incidents": [
+        "b21c2f4c-a3c7-4592-ad5d-933f8a1dd79b"
+      ],
+      "actions": [
+        "276eb318-71a9-42aa-88b9-7209f0924271",
+        "2df69e98-19e3-46de-af27-bb50479aded5"
+      ]
+    },
+    {
+      "scope_id": "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+      "jobs": [
+        "b73bea27-90f1-4062-b29f-814d011d8fdc"
+      ],
+      "incidents": [
+        "31635b9d-2f0c-4217-bd3a-58680629ae49"
+      ],
+      "actions": [
+        "6fd38337-5fd4-4f30-b0f1-a1163cdb4d86",
+        "c71d7809-1bb5-4865-b10d-d2775e91e227"
+      ]
+    },
+    {
+      "scope_id": "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+      "jobs": [
+        "74054b29-55ea-4673-9f66-886904498cc6",
+        "df394336-8d3c-4c47-b0a1-9a59a1b6e41d"
+      ],
+      "incidents": [
+        "4f3793b6-81af-48a3-b6e6-c8bae9dc294e"
+      ],
+      "actions": [
+        "4aca08be-a497-4658-b139-0be34ce1b5e1",
+        "88280c29-ce6e-4551-b93b-a31ddde2b1ad",
+        "d48071a2-ca7c-4c69-a89e-15ba96238e4b",
+        "fa29f1f6-3f6e-4fff-ac32-e7c4bebffc92"
+      ]
+    },
+    {
+      "scope_id": "a31ac718-e8b7-41c6-812c-8077577f3d25",
+      "jobs": [
+        "bd900dd0-dcec-4458-a1a7-bd57ca5dee95"
+      ],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "a42f4463-a29a-45ef-bf8a-4239d1449a13",
+      "jobs": [
+        "23a22d6a-31e8-4733-82e2-192a522b48a2",
+        "ac70a62d-c29c-4e66-bc75-086a42cc0b3d"
+      ],
+      "incidents": [
+        "71360e9d-2b79-411b-a3f9-e56bb85c72d9"
+      ],
+      "actions": [
+        "2d27ac6a-215f-4daa-a0e6-4d4392456d59",
+        "4280868a-4726-480f-9875-9972d9347e5b",
+        "c9e44d7a-50c7-4099-a136-1926aa52ed78",
+        "f8887f77-18ae-4d7a-b26b-633120d4d068"
+      ]
+    },
+    {
+      "scope_id": "b39d2cb7-a28c-422d-8d87-17d1fc3a8b4c",
+      "jobs": [
+        "91fc723a-80cb-4397-a8e8-990d210e8868",
+        "b1791bd2-726b-41e4-8ca3-30b0df38d577",
+        "eb6c029e-61df-446f-bd8e-a80caf07822c"
+      ],
+      "incidents": [
+        "31dc2e84-79e5-4c02-82e4-9c8fbcf4f24d"
+      ],
+      "actions": [
+        "ae14738b-db22-4cdc-9a40-32926aad92da",
+        "f5f5f97d-e900-4b60-9017-24bbfd1fa539"
+      ]
+    },
+    {
+      "scope_id": "d67d71d3-3e86-4a4f-8b98-4ea28590530b",
+      "jobs": [
+        "de86ee9d-b158-4662-a2f3-6e1d9e9025cc"
+      ],
+      "incidents": [
+        "51ac213a-719a-438b-9ebc-1cba99a3526d"
+      ],
+      "actions": [
+        "3c028e90-c172-448e-a68d-3a0ed35dba40",
+        "6dd01334-4195-4214-aea2-a791b075583c"
+      ]
+    },
+    {
+      "scope_id": "d8b57bad-f547-4946-b97c-54c1fbd2f458",
+      "jobs": [
+        "efea2853-4457-4db4-913e-82e0e1fb5144"
+      ],
+      "incidents": [
+        "a7b0e569-cf4e-4858-b586-df93daee33c5"
+      ],
+      "actions": [
+        "37dfb9a5-8a00-4242-9121-d27d788327cd",
+        "f2b653f8-2d64-4cb0-847c-d08f0e6a233c"
+      ]
+    },
+    {
+      "scope_id": "ebba5602-a845-439c-8a97-7718d5bed716",
+      "jobs": [
+        "687d48d2-a8cc-4490-9383-0b4719369ca3"
+      ],
+      "incidents": [
+        "ad9bda02-3add-43cc-a87c-c5d97671b8d3"
+      ],
+      "actions": [
+        "46d7d0df-e065-4c79-9921-8c61b4fd350f",
+        "d7c01a3b-354d-44a4-a81b-5eb9dd4e1272"
+      ]
+    },
+    {
+      "scope_id": "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+      "jobs": [
+        "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+        "b380468e-85ba-45e8-88d3-cb8e3a058b98"
+      ],
+      "incidents": [
+        "30f610ec-13ef-4418-8a20-973064912565"
+      ],
+      "actions": [
+        "8cf74e3e-3bc3-4b39-9825-7bc1a4961944",
+        "a65f540f-6a5f-467d-80aa-f8589c8f752a"
+      ]
+    },
+    {
+      "scope_id": "f03e6ae1-d81c-49b3-918d-5ea4e5ec2f32",
+      "jobs": [
+        "503eef88-84ee-4702-a0d6-463b46422fc4"
+      ],
+      "incidents": [
+        "5491c316-f0cf-4065-910d-b1c2ec253100"
+      ],
+      "actions": [
+        "25fd9ed8-6e32-45df-b4cb-96deab80b758",
+        "c55ae6bf-134e-45e6-9ac9-9becd4068085"
+      ]
+    },
+    {
+      "scope_id": "f2a602cd-97e8-4b7b-8fe7-f77dc10ba1bc",
+      "jobs": [
+        "a38fca36-6f75-4a2a-892a-c5b26f82a84a"
+      ],
+      "incidents": [
+        "3c0ffd77-5c8d-4657-bd59-8ef9a6b5fa92"
+      ],
+      "actions": [
+        "0667bd1a-5dfa-46c7-8bb4-c1588068ca8c",
+        "0abae20a-34b6-48bf-9f12-6e89611e66fd"
+      ]
+    },
+    {
+      "scope_id": "f60139f6-176e-4c04-ab86-7f7188a06d5e",
+      "jobs": [
+        "210eb45b-068f-43cb-a973-e611f3fd38a5"
+      ],
+      "incidents": [
+        "671b6b62-df50-4c05-8d49-4cb6557613d8"
+      ],
+      "actions": [
+        "d9dcca56-80fb-4940-b517-7d122d301740",
+        "ee06c416-95fb-453b-87f0-8475761a5bd0"
+      ]
+    },
+    {
+      "scope_id": "f7f6440e-cfc2-46eb-901b-5a3763ff4cdb",
+      "jobs": [
+        "27997a7a-a3d5-4b05-b3ae-326b01122a16",
+        "ba9378d7-b6a9-4383-81e0-2d656b761eb0"
+      ],
+      "incidents": [
+        "ed77305a-b919-45b7-b20a-02f2ab021ec1"
+      ],
+      "actions": [
+        "05306936-46f9-4a99-b23c-e65a92660783",
+        "84cc00d5-cab3-45df-8e9d-ee2ebb5fe7b6",
+        "94824221-9e57-44c7-8e66-014f0b336cdd",
+        "b067bbfd-27eb-4040-abde-7dacc215318a"
+      ]
+    },
+    {
+      "scope_id": "fe609f3b-4427-4b4b-87d3-37900e5532d2",
+      "jobs": [
+        "638d513d-aa38-41da-aac6-045db46abee1"
+      ],
+      "incidents": [],
+      "actions": []
+    },
+    {
+      "scope_id": "fff6c8fa-e1ce-4808-9942-0cb91ac06216",
+      "jobs": [
+        "8df008a9-7897-40f8-9ef3-1de8b9ab27de"
+      ],
+      "incidents": [
+        "213a1ccf-e413-4829-b98c-8c211eff3f06"
+      ],
+      "actions": [
+        "8744b239-be32-4fe1-8ef8-45fbdcbac1b9",
+        "bf4f19e2-a27b-4adf-91ff-5b8026397927"
+      ]
+    }
+  ],
+  "note": "Repeat bootstrap on persistent local stack. Fresh-start evidence is recorded separately in CI."
+}

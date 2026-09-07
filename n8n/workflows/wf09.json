@@ -1,0 +1,170 @@
+{
+  "id": "APICWF0900000001",
+  "name": "APIC | WF09 | Error and Dead Letter Handler",
+  "active": false,
+  "nodes": [
+    {
+      "id": "2c4d00a5-062e-5417-9966-c40e0bdac168",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF09 · Error and Dead Letter Handler\nReal automatic Error Trigger and explicit test/subworkflow input. Redact raw supplier text and credentials; bounded retry stays in DB. No self-error recursion.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "492850bf-cae4-5333-91ff-b9f7de0aa1ef",
+      "name": "Automatic Execution Error",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "ec816c38-135f-56c9-bbe8-26ca407aa19c",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "c03d2a1c-c8f4-57c8-beaf-51b5a2da50c8",
+      "name": "Protected Error Harness",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "apic-error",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {
+          "allowedOrigins": "http://127.0.0.1:5173"
+        }
+      },
+      "webhookId": "02e39ddb-b495-5699-8a8e-3fa620cd9721",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicWebhook001",
+          "name": "APIC Webhook Intake"
+        }
+      }
+    },
+    {
+      "id": "7d714d55-afed-56b2-8ef9-0065a31d8538",
+      "name": "Safe Error Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const e=$input.first().json.body||$input.first().json; const err=e.execution?.error||{}; const status=Number(e.status_code||err.httpCode||err.statusCode||err.context?.httpCode)||null; const delay=Number(e.retry_after||err.context?.retryAfter)||null; return [{json:{scope_id:e.scope_id||null,job_id:e.job_id||null,execution_id:String(e.execution?.id||e.execution_id||$execution.id),workflow_id:e.workflow?.id||e.workflow_id||$workflow.id,status_code:status,retry_after:delay,error_class:e.error_class||(status && status<500 && status!==429?'PERMANENT':'TRANSIENT'),message:e.error_class==='PERMANENT'?'Permanent workflow configuration failure':'Workflow execution failed; inspect authorized runtime logs'}}];"
+      }
+    },
+    {
+      "id": "d36fb387-4542-5b21-ad6f-b76219ac5323",
+      "name": "Record Error and Classify Retry",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/errors",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Automatic Execution Error": {
+      "main": [
+        [
+          {
+            "node": "Safe Error Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Safe Error Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protected Error Harness": {
+      "main": [
+        [
+          {
+            "node": "Safe Error Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Safe Error Metadata": {
+      "main": [
+        [
+          {
+            "node": "Record Error and Classify Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "tags": []
+}

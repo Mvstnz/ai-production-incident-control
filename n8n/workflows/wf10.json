@@ -1,0 +1,180 @@
+{
+  "id": "APICWF1000000001",
+  "name": "APIC | WF10 | Daily Management Digest",
+  "active": false,
+  "nodes": [
+    {
+      "id": "ae79596a-b0cf-5c37-a538-b5ce616c236d",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF10 · Daily Management Digest\nOne digest per scope, Bangkok business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "de2f13ed-7dea-501b-96c7-70e92c8f4c39",
+      "name": "Daily at 08 Bangkok",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "94a40370-2d1b-5db3-82de-89693cbc2d12",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "2ab05137-6369-539a-b86b-a0a05aebd421",
+      "name": "Protected Digest Test",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "apic-digest",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {
+          "allowedOrigins": "http://127.0.0.1:5173"
+        }
+      },
+      "webhookId": "95db3f5a-b4d7-5bc5-aa69-5d229f26a441",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicWebhook001",
+          "name": "APIC Webhook Intake"
+        }
+      }
+    },
+    {
+      "id": "849c810e-c8a1-550b-aa0a-265583538890",
+      "name": "Digest Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const d=$input.first().json.body||$input.first().json; return [{json:{scope_id:d.scope_id||null,execution_id:$execution.id,workflow_id:$workflow.id}}];"
+      }
+    },
+    {
+      "id": "267cf6d5-404f-551b-b113-e3e85d07a2bb",
+      "name": "Commit Consistent Sandbox Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/digest",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily at 08 Bangkok": {
+      "main": [
+        [
+          {
+            "node": "Digest Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Digest Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protected Digest Test": {
+      "main": [
+        [
+          {
+            "node": "Digest Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Digest Context": {
+      "main": [
+        [
+          {
+            "node": "Commit Consistent Sandbox Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "pinData": {},
+  "tags": []
+}

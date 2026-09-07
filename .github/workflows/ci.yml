@@ -1,0 +1,32 @@
+name: Local acceptance
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: '3.12.10'
+      - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        with:
+          node-version: '24.12.0'
+          cache: npm
+      - name: Install pinned command proxy
+        run: cargo install --git https://github.com/rtk-ai/rtk --rev 5a7880d404db8364d602f2ecdc41dd790f64013f --locked
+      - run: rtk proxy python -m pip install -r backend/requirements.lock.txt
+      - run: rtk npm ci
+      - run: rtk npm run build
+      - run: rtk proxy python -m pytest tests/unit -q
+      - run: rtk proxy python scripts/bootstrap.py
+      - run: rtk proxy python -m backend.run_integration
+      - run: rtk proxy python -X utf8 scripts/test_runtime.py
+      - run: rtk proxy python scripts/scan_repository.py
+      - name: Stop this job's local stack
+        if: always()
+        run: rtk docker compose down

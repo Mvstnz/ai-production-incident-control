@@ -1,0 +1,21 @@
+Status: LOCAL_TESTED
+Working directory: C:/Users/marvi/Desktop/n8n_Workflows/ai-production-incident-control
+Command: rtk proxy python -m pytest tests/unit/test_domain.py -q
+Observed result:
+........................................................................ [ 72%]
+............................                                             [100%]
+100 passed in 0.27s
+
+Coverage: Hero 88/69; proposal separation and replacement; temporal receipts and
+backlog; reserved/blocked inventory; baseline attribution; non-1:1 sales mapping
+and full-position union; mixed snapshots; timezone/date validation; every risk
+factor threshold and severity edges; null/invalid data; machine calendar,
+qualified alternative and existing bookings; quality trace/override/approval;
+shipped/unverified quality review; exact fixture extraction, injection/unknown
+text, grounded-draft fallback and approval despite LOW severity.
+Additional verified-disposition tests: matching inspection/lot, released stock,
+nonempty evidence, post-inspection/pre-snapshot decision time, retained original
+failed inspection, and no false resolution for blocked or already shipped stock.
+
+These are pure-domain unit tests. They do not prove API, n8n, browser or target
+cloud execution. Those tests require separate observed evidence.

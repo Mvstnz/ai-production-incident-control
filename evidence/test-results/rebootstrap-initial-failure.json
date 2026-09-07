@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "phase": "post-bootstrap health verification",
+  "observed": "All bootstrap commands completed, but the final dashboard compose up --build also recreated its ops-api dependency. Immediate post-bootstrap login raised RemoteDisconnected before that replacement was ready.",
+  "correction": "Build/start the dashboard with --no-deps after the API is ready, and verify API readiness again before bootstrap returns.",
+  "verification": "A full repeat-bootstrap rerun is required; this failure is retained separately."
+}

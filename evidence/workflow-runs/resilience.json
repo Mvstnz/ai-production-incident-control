@@ -1,0 +1,1165 @@
+{
+  "profile": "DEMO_LOCAL",
+  "started_at": "2026-09-07T11:40:25.371011+00:00",
+  "tests": [
+    {
+      "name": "rejected_plan_never_dispatches_supplier_email",
+      "phase": "normal",
+      "criteria": [
+        "AC16"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "7301ee8f-0cdb-4944-87df-278bd2f795bc",
+        "incident_id": "a009a5b0-68ec-47a9-9c69-52c7bc7debb0",
+        "incident_status": "WAITING_APPROVAL",
+        "jobs": [
+          {
+            "id": "389d6013-3c7f-4a15-b08a-fc4d474ea89a",
+            "source_event_id": "d3c0ac94-736c-4786-b9b3-f04abe88520d",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:40:28.223504+00:00",
+            "execution_id": "480",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          }
+        ],
+        "wait_registrations": [],
+        "actions": [
+          {
+            "id": "6f2abdf5-53a1-4e07-bff3-25c5fac121f3",
+            "scope_id": "7301ee8f-0cdb-4944-87df-278bd2f795bc",
+            "plan_id": "268740b6-e43b-4b34-9cd8-41844f0c1b48",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — a009a5b0-68ec-47a9-9c69-52c7bc7debb0 revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "a009a5b0-68ec-47a9-9c69-52c7bc7debb0",
+              "incident_revision": 1
+            },
+            "status": "WAITING_APPROVAL",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          },
+          {
+            "id": "88b196bf-704e-47a5-a5d6-b65a210cc1d6",
+            "scope_id": "7301ee8f-0cdb-4944-87df-278bd2f795bc",
+            "plan_id": "268740b6-e43b-4b34-9cd8-41844f0c1b48",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident a009a5b0-68ec-47a9-9c69-52c7bc7debb0",
+              "recipient": "operations@example.test",
+              "incident_id": "a009a5b0-68ec-47a9-9c69-52c7bc7debb0",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "ticket-88b196bf-704e-47a5-a5d6-b65a210cc1d6",
+            "execution_id": "490",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "ticket-88b196bf-704e-47a5-a5d6-b65a210cc1d6",
+              "reconciliation_required": false
+            }
+          }
+        ],
+        "approval_id": "74bf12d3-307c-4624-971b-9069982da769",
+        "decision_result": {
+          "status": "REJECTED",
+          "ready_action_ids": [
+            "88b196bf-704e-47a5-a5d6-b65a210cc1d6"
+          ],
+          "scope_id": "7301ee8f-0cdb-4944-87df-278bd2f795bc",
+          "plan_id": "268740b6-e43b-4b34-9cd8-41844f0c1b48",
+          "approval_id": "74bf12d3-307c-4624-971b-9069982da769",
+          "decision_status": "REJECTED"
+        }
+      },
+      "duration_seconds": 7.75
+    },
+    {
+      "name": "modified_plan_requires_new_exact_approval",
+      "phase": "normal",
+      "criteria": [
+        "AC16"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+        "incident_id": "357bc116-d387-43c9-8e26-d2fb0a4fc73a",
+        "incident_status": "MONITORING",
+        "jobs": [
+          {
+            "id": "f9390c96-6514-41eb-9c87-aaf717187365",
+            "source_event_id": "aee96a55-3b4b-48ce-ab71-3f3269600dad",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:40:33.754353+00:00",
+            "execution_id": "499",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          }
+        ],
+        "wait_registrations": [],
+        "actions": [
+          {
+            "id": "07eb25e5-591f-4f0b-8858-49319a58f5b1",
+            "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+            "plan_id": "abec2a80-866f-488a-93a2-0f9adfcdfa3d",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident 357bc116-d387-43c9-8e26-d2fb0a4fc73a",
+              "recipient": "operations@example.test",
+              "incident_id": "357bc116-d387-43c9-8e26-d2fb0a4fc73a",
+              "incident_revision": 1
+            },
+            "status": "CANCELLED",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          },
+          {
+            "id": "2e6054d4-05bc-40de-935e-9e1edc33bc72",
+            "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+            "plan_id": "2ef1a7cf-924f-4a7f-b90d-815cb420833e",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team\nPlease reply with the verified availability confirmation.",
+              "subject": "Availability confirmation requested — 357bc116-d387-43c9-8e26-d2fb0a4fc73a revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "357bc116-d387-43c9-8e26-d2fb0a4fc73a",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "<apic-2e6054d4-05bc-40de-935e-9e1edc33bc72@example.test>",
+            "execution_id": "503",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "<apic-2e6054d4-05bc-40de-935e-9e1edc33bc72@example.test>",
+              "reconciliation_required": false
+            }
+          },
+          {
+            "id": "345f52ef-a367-410f-b209-22817f379416",
+            "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+            "plan_id": "2ef1a7cf-924f-4a7f-b90d-815cb420833e",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident 357bc116-d387-43c9-8e26-d2fb0a4fc73a",
+              "recipient": "operations@example.test",
+              "incident_id": "357bc116-d387-43c9-8e26-d2fb0a4fc73a",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "ticket-345f52ef-a367-410f-b209-22817f379416",
+            "execution_id": "502",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "ticket-345f52ef-a367-410f-b209-22817f379416",
+              "reconciliation_required": false
+            }
+          },
+          {
+            "id": "baa891c0-b5a6-4c1a-bef4-be78cd5679d3",
+            "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+            "plan_id": "abec2a80-866f-488a-93a2-0f9adfcdfa3d",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — 357bc116-d387-43c9-8e26-d2fb0a4fc73a revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "357bc116-d387-43c9-8e26-d2fb0a4fc73a",
+              "incident_revision": 1
+            },
+            "status": "CANCELLED",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          }
+        ],
+        "old_plan_id": "abec2a80-866f-488a-93a2-0f9adfcdfa3d",
+        "new_plan": {
+          "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+          "plan_id": "2ef1a7cf-924f-4a7f-b90d-815cb420833e",
+          "plan_version": 2,
+          "plan_hash": "21ffaf7461f18e0794fdb41a0ccf6ed958d7617482644707b09111d773c31d11",
+          "approval_ids": [
+            "039f8c23-f424-48ea-8533-06b5fdd911a4"
+          ],
+          "action_ids": [
+            "345f52ef-a367-410f-b209-22817f379416",
+            "2e6054d4-05bc-40de-935e-9e1edc33bc72"
+          ],
+          "status": "SUPERSEDED"
+        },
+        "approval_decisions": [
+          {
+            "approval_id": "039f8c23-f424-48ea-8533-06b5fdd911a4",
+            "result": {
+              "status": "APPROVED",
+              "ready_action_ids": [
+                "345f52ef-a367-410f-b209-22817f379416",
+                "2e6054d4-05bc-40de-935e-9e1edc33bc72"
+              ],
+              "scope_id": "1910150d-e22e-4d87-87a2-40192667073b",
+              "plan_id": "2ef1a7cf-924f-4a7f-b90d-815cb420833e",
+              "approval_id": "039f8c23-f424-48ea-8533-06b5fdd911a4",
+              "decision_status": "APPROVED"
+            }
+          }
+        ],
+        "sent_exact_modified_body": true
+      },
+      "duration_seconds": 2.969
+    },
+    {
+      "name": "expired_plan_prevents_late_approval",
+      "phase": "normal",
+      "criteria": [
+        "AC16"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+        "incident_id": "31635b9d-2f0c-4217-bd3a-58680629ae49",
+        "incident_status": "WAITING_APPROVAL",
+        "jobs": [
+          {
+            "id": "b73bea27-90f1-4062-b29f-814d011d8fdc",
+            "source_event_id": "7e97c23e-83a9-4883-bcd8-d3c99880dee8",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:40:36.612820+00:00",
+            "execution_id": "509",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          }
+        ],
+        "wait_registrations": [],
+        "actions": [
+          {
+            "id": "6fd38337-5fd4-4f30-b0f1-a1163cdb4d86",
+            "scope_id": "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+            "plan_id": "d83dfd79-6bf1-4967-88d8-5539a9022374",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident 31635b9d-2f0c-4217-bd3a-58680629ae49",
+              "recipient": "operations@example.test",
+              "incident_id": "31635b9d-2f0c-4217-bd3a-58680629ae49",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "ticket-6fd38337-5fd4-4f30-b0f1-a1163cdb4d86",
+            "execution_id": "512",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "ticket-6fd38337-5fd4-4f30-b0f1-a1163cdb4d86",
+              "reconciliation_required": false
+            }
+          },
+          {
+            "id": "c71d7809-1bb5-4865-b10d-d2775e91e227",
+            "scope_id": "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+            "plan_id": "d83dfd79-6bf1-4967-88d8-5539a9022374",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — 31635b9d-2f0c-4217-bd3a-58680629ae49 revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "31635b9d-2f0c-4217-bd3a-58680629ae49",
+              "incident_revision": 1
+            },
+            "status": "WAITING_APPROVAL",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          }
+        ],
+        "clock": {
+          "scope_id": "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+          "clock": "2026-10-11T01:00:01+00:00",
+          "n8n_clock_unchanged": true
+        },
+        "approvals": [
+          {
+            "id": "0bb93650-e9db-4498-9d5f-f4f683546a72",
+            "scope_id": "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+            "plan_id": "d83dfd79-6bf1-4967-88d8-5539a9022374",
+            "plan_version": 1,
+            "plan_hash": "eb125f9904d8e5059ac5131914bf348b1cf4210933ca6819d3ba8a138fa5a538",
+            "required_role": "production_manager",
+            "status": "EXPIRED",
+            "expires_at": "2026-10-11T01:00:00+00:00",
+            "actor_id": null,
+            "decision": null,
+            "comment": null,
+            "decided_at": null,
+            "incident_id": "31635b9d-2f0c-4217-bd3a-58680629ae49",
+            "revision": 1,
+            "actions": [
+              {
+                "action_type": "SUPPLIER_EMAIL",
+                "payload": {
+                  "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+                  "subject": "Availability confirmation requested — 31635b9d-2f0c-4217-bd3a-58680629ae49 revision 1",
+                  "recipient": "supplier@example.test",
+                  "incident_id": "31635b9d-2f0c-4217-bd3a-58680629ae49",
+                  "incident_revision": 1
+                }
+              },
+              {
+                "action_type": "INTERNAL_TICKET",
+                "payload": {
+                  "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+                  "title": "CRITICAL incident 31635b9d-2f0c-4217-bd3a-58680629ae49",
+                  "recipient": "operations@example.test",
+                  "incident_id": "31635b9d-2f0c-4217-bd3a-58680629ae49",
+                  "incident_revision": 1
+                }
+              }
+            ]
+          }
+        ],
+        "late_approval_http_status": 409
+      },
+      "duration_seconds": 2.954
+    },
+    {
+      "name": "superseded_approval_rejected_after_new_revision",
+      "phase": "normal",
+      "criteria": [
+        "AC17"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+        "incident_id": "4f3793b6-81af-48a3-b6e6-c8bae9dc294e",
+        "incident_status": "WAITING_APPROVAL",
+        "jobs": [
+          {
+            "id": "74054b29-55ea-4673-9f66-886904498cc6",
+            "source_event_id": "29cc0241-ed3a-49f9-a835-6d6157872fc1",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:40:41.047143+00:00",
+            "execution_id": "521",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          },
+          {
+            "id": "df394336-8d3c-4c47-b0a1-9a59a1b6e41d",
+            "source_event_id": "8e37eb86-271b-452c-b8b8-68efc6658df8",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:40:39.540461+00:00",
+            "execution_id": "517",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          }
+        ],
+        "wait_registrations": [],
+        "actions": [
+          {
+            "id": "4aca08be-a497-4658-b139-0be34ce1b5e1",
+            "scope_id": "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+            "plan_id": "0e6d8218-9c7f-4294-b5a1-c2361e3f4042",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 1 affected. Resource shortage: 14. Affected open-order value: EUR 54,400.00. Risk: 69 / HIGH. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "HIGH incident 4f3793b6-81af-48a3-b6e6-c8bae9dc294e",
+              "recipient": "operations@example.test",
+              "incident_id": "4f3793b6-81af-48a3-b6e6-c8bae9dc294e",
+              "incident_revision": 2
+            },
+            "status": "READY",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          },
+          {
+            "id": "88280c29-ce6e-4551-b93b-a31ddde2b1ad",
+            "scope_id": "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+            "plan_id": "21092bff-d55a-400d-bfb2-504ae1ffae82",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident 4f3793b6-81af-48a3-b6e6-c8bae9dc294e",
+              "recipient": "operations@example.test",
+              "incident_id": "4f3793b6-81af-48a3-b6e6-c8bae9dc294e",
+              "incident_revision": 1
+            },
+            "status": "CANCELLED",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          },
+          {
+            "id": "d48071a2-ca7c-4c69-a89e-15ba96238e4b",
+            "scope_id": "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+            "plan_id": "0e6d8218-9c7f-4294-b5a1-c2361e3f4042",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 1 affected. Resource shortage: 14. Affected open-order value: EUR 54,400.00. Risk: 69 / HIGH. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — 4f3793b6-81af-48a3-b6e6-c8bae9dc294e revision 2",
+              "recipient": "supplier@example.test",
+              "incident_id": "4f3793b6-81af-48a3-b6e6-c8bae9dc294e",
+              "incident_revision": 2
+            },
+            "status": "WAITING_APPROVAL",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          },
+          {
+            "id": "fa29f1f6-3f6e-4fff-ac32-e7c4bebffc92",
+            "scope_id": "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+            "plan_id": "21092bff-d55a-400d-bfb2-504ae1ffae82",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — 4f3793b6-81af-48a3-b6e6-c8bae9dc294e revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "4f3793b6-81af-48a3-b6e6-c8bae9dc294e",
+              "incident_revision": 1
+            },
+            "status": "CANCELLED",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          }
+        ],
+        "old_approval_id": "3e4a3dd7-9954-4272-beae-0801f8f5a6a0",
+        "revision": 2,
+        "old_approval_http_status": 409
+      },
+      "duration_seconds": 3.468
+    },
+    {
+      "name": "ERP_503_stops_after_four_attempts_in_DLQ",
+      "phase": "normal",
+      "criteria": [
+        "AC20"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+        "job_id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+        "kind": "read-503",
+        "history": [
+          {
+            "observed_at": "2026-09-07T11:40:57.598576+00:00",
+            "id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "source_event_id": "563cba8f-8894-47ed-a903-3fb0ea4024de",
+            "status": "PENDING",
+            "step": "NORMALIZE",
+            "attempts": 0,
+            "next_attempt_at": "2026-09-07T11:40:57.719849+00:00",
+            "execution_id": null,
+            "workflow_id": null,
+            "last_error": null
+          },
+          {
+            "observed_at": "2026-09-07T11:40:59.766008+00:00",
+            "id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "source_event_id": "563cba8f-8894-47ed-a903-3fb0ea4024de",
+            "status": "RETRY_SCHEDULED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:41:03.602033+00:00",
+            "execution_id": "545",
+            "workflow_id": "APICWF0300000001",
+            "last_error": "Workflow execution failed; inspect authorized runtime logs"
+          },
+          {
+            "observed_at": "2026-09-07T11:41:08.021742+00:00",
+            "id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "source_event_id": "563cba8f-8894-47ed-a903-3fb0ea4024de",
+            "status": "RETRY_SCHEDULED",
+            "step": "NORMALIZE",
+            "attempts": 2,
+            "next_attempt_at": "2026-09-07T11:41:36.632905+00:00",
+            "execution_id": "556",
+            "workflow_id": "APICWF0300000001",
+            "last_error": "Workflow execution failed; inspect authorized runtime logs"
+          },
+          {
+            "observed_at": "2026-09-07T11:41:41.112876+00:00",
+            "id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "source_event_id": "563cba8f-8894-47ed-a903-3fb0ea4024de",
+            "status": "RETRY_SCHEDULED",
+            "step": "NORMALIZE",
+            "attempts": 3,
+            "next_attempt_at": "2026-09-07T11:43:39.711141+00:00",
+            "execution_id": "569",
+            "workflow_id": "APICWF0300000001",
+            "last_error": "Workflow execution failed; inspect authorized runtime logs"
+          },
+          {
+            "observed_at": "2026-09-07T11:43:44.555015+00:00",
+            "id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "source_event_id": "563cba8f-8894-47ed-a903-3fb0ea4024de",
+            "status": "DEAD_LETTER",
+            "step": "NORMALIZE",
+            "attempts": 4,
+            "next_attempt_at": "2026-09-07T11:45:43.204800+00:00",
+            "execution_id": "617",
+            "workflow_id": "APICWF0300000001",
+            "last_error": "Workflow execution failed; inspect authorized runtime logs"
+          }
+        ],
+        "workflow_errors": [
+          {
+            "id": "304cc901-af89-444c-9413-0564916576b9",
+            "scope_id": "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+            "job_id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "execution_id": "617",
+            "workflow_id": "APICWF0300000001",
+            "error_class": "TRANSIENT",
+            "message": "Workflow execution failed; inspect authorized runtime logs",
+            "retryable": true,
+            "dead_letter": true,
+            "next_attempt_at": null,
+            "created_at": "2026-09-07T11:43:42.901738+00:00"
+          },
+          {
+            "id": "198de46a-814a-4e62-a3b6-abb3c5ad4cf3",
+            "scope_id": "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+            "job_id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "execution_id": "569",
+            "workflow_id": "APICWF0300000001",
+            "error_class": "TRANSIENT",
+            "message": "Workflow execution failed; inspect authorized runtime logs",
+            "retryable": true,
+            "dead_letter": false,
+            "next_attempt_at": "2026-09-07T11:43:39.711141+00:00",
+            "created_at": "2026-09-07T11:41:39.136738+00:00"
+          },
+          {
+            "id": "623aa2ac-eae1-432a-8480-1e8d67fa3a0e",
+            "scope_id": "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+            "job_id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "execution_id": "556",
+            "workflow_id": "APICWF0300000001",
+            "error_class": "TRANSIENT",
+            "message": "Workflow execution failed; inspect authorized runtime logs",
+            "retryable": true,
+            "dead_letter": false,
+            "next_attempt_at": "2026-09-07T11:41:36.632905+00:00",
+            "created_at": "2026-09-07T11:41:06.184759+00:00"
+          },
+          {
+            "id": "9c9641aa-e1d1-4b27-88a6-fd2dfc53c5fd",
+            "scope_id": "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+            "job_id": "8bc0bb23-3bf8-4c71-8e16-f13b1c2a77b8",
+            "execution_id": "545",
+            "workflow_id": "APICWF0300000001",
+            "error_class": "TRANSIENT",
+            "message": "Workflow execution failed; inspect authorized runtime logs",
+            "retryable": true,
+            "dead_letter": false,
+            "next_attempt_at": "2026-09-07T11:41:03.602033+00:00",
+            "created_at": "2026-09-07T11:40:58.020876+00:00"
+          }
+        ],
+        "final_status": "DEAD_LETTER",
+        "total_attempts": 4,
+        "max_total_attempts": 4
+      },
+      "duration_seconds": 168.797
+    },
+    {
+      "name": "SLA_stages_are_unique_and_never_auto_approve",
+      "phase": "normal",
+      "criteria": [
+        "AC23"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "ebba5602-a845-439c-8a97-7718d5bed716",
+        "incident_id": "ad9bda02-3add-43cc-a87c-c5d97671b8d3",
+        "incident_status": "WAITING_APPROVAL",
+        "jobs": [
+          {
+            "id": "687d48d2-a8cc-4490-9383-0b4719369ca3",
+            "source_event_id": "88422426-d6d1-46c3-9f1d-4cc33898dc3a",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 2,
+            "next_attempt_at": "2026-09-07T11:43:50.456755+00:00",
+            "execution_id": "638",
+            "workflow_id": "APICWF0500000001",
+            "last_error": "Workflow execution failed; inspect authorized runtime logs"
+          }
+        ],
+        "wait_registrations": [],
+        "actions": [
+          {
+            "id": "46d7d0df-e065-4c79-9921-8c61b4fd350f",
+            "scope_id": "ebba5602-a845-439c-8a97-7718d5bed716",
+            "plan_id": "49f3274d-06fb-40ee-935e-c6453919dd42",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident ad9bda02-3add-43cc-a87c-c5d97671b8d3",
+              "recipient": "operations@example.test",
+              "incident_id": "ad9bda02-3add-43cc-a87c-c5d97671b8d3",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "ticket-46d7d0df-e065-4c79-9921-8c61b4fd350f",
+            "execution_id": "655",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "ticket-46d7d0df-e065-4c79-9921-8c61b4fd350f",
+              "reconciliation_required": false
+            }
+          },
+          {
+            "id": "d7c01a3b-354d-44a4-a81b-5eb9dd4e1272",
+            "scope_id": "ebba5602-a845-439c-8a97-7718d5bed716",
+            "plan_id": "49f3274d-06fb-40ee-935e-c6453919dd42",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — ad9bda02-3add-43cc-a87c-c5d97671b8d3 revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "ad9bda02-3add-43cc-a87c-c5d97671b8d3",
+              "incident_revision": 1
+            },
+            "status": "WAITING_APPROVAL",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          }
+        ],
+        "notification_ids_before": [
+          "3ec6853d-586b-45c6-a9af-cb7def5f5abd",
+          "81137c3f-53ee-495c-9631-ccf4b3070148"
+        ],
+        "notification_ids_after": [
+          "3ec6853d-586b-45c6-a9af-cb7def5f5abd",
+          "81137c3f-53ee-495c-9631-ccf4b3070148"
+        ],
+        "automatic_approval": false
+      },
+      "duration_seconds": 87.953
+    },
+    {
+      "name": "reset_only_changes_owned_synthetic_scope",
+      "phase": "normal",
+      "criteria": [
+        "AC29"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "reset_scope": "272926a9-c50e-4e43-836c-80d57b19f489",
+        "reset_result": {
+          "scope_id": "272926a9-c50e-4e43-836c-80d57b19f489",
+          "status": "reset",
+          "audit_retained": true
+        },
+        "other_scope": "d8b57bad-f547-4946-b97c-54c1fbd2f458",
+        "other_incident_id": "a7b0e569-cf4e-4858-b586-df93daee33c5",
+        "other_revision": 1,
+        "other_impact_unchanged": true
+      },
+      "duration_seconds": 3.906
+    },
+    {
+      "name": "ERP_429_respects_retry_after_then_recovers",
+      "phase": "normal",
+      "criteria": [
+        "AC20"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "a42f4463-a29a-45ef-bf8a-4239d1449a13",
+        "job_id": "23a22d6a-31e8-4733-82e2-192a522b48a2",
+        "kind": "read-429",
+        "history": [
+          {
+            "observed_at": "2026-09-07T11:47:14.080948+00:00",
+            "id": "23a22d6a-31e8-4733-82e2-192a522b48a2",
+            "source_event_id": "3e728d75-faf6-44f5-9be2-2172ae0d72a4",
+            "status": "PENDING",
+            "step": "NORMALIZE",
+            "attempts": 0,
+            "next_attempt_at": "2026-09-07T11:47:14.197041+00:00",
+            "execution_id": null,
+            "workflow_id": null,
+            "last_error": null
+          },
+          {
+            "observed_at": "2026-09-07T11:47:16.342482+00:00",
+            "id": "23a22d6a-31e8-4733-82e2-192a522b48a2",
+            "source_event_id": "3e728d75-faf6-44f5-9be2-2172ae0d72a4",
+            "status": "RETRY_SCHEDULED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T11:47:44.844108+00:00",
+            "execution_id": "679",
+            "workflow_id": "APICWF0300000001",
+            "last_error": "Mock ERP snapshot request returned HTTP 429"
+          },
+          {
+            "observed_at": "2026-09-07T11:47:49.933036+00:00",
+            "id": "23a22d6a-31e8-4733-82e2-192a522b48a2",
+            "source_event_id": "3e728d75-faf6-44f5-9be2-2172ae0d72a4",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 2,
+            "next_attempt_at": "2026-09-07T11:47:44.844108+00:00",
+            "execution_id": "720",
+            "workflow_id": "APICWF0500000001",
+            "last_error": "Mock ERP snapshot request returned HTTP 429"
+          }
+        ],
+        "workflow_errors": [
+          {
+            "id": "5b54be50-5034-4881-a959-0be051244adb",
+            "scope_id": "a42f4463-a29a-45ef-bf8a-4239d1449a13",
+            "job_id": "23a22d6a-31e8-4733-82e2-192a522b48a2",
+            "execution_id": "679",
+            "workflow_id": "APICWF0300000001",
+            "error_class": "TRANSIENT",
+            "message": "Workflow execution failed; inspect authorized runtime logs",
+            "retryable": true,
+            "dead_letter": false,
+            "next_attempt_at": null,
+            "created_at": "2026-09-07T11:47:14.565842+00:00"
+          },
+          {
+            "id": "4161eca6-abab-42f3-b9c9-e56a9299352a",
+            "scope_id": "a42f4463-a29a-45ef-bf8a-4239d1449a13",
+            "job_id": "23a22d6a-31e8-4733-82e2-192a522b48a2",
+            "execution_id": "679",
+            "workflow_id": "APICWF0300000001",
+            "error_class": "TRANSIENT",
+            "message": "Mock ERP snapshot request returned HTTP 429",
+            "retryable": true,
+            "dead_letter": false,
+            "next_attempt_at": "2026-09-07T11:47:44.844108+00:00",
+            "created_at": "2026-09-07T11:47:14.393029+00:00"
+          }
+        ],
+        "final_status": "SUCCEEDED",
+        "total_attempts": 2,
+        "max_total_attempts": 4
+      },
+      "duration_seconds": 37.656
+    },
+    {
+      "name": "registered_wait_and_committed_approval_outbox_survive_n8n_restart",
+      "phase": "restart",
+      "criteria": [
+        "AC22"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+        "incident_id": "d5797536-78fb-45da-993f-07a33b0abf91",
+        "incident_status": "MONITORING",
+        "jobs": [
+          {
+            "id": "766822f7-3097-475f-9ded-5ebc417b8f12",
+            "source_event_id": "50622120-ddda-4f72-8a67-aa49304a152f",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T12:20:43.748721+00:00",
+            "execution_id": "1183",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          }
+        ],
+        "wait_registrations": [
+          {
+            "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+            "plan_id": "c74e497b-8fef-4e1f-861e-c9842bc822cf",
+            "execution_id": "1195",
+            "workflow_id": "APICWF0600000001",
+            "registered_at": "2026-09-07T12:21:01.551172+00:00"
+          }
+        ],
+        "actions": [
+          {
+            "id": "c2c23c78-27c6-45bd-858c-f080d37d8c67",
+            "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+            "plan_id": "c74e497b-8fef-4e1f-861e-c9842bc822cf",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — d5797536-78fb-45da-993f-07a33b0abf91 revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "d5797536-78fb-45da-993f-07a33b0abf91",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "<apic-c2c23c78-27c6-45bd-858c-f080d37d8c67@example.test>",
+            "execution_id": "1208",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "<apic-c2c23c78-27c6-45bd-858c-f080d37d8c67@example.test>",
+              "reconciliation_required": false
+            }
+          },
+          {
+            "id": "c8b99656-a99e-4621-8fc4-39b227caaa0b",
+            "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+            "plan_id": "c74e497b-8fef-4e1f-861e-c9842bc822cf",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident d5797536-78fb-45da-993f-07a33b0abf91",
+              "recipient": "operations@example.test",
+              "incident_id": "d5797536-78fb-45da-993f-07a33b0abf91",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "ticket-c8b99656-a99e-4621-8fc4-39b227caaa0b",
+            "execution_id": "1205",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "ticket-c8b99656-a99e-4621-8fc4-39b227caaa0b",
+              "reconciliation_required": false
+            }
+          }
+        ],
+        "container_operations": [
+          {
+            "command": [
+              "docker",
+              "compose",
+              "stop",
+              "n8n"
+            ],
+            "returncode": 0,
+            "observed_at": "2026-09-07T12:21:04.855160+00:00"
+          },
+          {
+            "command": [
+              "docker",
+              "compose",
+              "start",
+              "n8n"
+            ],
+            "returncode": 0,
+            "observed_at": "2026-09-07T12:21:06.755775+00:00"
+          }
+        ],
+        "health_after_restart": {
+          "url": "http://127.0.0.1:5678/healthz",
+          "http_status": 200,
+          "observed_at": "2026-09-07T12:21:22.976757+00:00"
+        },
+        "published_webhook_readiness": [
+          {
+            "http_status": 404,
+            "observed_at": "2026-09-07T12:21:23.685463+00:00"
+          },
+          {
+            "http_status": 404,
+            "observed_at": "2026-09-07T12:21:25.876880+00:00"
+          },
+          {
+            "http_status": 200,
+            "observed_at": "2026-09-07T12:21:30.676147+00:00"
+          }
+        ],
+        "wait_registration_before": [
+          {
+            "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+            "plan_id": "c74e497b-8fef-4e1f-861e-c9842bc822cf",
+            "execution_id": "1195",
+            "workflow_id": "APICWF0600000001",
+            "registered_at": "2026-09-07T12:21:01.551172+00:00"
+          }
+        ],
+        "wait_registration_after": [
+          {
+            "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+            "plan_id": "c74e497b-8fef-4e1f-861e-c9842bc822cf",
+            "execution_id": "1195",
+            "workflow_id": "APICWF0600000001",
+            "registered_at": "2026-09-07T12:21:01.551172+00:00"
+          }
+        ],
+        "decision_committed_while_n8n_stopped": [
+          {
+            "approval_id": "34fc6934-ec0a-4a6b-a622-1a74bf4d7bb5",
+            "result": {
+              "status": "APPROVED",
+              "ready_action_ids": [
+                "c2c23c78-27c6-45bd-858c-f080d37d8c67"
+              ],
+              "scope_id": "257ed8f1-5c61-405c-9527-9d12dbc06276",
+              "plan_id": "c74e497b-8fef-4e1f-861e-c9842bc822cf",
+              "approval_id": "34fc6934-ec0a-4a6b-a622-1a74bf4d7bb5",
+              "decision_status": "APPROVED"
+            }
+          }
+        ],
+        "outbox_while_stopped": [
+          {
+            "kind": "ACTION",
+            "status": "DELIVERED",
+            "count": 1
+          },
+          {
+            "kind": "ACTION",
+            "status": "PENDING",
+            "count": 1
+          },
+          {
+            "kind": "PLAN",
+            "status": "DELIVERED",
+            "count": 1
+          },
+          {
+            "kind": "WAKEUP",
+            "status": "PENDING",
+            "count": 1
+          }
+        ],
+        "action_effects_after_first_and_second_recovery_equal": true
+      },
+      "duration_seconds": 60.437
+    },
+    {
+      "name": "database_outage_no_false_202_and_safe_redelivery",
+      "phase": "database",
+      "criteria": [
+        "AC21"
+      ],
+      "status": "PASS",
+      "evidence": {
+        "scope_id": "7bed971b-5e56-405d-af81-4bcd8e0fe014",
+        "incident_id": "20101190-7c7e-4154-8136-90712519f316",
+        "incident_status": "WAITING_APPROVAL",
+        "jobs": [
+          {
+            "id": "9d34ab5f-6011-46ba-8377-ba85502a7ece",
+            "source_event_id": "d460c3ae-1d39-44c6-ba41-819d9ccb5372",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T12:22:33.861845+00:00",
+            "execution_id": "1215",
+            "workflow_id": "APICWF0500000001",
+            "last_error": null
+          },
+          {
+            "id": "109b9ecf-2bee-4720-bb1c-c84daf179cc5",
+            "source_event_id": "867f4f29-12fc-4812-8511-255ddea0ea7a",
+            "status": "SUCCEEDED",
+            "step": "NORMALIZE",
+            "attempts": 1,
+            "next_attempt_at": "2026-09-07T12:22:47.885201+00:00",
+            "execution_id": "1220",
+            "workflow_id": "APICWF0300000001",
+            "last_error": null
+          }
+        ],
+        "wait_registrations": [
+          {
+            "scope_id": "7bed971b-5e56-405d-af81-4bcd8e0fe014",
+            "plan_id": "6203a597-fb57-4b6b-912c-807647b96551",
+            "execution_id": "1217",
+            "workflow_id": "APICWF0600000001",
+            "registered_at": "2026-09-07T12:22:47.712785+00:00"
+          }
+        ],
+        "actions": [
+          {
+            "id": "16ef6d02-2f5c-45fa-9303-96621db6819a",
+            "scope_id": "7bed971b-5e56-405d-af81-4bcd8e0fe014",
+            "plan_id": "6203a597-fb57-4b6b-912c-807647b96551",
+            "action_type": "INTERNAL_TICKET",
+            "payload": {
+              "body": "SUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.",
+              "title": "CRITICAL incident 20101190-7c7e-4154-8136-90712519f316",
+              "recipient": "operations@example.test",
+              "incident_id": "20101190-7c7e-4154-8136-90712519f316",
+              "incident_revision": 1
+            },
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "provider_id": "ticket-16ef6d02-2f5c-45fa-9303-96621db6819a",
+            "execution_id": "1219",
+            "workflow_id": "APICWF0700000001",
+            "result": {
+              "synthetic": true,
+              "provider_id": "ticket-16ef6d02-2f5c-45fa-9303-96621db6819a",
+              "reconciliation_required": false
+            }
+          },
+          {
+            "id": "92f22374-2cbf-4368-aa89-6739f36002c4",
+            "scope_id": "7bed971b-5e56-405d-af81-4bcd8e0fe014",
+            "plan_id": "6203a597-fb57-4b6b-912c-807647b96551",
+            "action_type": "SUPPLIER_EMAIL",
+            "payload": {
+              "body": "Dear Supplier,\n\nSUPPLIER_DELAY: 3 production orders reviewed; 2 affected. Resource shortage: 24. Affected open-order value: EUR 126,400.00. Risk: 88 / CRITICAL. Synthetic ERP assessment; affected value is not a forecast revenue loss.\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team",
+              "subject": "Availability confirmation requested — 20101190-7c7e-4154-8136-90712519f316 revision 1",
+              "recipient": "supplier@example.test",
+              "incident_id": "20101190-7c7e-4154-8136-90712519f316",
+              "incident_revision": 1
+            },
+            "status": "WAITING_APPROVAL",
+            "attempts": 0,
+            "provider_id": null,
+            "execution_id": null,
+            "workflow_id": null,
+            "result": {}
+          }
+        ],
+        "container_operations": [
+          {
+            "command": [
+              "docker",
+              "compose",
+              "stop",
+              "postgres"
+            ],
+            "returncode": 0,
+            "observed_at": "2026-09-07T12:22:39.088578+00:00"
+          },
+          {
+            "command": [
+              "docker",
+              "compose",
+              "start",
+              "postgres"
+            ],
+            "returncode": 0,
+            "observed_at": "2026-09-07T12:22:41.418488+00:00"
+          }
+        ],
+        "outage_ingress": {
+          "http_status": 503,
+          "response": "{\"code\":503,\"message\":\"Database is not ready!\"}"
+        },
+        "health_after_recovery": [
+          {
+            "url": "http://127.0.0.1:8000/health/ready",
+            "http_status": 200,
+            "observed_at": "2026-09-07T12:22:43.784650+00:00"
+          },
+          {
+            "url": "http://127.0.0.1:5678/healthz",
+            "http_status": 200,
+            "observed_at": "2026-09-07T12:22:43.793945+00:00"
+          }
+        ],
+        "published_webhook_readiness": [
+          {
+            "http_status": 503,
+            "observed_at": "2026-09-07T12:22:43.929866+00:00"
+          },
+          {
+            "http_status": 200,
+            "observed_at": "2026-09-07T12:22:46.288057+00:00"
+          }
+        ],
+        "redelivery_source_event_id": "867f4f29-12fc-4812-8511-255ddea0ea7a",
+        "redelivery_job_id": "109b9ecf-2bee-4720-bb1c-c84daf179cc5",
+        "same_source_retry_deduplicated": true
+      },
+      "duration_seconds": 19.188
+    }
+  ],
+  "scopes": [
+    "7301ee8f-0cdb-4944-87df-278bd2f795bc",
+    "1910150d-e22e-4d87-87a2-40192667073b",
+    "96d2682b-1a03-40ca-95c7-b23e2ec71755",
+    "9a7759d3-6ae7-4415-9478-b74e54ddce06",
+    "160c0a89-e6c7-4d89-97f4-9ad4db69d2bf",
+    "eeb158d5-ee8d-4a0f-a1c0-8c194fe89753",
+    "ebba5602-a845-439c-8a97-7718d5bed716",
+    "272926a9-c50e-4e43-836c-80d57b19f489",
+    "d8b57bad-f547-4946-b97c-54c1fbd2f458",
+    "a42f4463-a29a-45ef-bf8a-4239d1449a13",
+    "4d317e75-f4f5-483b-a877-472941c59706",
+    "f2a602cd-97e8-4b7b-8fe7-f77dc10ba1bc",
+    "257ed8f1-5c61-405c-9527-9d12dbc06276",
+    "7bed971b-5e56-405d-af81-4bcd8e0fe014"
+  ],
+  "target_tests": "NOT_RUN",
+  "boundary": "Real loopback HTTP -> published local n8n -> APIs -> PostgreSQL and sandbox providers",
+  "updated_at": "2026-09-07T12:22:49.185763+00:00",
+  "history": [
+    {
+      "name": "ERP_429_respects_retry_after_then_recovers",
+      "phase": "normal",
+      "criteria": [
+        "AC20"
+      ],
+      "status": "FAIL",
+      "error": "('Retry-After was not preserved', 3.916298, {'observed_at': '2026-09-07T11:40:47.416133+00:00', 'id': '1e3b5241-b461-49a3-8642-41473159ffa0', 'source_event_id': '7405d4c3-ecda-4859-850b-9db1f8fdfb58', 'status': 'RETRY_SCHEDULED', 'step': 'NORMALIZE', 'attempts': 1, 'next_attempt_at': '2026-09-07T11:40:51.332431+00:00', 'execution_id': '527', 'workflow_id': 'APICWF0300000001', 'last_error': 'Workflow execution failed; inspect authorized runtime logs'})",
+      "duration_seconds": 12.813
+    },
+    {
+      "name": "registered_wait_and_committed_approval_outbox_survive_n8n_restart",
+      "phase": "restart",
+      "criteria": [
+        "AC22"
+      ],
+      "status": "FAIL",
+      "error": "('real Wait registration', 'deadline exceeded', [])",
+      "duration_seconds": 91.719
+    },
+    {
+      "name": "registered_wait_and_committed_approval_outbox_survive_n8n_restart",
+      "phase": "restart",
+      "criteria": [
+        "AC22"
+      ],
+      "status": "FAIL",
+      "error": "('Recovery trigger failed', 404, '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>Cannot POST /webhook/apic-recovery</pre>\\n</body>\\n</html>\\n')",
+      "duration_seconds": 27.921
+    }
+  ]
+}

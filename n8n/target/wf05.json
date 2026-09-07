@@ -1,0 +1,190 @@
+{
+  "id": "DaGeYQsYvTTBkzpA",
+  "name": "APIC | WF05 | Risk Explanation and Action Plan",
+  "active": false,
+  "isArchived": false,
+  "versionId": "2b78bd13-5ca8-4611-ba41-92d3dc220fa8",
+  "activeVersionId": null,
+  "createdAt": "2026-09-07T11:36:53.221Z",
+  "updatedAt": "2026-09-07T11:36:53.221Z",
+  "description": "apic-portfolio: Risk Explanation and Action Plan. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+  "nodes": [
+    {
+      "id": "e2a5ea5d-10cf-4e12-b391-775e61c075a0",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF05 · Risk Explanation and Action Plan\nVersioned risk policy → allowed SOP actions → verified exact drafts → immutable plan and approval/outbox. Simulated AI explicitly disclosed.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "d1163320-5216-4c51-9e2d-07e17700453b",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "8641286c-32b8-479e-a4cc-f6c5c398b23d",
+      "name": "Plan Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "21825e0b-3a0b-40e8-bcdd-3d4c4e4985af",
+      "name": "Evaluate Risk Policy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://configure-apic-ops.invalid/internal/risk/evaluate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {impact:$json.impact} }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "a5455d09-0c9d-4e15-b398-bc4a8d28514c",
+      "name": "Draft Allowed Actions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://configure-apic-ops.invalid/internal/plans/draft",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {impact:$('Plan Context').first().json.impact,risk:$json,incident_id:$('Plan Context').first().json.incident_id,revision:$('Plan Context').first().json.revision} }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "5a812fcf-281f-49a1-8324-89d29719e81f",
+      "name": "Commit Versioned Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://configure-apic-ops.invalid/internal/plans",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {...$('Plan Context').first().json,risk:$('Evaluate Risk Policy').first().json,plan:$json} }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "7a98a96e-0072-4768-aa36-7da7d8b0fa9c",
+      "name": "Target Configuration BLOCKED",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -720
+      ],
+      "parameters": {
+        "content": "## BLOCKED — inactive / unpublished\nConfigure authorized Operations and ERP HTTPS endpoints and missing APIC credentials before any separately authorized execution.\n\nhttps://configure-apic-ops.invalid and https://configure-apic-erp.invalid are deliberately non-routable configuration placeholders. Preserve every endpoint path. Dynamic wakeup URLs must be backend-validated for the authorized n8n host and protected by APIC Webhook Intake.\n\nWorkflow settings (Asia/Bangkok, caller policy, retention and shared WF09 error routing) are pending: no documented SDK creation settings; update is blocked by the approval gate. WF09 must remain unpublished. No runtime test has run.",
+        "width": 980,
+        "height": 390,
+        "color": 3
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Plan Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Context": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Risk Policy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluate Risk Policy": {
+      "main": [
+        [
+          {
+            "node": "Draft Allowed Actions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Allowed Actions": {
+      "main": [
+        [
+          {
+            "node": "Commit Versioned Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "tags": []
+}
+

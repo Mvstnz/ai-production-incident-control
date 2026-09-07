@@ -1,0 +1,97 @@
+{
+  "profile": "DEMO_LOCAL",
+  "n8n_version": "2.37.10",
+  "deployment_status": "GENERATED_NOT_RUNTIME_TESTED",
+  "workflows": [
+    {
+      "key": "WF01",
+      "id": "APICWF0100000001",
+      "name": "APIC | WF01 | Email Intake",
+      "file": "wf01.json",
+      "export_hash": "b91dcb48d28d9b9fadfef315f7cb89c35b7dd8b914edd11ecc9149009e8c02b2",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF02",
+      "id": "APICWF0200000001",
+      "name": "APIC | WF02 | API and Form Intake",
+      "file": "wf02.json",
+      "export_hash": "3e389a12bf71310befec06d7cd1c13b8707b47d392d4476fb24a5eed4c3f499e",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF03",
+      "id": "APICWF0300000001",
+      "name": "APIC | WF03 | Normalize Verify and Correlate",
+      "file": "wf03.json",
+      "export_hash": "69e00d31ce8d46aa3b95f5b72658fde45165f7e2990ec78e46ed6a28eb97bd0b",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF04",
+      "id": "APICWF0400000001",
+      "name": "APIC | WF04 | ERP Impact Analysis",
+      "file": "wf04.json",
+      "export_hash": "1cb0fe703f3f293ba3cb2090620803a5ae06bf8851ca22afd58cfcf71c114af6",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF05",
+      "id": "APICWF0500000001",
+      "name": "APIC | WF05 | Risk Explanation and Action Plan",
+      "file": "wf05.json",
+      "export_hash": "f8266b22b67e65ba88f35d914f4bd37dcbb273ea2dbf0848942736d5b4b98a19",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF06",
+      "id": "APICWF0600000001",
+      "name": "APIC | WF06 | Human Approval",
+      "file": "wf06.json",
+      "export_hash": "f25d8102bca2d0363777f6a5ac9eabdd4ba4d06249044b74f6dea51b414c2af1",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF07",
+      "id": "APICWF0700000001",
+      "name": "APIC | WF07 | Action Execution",
+      "file": "wf07.json",
+      "export_hash": "ae02bd415c159075a9e12f547a98713237d132ecfd4e139b70ff7dc909a862dc",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF08",
+      "id": "APICWF0800000001",
+      "name": "APIC | WF08 | SLA Dispatch and Recovery",
+      "file": "wf08.json",
+      "export_hash": "8debce91ac33428a9188c7bf2179ca2f5ca3f2c5365e30c4c3e58b4bb8efff4f",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF09",
+      "id": "APICWF0900000001",
+      "name": "APIC | WF09 | Error and Dead Letter Handler",
+      "file": "wf09.json",
+      "export_hash": "4eb154e7dd4965b411f8771ce542840c6dc668110a0f648ba8fa243e4f086b75",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    },
+    {
+      "key": "WF10",
+      "id": "APICWF1000000001",
+      "name": "APIC | WF10 | Daily Management Digest",
+      "file": "wf10.json",
+      "export_hash": "f9138108f271242cb9b30b0550c8be706dfab87f14b509f1ad231f40c23fdbcc",
+      "state": "INACTIVE",
+      "test_status": "NOT_RUN"
+    }
+  ]
+}

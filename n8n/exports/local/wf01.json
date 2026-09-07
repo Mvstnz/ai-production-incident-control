@@ -1,0 +1,188 @@
+{
+  "id": "APICWF0100000001",
+  "name": "APIC | WF01 | Email Intake",
+  "active": true,
+  "nodes": [
+    {
+      "id": "cc3041ec-e0a3-5c53-8957-4533c8b73149",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF01 · Email Intake\nAuthenticated intake → durable event/job transaction → 202 → asynchronous analysis. Idempotency lives in PostgreSQL, not this execution.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "bf84f985-dda9-5933-ae62-28e976f7b9fd",
+      "name": "Authenticated Intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "apic-email",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "http://127.0.0.1:5173"
+        }
+      },
+      "webhookId": "ecbf62eb-d7df-53bb-ab28-ecbaea0aa6cf",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicWebhook001",
+          "name": "APIC Webhook Intake"
+        }
+      }
+    },
+    {
+      "id": "58ad69cb-cbf1-5582-893d-d4eec97ab34d",
+      "name": "Canonical Envelope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const e=$input.first().json.body; if(!e || JSON.stringify(e).length>65536) throw new Error('INVALID_ENVELOPE_SIZE'); return [{json:e}];"
+      }
+    },
+    {
+      "id": "f119169c-9451-5d69-89dc-9e0d4f8101e6",
+      "name": "Commit Source Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/source-events",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "6b7dff18-5b7e-5b58-a5ad-e5df39963d99",
+      "name": "Durable Acceptance",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 202
+        }
+      }
+    },
+    {
+      "id": "2faa6114-3bbc-5bab-83fa-855673d98a90",
+      "name": "Start Analysis",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "APICWF0300000001"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Authenticated Intake": {
+      "main": [
+        [
+          {
+            "node": "Canonical Envelope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Canonical Envelope": {
+      "main": [
+        [
+          {
+            "node": "Commit Source Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commit Source Event": {
+      "main": [
+        [
+          {
+            "node": "Durable Acceptance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Durable Acceptance": {
+      "main": [
+        [
+          {
+            "node": "Start Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "versionId": "5787cb50-d645-4809-9b00-d4db7f14ed22",
+  "activeVersionId": "5787cb50-d645-4809-9b00-d4db7f14ed22",
+  "pinData": {},
+  "tags": []
+}

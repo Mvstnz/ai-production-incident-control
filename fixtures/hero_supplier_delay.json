@@ -1,0 +1,66 @@
+{
+  "fixture_version": "1.0",
+  "data_classification": "SYNTHETIC_ONLY",
+  "analysis_time": "2026-10-10T08:00:00+07:00",
+  "business_timezone": "Asia/Bangkok",
+  "currency": "EUR",
+  "supplier": "Asia Precision Components",
+  "purchase_order": "4500192",
+  "purchase_order_item": "10",
+  "material": "SHAFT-DN300",
+  "unit": "pcs",
+  "open_purchase_quantity": 40,
+  "original_supply_schedule": [
+    {"quantity": 40, "available_at": "2026-10-12T08:00:00+07:00", "status": "CONFIRMED"}
+  ],
+  "inventory": {"physical": 20, "reserved_for_other_demands": 6, "quarantined": 0, "available_to_this_scope": 14},
+  "qualified_alternative_available": false,
+  "production_requirements": [
+    {"production_order": "MO-1001", "required_quantity": 10, "need_at": "2026-10-13T08:00:00+07:00", "remaining_lead_time_calendar_days": 2, "sales_line": "SO-2000/10", "open_net_line_value_cents": 2500000, "customer_due_at": "2026-10-15T08:00:00+07:00", "strategic_customer": false},
+    {"production_order": "MO-1002", "required_quantity": 12, "need_at": "2026-10-14T08:00:00+07:00", "remaining_lead_time_calendar_days": 2, "sales_line": "SO-2001/10", "open_net_line_value_cents": 7200000, "customer_due_at": "2026-10-16T08:00:00+07:00", "strategic_customer": true},
+    {"production_order": "MO-1003", "required_quantity": 16, "need_at": "2026-10-15T08:00:00+07:00", "remaining_lead_time_calendar_days": 2, "sales_line": "SO-2002/10", "open_net_line_value_cents": 5440000, "customer_due_at": "2026-10-17T08:00:00+07:00", "strategic_customer": false}
+  ],
+  "source_email": {
+    "sender": "supplier@example.test",
+    "subject": "Delivery Update – PO 4500192 / Item 10",
+    "content_text": "Dear Purchasing Team,\n\nDue to capacity problems in our heat treatment department, we cannot meet the confirmed material availability date for PO 4500192, item 10.\n\nMaterial: SHAFT-DN300\nQuantity: 40 pcs\nOriginally confirmed availability at your plant: 12 October 2026, 08:00 Bangkok time.\nNew confirmed availability at your plant: 19 October 2026, 08:00 Bangkok time, for the full quantity of 40 pcs.\n\nWe may be able to make 10 of these 40 pcs available at your plant on 13 October 2026, 08:00 Bangkok time. This early partial delivery is not confirmed yet. If confirmed, the remaining delivery on 19 October would be 30 pcs, not 40 additional pcs.\n\nBest regards,\nAsia Precision Components"
+  },
+  "scenarios": [
+    {
+      "id": "confirmed_delay_with_unconfirmed_partial_offer",
+      "confirmed_supply_schedule": [{"quantity": 40, "available_at": "2026-10-19T08:00:00+07:00", "status": "CONFIRMED"}],
+      "proposed_partial": {"quantity": 10, "available_at": "2026-10-13T08:00:00+07:00", "status": "PROPOSED", "replaces_quantity_from_final_delivery": true},
+      "expected": {
+        "allocations_at_need": [10, 4, 0],
+        "shortages_at_need": [0, 8, 16],
+        "total_shortage": 24,
+        "reviewed_production_orders": 3,
+        "affected_production_orders": ["MO-1002", "MO-1003"],
+        "affected_sales_lines": ["SO-2001/10", "SO-2002/10"],
+        "affected_open_order_value_cents": 12640000,
+        "risk_factors": {"disruption": 20, "value": 20, "urgency": 16, "resource_gap": 12, "alternative": 10, "strategic_customer": 10},
+        "risk_score": 88,
+        "severity": "CRITICAL"
+      }
+    },
+    {
+      "id": "confirmed_split_revision",
+      "confirmed_supply_schedule": [
+        {"quantity": 10, "available_at": "2026-10-13T08:00:00+07:00", "status": "CONFIRMED"},
+        {"quantity": 30, "available_at": "2026-10-19T08:00:00+07:00", "status": "CONFIRMED"}
+      ],
+      "expected": {
+        "allocations_at_need": [10, 12, 2],
+        "shortages_at_need": [0, 0, 14],
+        "total_shortage": 14,
+        "reviewed_production_orders": 3,
+        "affected_production_orders": ["MO-1003"],
+        "affected_sales_lines": ["SO-2002/10"],
+        "affected_open_order_value_cents": 5440000,
+        "risk_factors": {"disruption": 20, "value": 15, "urgency": 16, "resource_gap": 8, "alternative": 10, "strategic_customer": 0},
+        "risk_score": 69,
+        "severity": "HIGH"
+      }
+    }
+  ]
+}

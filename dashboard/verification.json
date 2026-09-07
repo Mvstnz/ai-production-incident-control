@@ -1,0 +1,28 @@
+{
+  "component": "dashboard",
+  "date": "2026-09-07",
+  "implementation_status": "IMPLEMENTED",
+  "runtime": {
+    "react": "19.2.8",
+    "vite": "8.2.2",
+    "typescript": "5.9.3",
+    "node_image": "node:24.12.0-bookworm-slim",
+    "nginx_image": "nginx:1.28.0-alpine",
+    "url": "http://127.0.0.1:5173"
+  },
+  "checks": [
+    {"command": "rtk npm run build", "status": "LOCAL_TESTED", "result": "PASS; strict TypeScript and production bundle generation"},
+    {"command": "rtk npm run typecheck", "status": "LOCAL_TESTED", "result": "PASS"},
+    {"command": "rtk npm install --ignore-scripts", "status": "LOCAL_TESTED", "result": "PASS; zero reported audit vulnerabilities"},
+    {"command": "rtk docker compose build dashboard", "status": "LOCAL_TESTED", "result": "PASS"},
+    {"command": "rtk docker compose up -d --no-deps dashboard", "status": "LOCAL_TESTED", "result": "PASS; container healthy"},
+    {"command": "rtk docker compose exec -T dashboard nginx -t", "status": "LOCAL_TESTED", "result": "PASS; dynamic Docker DNS upstream syntax valid"},
+    {"command": "rtk curl -s -I http://127.0.0.1:5173/", "status": "LOCAL_TESTED", "result": "200; CSP, frame denial, MIME protection present"},
+    {"command": "rtk curl -s -i http://127.0.0.1:5173/api/auth/me", "status": "LOCAL_TESTED", "result": "401; unauthenticated JSON response from actual Operations API through nginx"},
+    {"command": "rtk curl -s -I http://127.0.0.1:5173/internal/jobs/claim", "status": "LOCAL_TESTED", "result": "404; internal route blocked"},
+    {"check": "Interactive browser / workflow E2E / screenshots", "status": "NOT_RUN", "result": "Not executed by the frontend subtask. Consult the main project browser and workflow evidence."},
+    {"check": "Backend container replacement while dashboard remains running", "status": "LOCAL_TESTED", "result": "PASS on 2026-09-07T11:47:37Z: dashboard302062df955 stayed running, ops changed664307acd54 to8f49fd44e167, proxy GET /api/auth/me returned401. Docker reused172.18.0.6."},
+    {"check": "Backend replacement with a changed container IP", "status": "NOT_RUN", "result": "Dynamic DNS fix implemented after observed stale-upstream 502. Subsequent backend replacement reused the old IP, so changed-IP re-resolution itself has not been demonstrated."}
+  ],
+  "scope": "Build and HTTP smoke checks establish frontend packaging and proxy behavior only. They do not establish business workflow correctness or browser acceptance."
+}

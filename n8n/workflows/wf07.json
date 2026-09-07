@@ -1,0 +1,222 @@
+{
+  "id": "APICWF0700000001",
+  "name": "APIC | WF07 | Action Execution",
+  "active": false,
+  "nodes": [
+    {
+      "id": "a3073ddd-819e-5acc-a7bd-449b0efa86b0",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF07 · Action Execution\nAtomic claim rechecks exact current authorization. Adapter supports only local effects; accepted-but-timed-out write is UNKNOWN_OUTCOME and cannot blindly retry. Notification never resolves incident.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "9ad3b39e-c8d0-5806-b301-a62698dcea59",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "247b25e9-1fd3-5ce6-a63f-00af770192f8",
+      "name": "Action Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "ed7c2f99-e779-57f2-a449-dc33355d11cb",
+      "name": "Claim Authorized Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/actions/claim",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "cfb8e3e1-a6d8-58de-a106-f856095d8d03",
+      "name": "May Execute Exact Payload",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b2442fd3-5663-5882-a86c-6c51ae9afa2a",
+              "leftValue": "={{ $json.can_execute===true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ad5c4797-c48e-56c2-afd6-1926814e1717",
+      "name": "Execute Controlled Sandbox Adapter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/actions/execute",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {scope_id:$('Action Context').first().json.scope_id,action_id:$json.action_id,claim_token:$json.claim_token,execution_id:$execution.id,workflow_id:$workflow.id} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "e5cde584-8bca-588b-9fae-fc1d0c3fc235",
+      "name": "Known Action Outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{action_id:i.json.action_id,status:i.json.status,provider_reference:i.json.provider_reference||null}}));"
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Action Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action Context": {
+      "main": [
+        [
+          {
+            "node": "Claim Authorized Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim Authorized Action": {
+      "main": [
+        [
+          {
+            "node": "May Execute Exact Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "May Execute Exact Payload": {
+      "main": [
+        [
+          {
+            "node": "Execute Controlled Sandbox Adapter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Controlled Sandbox Adapter": {
+      "main": [
+        [
+          {
+            "node": "Known Action Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "pinData": {},
+  "tags": []
+}

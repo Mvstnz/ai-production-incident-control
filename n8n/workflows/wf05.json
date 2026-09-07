@@ -1,0 +1,190 @@
+{
+  "id": "APICWF0500000001",
+  "name": "APIC | WF05 | Risk Explanation and Action Plan",
+  "active": false,
+  "nodes": [
+    {
+      "id": "30b0e888-884e-56a1-9762-6fa8f8045168",
+      "name": "Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -270
+      ],
+      "parameters": {
+        "content": "## WF05 · Risk Explanation and Action Plan\nVersioned risk policy → allowed SOP actions → verified exact drafts → immutable plan and approval/outbox. Simulated AI explicitly disclosed.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "height": 190,
+        "width": 700
+      }
+    },
+    {
+      "id": "f5d484f6-5e5d-5d2e-a501-4bf16d19eec7",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        270,
+        200
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      }
+    },
+    {
+      "id": "42e7ac7f-e04a-5a1a-aa01-56f952cce610",
+      "name": "Plan Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(i=>({json:{...i.json,execution_id:$execution.id,workflow_id:$workflow.id}}));"
+      }
+    },
+    {
+      "id": "4f558b14-b457-5bc9-bceb-9d0164c7417c",
+      "name": "Evaluate Risk Policy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        810,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/risk/evaluate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {impact:$json.impact} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "6db0a3e8-e176-500e-8850-2038618377fd",
+      "name": "Draft Allowed Actions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1080,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/plans/draft",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {impact:$('Plan Context').first().json.impact,risk:$json,incident_id:$('Plan Context').first().json.incident_id,revision:$('Plan Context').first().json.revision} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    },
+    {
+      "id": "4cf5a057-7a9a-5e23-8933-cb9f817faa6c",
+      "name": "Commit Versioned Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1350,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://ops-api:8000/internal/plans",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {...$('Plan Context').first().json,risk:$('Evaluate Risk Policy').first().json,plan:$json} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "apicOpsService01",
+          "name": "APIC Operations Service"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Plan Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Context": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Risk Policy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluate Risk Policy": {
+      "main": [
+        [
+          {
+            "node": "Draft Allowed Actions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Allowed Actions": {
+      "main": [
+        [
+          {
+            "node": "Commit Versioned Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "APICWF0900000001"
+  },
+  "pinData": {},
+  "tags": []
+}
