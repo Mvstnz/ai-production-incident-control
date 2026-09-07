@@ -18,7 +18,7 @@ From this repository directory:
 rtk proxy python scripts/bootstrap.py
 ```
 
-Bootstrap generates random local credentials once, starts persistent infrastructure, applies migrations, seeds the synthetic ERP, imports and publishes the ten local workflows, and builds the dashboard. It preserves existing secrets and deterministic workflow IDs on subsequent runs. Initial image download/build takes several minutes.
+Bootstrap generates random local credentials once, starts persistent infrastructure, applies migrations, seeds the synthetic ERP, imports and publishes the ten local workflows, and builds the dashboard. Three shared showcase incidents enter the actual n8n intake so the viewer account has real supplier, machine and quality results to inspect. Consequential actions still await human approval. Existing showcase types, secrets and deterministic workflow IDs are preserved on subsequent runs. Initial image download/build takes several minutes.
 
 | Service | Local address |
 |---|---|

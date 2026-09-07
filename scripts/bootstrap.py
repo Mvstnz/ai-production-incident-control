@@ -69,6 +69,7 @@ def main():
         compose('up','-d','--no-deps','--build','dashboard')
         wait('http://127.0.0.1:5173')
     wait('http://127.0.0.1:8000/health/ready')
+    run('proxy',sys.executable,'scripts/seed_showcase.py')
     print('APIC local stack ready. Sign-in credentials are in .local/credentials.json; never publish this file.')
     print('An initial n8n owner setup may still be required to use the editor UI. CLI-deployed workflows do not require it to execute.')
 if __name__=='__main__':main()

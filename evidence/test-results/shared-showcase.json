@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope_id": "928d1daf-6ffe-54e4-8cf3-5d4032986821",
+  "viewer_can_read_three_incident_types": true,
+  "repeat_seed_preserves_incident_job_action_ids": true,
+  "viewer_mutation_http_status": 403,
+  "consequential_actions_wait_for_approval": true,
+  "incident_ids": [
+    "d48ed72d-4740-45a8-9bc1-a31368a13235",
+    "34a33f08-1b61-4558-8be8-fcdf881b823d",
+    "af65fd5a-734e-430b-ae64-37c03a704aa5"
+  ],
+  "execution_ids": [
+    "1429",
+    "1437",
+    "1433"
+  ]
+}
