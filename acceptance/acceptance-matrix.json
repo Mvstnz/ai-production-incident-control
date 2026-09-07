@@ -6,7 +6,7 @@
       "id": "AC01",
       "test": "Frischer lokaler Start",
       "expected": "Dienste healthy; Seeds/Migrationen bereit; Demo ohne externe Konten nutzbar.",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "evidence/test-results/github-ci.json"
       ],
@@ -58,7 +58,7 @@
       "expected": "Ein Source Event und ein fachlicher Incident; keine doppelten externen Aktionen.",
       "status": "PASS",
       "evidence": [
-        "evidence/workflow-runs/local-e2e.json#parallel_deduplication_and_cross_channel_correlation"
+        "evidence/workflow-runs/acceptance-ordering.json#ten_concurrent_first_deliveries_then_one_sandbox_effect"
       ],
       "verification_scope": "DEMO_LOCAL"
     },
@@ -156,7 +156,7 @@
       "expected": "Entscheidung bleibt gespeichert; Workflow wird später fortgesetzt.",
       "status": "PASS",
       "evidence": [
-        "evidence/workflow-runs/local-e2e.json#approval_replay_early_decision_and_delivery"
+        "evidence/workflow-runs/acceptance-ordering.json#committed_approval_observed_before_any_wait_then_n8n_delivery"
       ],
       "verification_scope": "DEMO_LOCAL"
     },
@@ -384,11 +384,11 @@
       "verification_scope": "DEMO_LOCAL"
     }
   ],
-  "evaluated_at": "2026-09-07T12:36:47.193290+00:00",
+  "evaluated_at": "2026-09-07T13:07:06.007011+00:00",
   "summary": {
-    "PASS": 34,
+    "PASS": 35,
     "FAIL": 0,
     "BLOCKED": 1,
-    "NOT_RUN": 1
+    "NOT_RUN": 0
   }
 }

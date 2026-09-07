@@ -20,9 +20,9 @@
     {"command": "rtk curl -s -I http://127.0.0.1:5173/", "status": "LOCAL_TESTED", "result": "200; CSP, frame denial, MIME protection present"},
     {"command": "rtk curl -s -i http://127.0.0.1:5173/api/auth/me", "status": "LOCAL_TESTED", "result": "401; unauthenticated JSON response from actual Operations API through nginx"},
     {"command": "rtk curl -s -I http://127.0.0.1:5173/internal/jobs/claim", "status": "LOCAL_TESTED", "result": "404; internal route blocked"},
-    {"check": "Interactive browser / workflow E2E / screenshots", "status": "NOT_RUN", "result": "Not executed by the frontend subtask. Consult the main project browser and workflow evidence."},
+    {"check": "Interactive browser / workflow E2E / screenshots", "status": "LOCAL_TESTED", "result": "Root verification passed: four views, actual exact-plan approval, viewer restrictions, scope reload, responsive keyboard/focus and dashboard action matched to real n8n execution 670. See evidence/test-results/browser.json and evidence/workflow-runs/local-e2e.json."},
     {"check": "Backend container replacement while dashboard remains running", "status": "LOCAL_TESTED", "result": "PASS on 2026-09-07T11:47:37Z: dashboard302062df955 stayed running, ops changed664307acd54 to8f49fd44e167, proxy GET /api/auth/me returned401. Docker reused172.18.0.6."},
     {"check": "Backend replacement with a changed container IP", "status": "NOT_RUN", "result": "Dynamic DNS fix implemented after observed stale-upstream 502. Subsequent backend replacement reused the old IP, so changed-IP re-resolution itself has not been demonstrated."}
   ],
-  "scope": "Build and HTTP smoke checks establish frontend packaging and proxy behavior only. They do not establish business workflow correctness or browser acceptance."
+  "scope": "Build/HTTP checks establish packaging and proxy behavior. Root browser and n8n E2E evidence separately establish the listed interactive and business behavior. The changed-IP check remains NOT_RUN."
 }

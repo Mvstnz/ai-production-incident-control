@@ -1,12 +1,14 @@
 # Handover
 
-The executable project is in this repository, branch `main`. Use `rtk git log -1 --oneline` for the exact checked-out revision. The user explicitly authorized publication of the sanitized source as a public GitHub repository. Hosting of the application itself is separate and has not been performed.
+The executable project is published at [Mvstnz/ai-production-incident-control](https://github.com/Mvstnz/ai-production-incident-control), branch `main`. Use `rtk git log -1 --oneline` for the exact checked-out revision. [Fresh GitHub CI passed](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34124335738) for application revision `8fb00eb813c618e3588134e5c44997f53cc3a451`; subsequent delivery changes add verification scripts, evidence and documentation without changing application code or workflow graphs. Hosting of the application itself is separate and has not been performed.
 
 Run `rtk proxy python scripts/bootstrap.py` from the repository. Open http://127.0.0.1:5173 and use the randomly generated `.local/credentials.json`. Services bind only to loopback; the ERP and database have no host ports. Keep `.env`, `.local`, database volumes and private editor credentials out of Git and shared archives.
 
 ## What is demonstrated
 
 Real local n8n execution coordinates intake, verification/correlation, immutable ERP impact, risk and action planning, human approval, action execution, recovery, error handling and digest. PostgreSQL owns domain state and concurrency. Test commands and observed results are linked from README and the acceptance matrix. Fixture evaluation is not live LLM evaluation. Target readback is not target execution.
+
+The shared viewer scope contains supplier, machine and quality incidents assessed by actual local n8n executions `1429`, `1433` and `1437`. Their consequential actions remain waiting for the responsible human approval. Repeated bootstrap preserves those identities; independent guided demos create separate owned scopes.
 
 The final workflow inventory maps all ten local IDs to all ten connected-cloud IDs. Local cleaned runtime exports are in `n8n/exports/local`; the actual target readbacks are in `n8n/target`. `scripts/build_workflows.py` is the reviewed local graph source, and `scripts/sync_exports.py` asserts that the persisted local graphs match it.
 

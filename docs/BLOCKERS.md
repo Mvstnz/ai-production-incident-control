@@ -19,4 +19,4 @@ No explicit paid-call budget or live provider credential was supplied. The deter
 
 ## Resolved prerequisites
 
-The canonical v1.1 handoff was supplied, read and checked. Docker was restored and the local Compose stack runs. These are no longer access blockers. Remaining local test work is tracked honestly in the acceptance matrix and progress report.
+The canonical v1.1 handoff was supplied, read and checked. Docker was restored and the local Compose stack runs. The public GitHub repository and fresh CI are verified, including repeated bootstrap on Linux. These are no longer access blockers. Exact executed acceptance status is recorded in the acceptance matrix and progress report.

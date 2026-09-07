@@ -19,6 +19,15 @@ for filename in ('evidence/workflow-runs/local-e2e.json','evidence/workflow-runs
             if row['status']!='FAIL':row['status']=case['status']
             row['evidence'].append(filename+'#'+case['name'])
 
+# These exact combined/ordered scenarios require their own observed evidence.
+for key in ('AC06','AC15'):
+    set_result(key,'NOT_RUN')
+ordering=ROOT/'evidence/workflow-runs/acceptance-ordering.json'
+if ordering.exists():
+    for case in read('evidence/workflow-runs/acceptance-ordering.json')['tests']:
+        for key in case['criteria']:
+            set_result(key,case['status'],'evidence/workflow-runs/acceptance-ordering.json#'+case['name'])
+
 api=(ROOT/'docs/implementation/api-integration-output.txt').read_text(encoding='utf-8')
 unit=(ROOT/'evidence/test-results/domain-junit.xml').read_text(encoding='utf-8')
 assert 'failures="0"' in unit and 'errors="0"' in unit,'Domain evidence is not clean'

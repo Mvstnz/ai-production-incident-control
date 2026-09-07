@@ -46,7 +46,7 @@ The three guided starts create a new scope through `/api/demo/runs`. The source-
 | Unauthenticated `GET /api/auth/me` through nginx | 401 JSON from Operations API |
 | `HEAD /internal/jobs/claim` through nginx | 404 |
 | Backend container replacement without dashboard restart | PASS: `/api/auth/me` returned 401 after replacement; Docker reused the IP, so a changed-IP case remains unobserved |
-| Interactive browser checks / real E2E / screenshots | NOT_RUN by this frontend subtask; main implementation task records actual browser evidence separately |
+| Interactive browser checks / real E2E / screenshots | LOCAL_TESTED; actual four-view, role, scope, approval and responsive evidence is in `evidence/test-results/browser.json` at repository root |
 
 Build and HTTP smoke checks do not establish workflow correctness or UI acceptance. The parent release evidence is authoritative for executed browser scenarios and screenshots.
 

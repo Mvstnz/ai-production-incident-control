@@ -1,5 +1,7 @@
 # Acceptance evidence audit
 
+**Historical audit.** The cutoff findings below are preserved. Use the [current matrix](../../acceptance/acceptance-matrix.json), [executed test report](test-report.md) and final verification paragraph for the delivered status.
+
 Evidence reviewed on 7 September 2026 at approximately 12:19 UTC. This is a
 read-only assessment of recorded results, not a new test run or an update of the
 acceptance matrix. At this cutoff, `acceptance/acceptance-matrix.json` still has
@@ -102,4 +104,4 @@ for the final authorized run. Only then can recorded gaps be upgraded.
 
 ## Final verification after the audit cutoff
 
-All six added API edge cases were actually executed by the final whole-directory runner: 30/30 integration tests passed, including AC09/11/13/26/35. The actual resilience suite now has 10/10 passes including database outage (AC21) and signed Wait/restart/offline approval-outbox persistence (AC22); original failures remain in history. The complete repeat bootstrap passed (AC02). The browser report asserts the same incident/action and real n8n execution670 (AC36), plus reload/keyboard corrections. The current acceptance matrix supersedes the cutoff statuses above. Fresh GitHub CI (AC01) remains pending publication; target AC31 remains blocked.
+All six added API edge cases were actually executed by the final whole-directory runner: 30/30 integration tests passed, including AC09/11/13/26/35. The actual resilience suite now has 10/10 passes including database outage (AC21) and signed Wait/restart/offline approval-outbox persistence (AC22); original failures remain in history. The complete repeat bootstrap passed (AC02). The browser report asserts the same incident/action and real n8n execution670 (AC36), plus reload/keyboard corrections. The current acceptance matrix supersedes the cutoff statuses above. [Fresh GitHub CI](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34124335738) passed (AC01), including the second bootstrap on Linux. Target AC31 remains blocked. Exact combined delivery and early-approval ordering checks have a separate retained report, `evidence/workflow-runs/acceptance-ordering.json`; their observed results, rather than the earlier broad case names, determine AC06/AC15.

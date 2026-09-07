@@ -40,6 +40,7 @@ rtk proxy python -m pip install -r backend/requirements.lock.txt
 rtk proxy python -m pytest tests/unit -q
 rtk proxy python -m backend.run_integration
 rtk proxy python -X utf8 scripts/test_runtime.py
+rtk proxy python -X utf8 scripts/test_acceptance_ordering.py
 rtk proxy python -X utf8 scripts/test_resilience.py --phase normal
 rtk npm ci
 rtk npm run build
@@ -50,7 +51,7 @@ The API suite uses a separate real PostgreSQL database, `apic_integration`. Runt
 
 `verify_handoff.py` is the original **handoff-package checker**, not an application test. It expects untouched NOT_RUN acceptance entries and should be run against the separately extracted v1.1 handoff, as recorded in [handoff validation](evidence/test-results/handoff-v1.1.json).
 
-GitHub [CI](.github/workflows/ci.yml) defines the build, domain, API, local n8n and repository scan pipeline. Publication is in progress; a hosted CI pass is claimed only after its completed run is recorded in the acceptance matrix. Dependency versions and Action commits are pinned.
+The [public repository](https://github.com/Mvstnz/ai-production-incident-control) includes a [successful fresh GitHub CI run](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34124335738) for application revision `8fb00eb813c618e3588134e5c44997f53cc3a451`. Build, 100 domain tests, 30 API tests, ten local n8n E2E cases, shared viewer examples, repeated bootstrap and the repository scan passed. Later changes only add verification scripts, evidence and documentation. Dependency versions and Action commits are pinned; the exact hosted result is retained in [CI evidence](evidence/test-results/github-ci.json).
 
 ## Architecture and evidence
 

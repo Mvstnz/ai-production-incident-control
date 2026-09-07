@@ -10,7 +10,7 @@ rtk proxy python -m backend.run_integration
 
 The runner uses the existing project's PostgreSQL and Mailpit services, provisions the separate `apic_integration` PostgreSQL database idempotently, applies migrations, and runs API tests. Secrets stay in process environment. It does not enqueue work in the demo database or n8n. Its own test scopes have work and membership removed during teardown; append-only audit history and immutable snapshots remain. The default demonstration scope is not reset.
 
-Observed result: **24 passed** in **34.71 seconds**, with two upstream TestClient deprecation warnings. Exact output: `api-integration-output.txt`.
+Final observed result: **30 passed** in **152.87 seconds**, with two upstream TestClient deprecation warnings. Exact output, including the six acceptance edge cases: `api-integration-output.txt`.
 
 The tested boundaries are FastAPI TestClient â†’ genuine PostgreSQL and ERP FastAPI TestClient â†’ genuine PostgreSQL. SMTP tests actually connect to Compose Mailpit. ERP-command tests call the genuine ERP API in process; they are not evidence of n8n execution. Runtime workflow tests and actual n8n execution IDs belong to the separate end-to-end report.
 

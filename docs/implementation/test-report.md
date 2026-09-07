@@ -7,15 +7,17 @@ The matrix is an index of retained evidence. Fixture tests, local runtime and co
 | Pure domain | 100 passed | `rtk proxy python -m pytest tests/unit -q`; domain-junit.xml |
 | Real PostgreSQL API integration | 30 passed, 2 warnings in 152.87s (0:02:32) | `rtk proxy python -m backend.run_integration`; api-integration-output.txt |
 | Published local n8n E2E | 10/10 passed after final redeploy | `rtk proxy python -X utf8 scripts/test_runtime.py` |
+| Exact concurrent delivery / early approval ordering | 2/2 passed locally; actual Mailpit capture counted after repeated recovery | `rtk proxy python -X utf8 scripts/test_acceptance_ordering.py`; acceptance-ordering.json |
 | Actual runtime resilience | 10/10 passed, earlier failures retained | `rtk proxy python -X utf8 scripts/test_resilience.py --phase normal`; disruptive phases below |
 | Repeat full bootstrap | Passed, identities and secrets preserved | `rtk proxy python scripts/test_rebootstrap.py` |
+| Shared viewer showcase | Three actual incident types; repeated seeding preserves IDs; viewer mutation 403 | `rtk proxy python scripts/test_showcase.py`; evidence/test-results/shared-showcase.json |
 | Frontend build / typecheck | Passed | `rtk npm run build` |
 | Real browser | Four views, exact approval, role/scope checks, responsive keyboard and same execution verified | evidence/test-results/browser.json |
 | Fixture evaluation | 50 cases; 30 development / 20 holdout | evidence/evaluations/fixture-v1-report.json |
 | Live LLM | NOT_RUN, zero calls/cost | Missing configured model/credential/call budget |
 | Target cloud n8n | 10 created/read back, 0 executions | BLOCKED; target-deployment.json |
 
-Fresh GitHub CI: pending the first public run.
+Fresh GitHub CI: PASS
 
 ## Recorded local execution IDs
 
@@ -41,6 +43,8 @@ Fresh GitHub CI: pending the first public run.
 | ERP_429_respects_retry_after_then_recovers | PASS | 679, 720 |
 | registered_wait_and_committed_approval_outbox_survive_n8n_restart | PASS | 1183, 1195, 1205, 1208 |
 | database_outage_no_false_202_and_safe_redelivery | PASS | 1215, 1217, 1219, 1220 |
+| ten_concurrent_first_deliveries_then_one_sandbox_effect | PASS | 1552, 1553 |
+| committed_approval_observed_before_any_wait_then_n8n_delivery | PASS | 1564, 1565 |
 
 Each execution is in the local n8n instance, not the cloud target. Action records and browser evidence separately prove action670 succeeded once and left the incident in monitoring.
 
