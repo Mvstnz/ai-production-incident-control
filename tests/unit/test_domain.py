@@ -339,13 +339,15 @@ def test_live_extraction_accepts_only_grounded_erp_verified_supplier_facts():
     snapshot, facts = fixture()
     envelope = {"source": "EMAIL", "sender": "supplier@example.test",
                 "content_text": HERO["source_email"]["content_text"], "ai_mode": "live"}
-    result = verify_live_extraction(envelope, snapshot, live_supplier_candidate(), "models/gemini-test")
+    response_metadata = {"request_id": "request-1", "finish_reason": "STOP", "total_tokens": 321}
+    result = verify_live_extraction(envelope, snapshot, live_supplier_candidate(), "models/gemini-test", response_metadata)
     assert result["status"] == "VERIFIED"
     facts["reason"] = "capacity problems in our heat treatment department"
     assert result["facts"] == facts
     assert result["business_key"] == "SUPPLIER_DELAY:4500192:10"
     assert result["provider"] == "google-gemini"
     assert result["model"] == "models/gemini-test"
+    assert result["response_metadata"] == response_metadata
     assert result["evidence"]["purchase_order"]["evidence"]["quote"] == "PO 4500192"
 
 

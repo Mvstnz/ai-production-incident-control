@@ -88,11 +88,21 @@ class CustomEmail(Strict):
     content_text: str = Field(min_length=1,max_length=50000)
 
 
+class ProviderResponseMetadata(Strict):
+    request_id: str | None = Field(default=None,max_length=200)
+    finish_reason: str | None = Field(default=None,max_length=100)
+    prompt_tokens: int | None = Field(default=None,ge=0,le=10_000_000)
+    completion_tokens: int | None = Field(default=None,ge=0,le=10_000_000)
+    total_tokens: int | None = Field(default=None,ge=0,le=10_000_000)
+    latency_ms: int | None = Field(default=None,ge=0,le=86_400_000)
+
+
 class LiveExtractionInput(Strict):
     envelope: dict[str,Any]
     snapshot: dict[str,Any]
     candidate: dict[str,Any]
     model: str = Field(min_length=1,max_length=200)
+    response_metadata: ProviderResponseMetadata = Field(default_factory=ProviderResponseMetadata)
 
 
 class ImpactInput(Strict):

@@ -66,7 +66,9 @@ local n8n release does not establish the cloud instance's release.
 2. WF03 claims a bounded lease, obtains source and ERP context, and verifies the
    facts. Exact guided synthetic email uses the visible fixture provider. Typed
    form/API input is validated directly. An explicitly live synthetic email first
-   reserves one durable call-budget slot, then Gemini returns only a candidate.
+   reserves one durable call-budget slot per real provider invocation, then Gemini
+   returns only a candidate plus bounded response metadata. The configured model
+   is resolved by the node at runtime rather than being duplicated in the graph.
    Exact quotes, quantities, offset-aware dates and ERP identity are revalidated
    by the backend. Unknown text and ambiguous, invented or injected instructions
    require review.

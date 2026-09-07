@@ -1,7 +1,7 @@
 {
   "status": "LOCAL_TESTED_WITH_SOURCE_DRIFT",
   "command": "rtk proxy node n8n/target/verify.cjs",
-  "checked_at": "2026-09-07T16:22:04.503Z",
+  "checked_at": "2026-09-07T16:55:15.507Z",
   "workflow_count": 10,
   "passed_readback_comparisons": 10,
   "total_source_nodes": 91,
@@ -55,12 +55,12 @@
       "node_count": 19,
       "edge_count": 18,
       "credential_bindings": 1,
-      "builder_sha256": "75ff36c39d17268786d3c56f636da47d7ff747edfb3ffc022a485ba5a41bfe3d",
-      "export_sha256": "da27d82da700166f055f7468230eae9f04a702101766861bd704a5e744d5c47d",
-      "current_source_file_sha256": "ea0fe8ab58919da7e7be810646b7dbcb0fe78511532913c4b082c7a6b6f1a9a2",
-      "source_snapshot_sha256": "11ef89e9bcba61a2ed6efe46b857f18050ca26985703b18a737b253402e13181",
-      "expected_graph_sha256": "7fbe30f36f2fb50f98a3da6c85b5e2156972732ecae271f96948c30d5dc667ec",
-      "readback_graph_sha256": "6b7456ccce6c3180453bce433a5f5fa7c46157c87688fe07e6cc3ff22bdbb04a"
+      "builder_sha256": "ce7721c368c1afb4ef8d2a53a11785394f785f4819d31702a41b7e9457f938a2",
+      "export_sha256": "de53797594a429f4e5cfcb4a39ff7644cba0bb6d721a53474312bc81b190ddc4",
+      "current_source_file_sha256": "c341d2407b5f0aeff0bf1d097b326e00c47ada5103e8d3bfd65d284016f891e4",
+      "source_snapshot_sha256": "98468e0960930246fe02688b6338aed8dc44eee43c160b88985205328036a219",
+      "expected_graph_sha256": "f33cbd65cee12f668c1c8879b0207f12c534d5e2ba633817af6f99a91353ce2a",
+      "readback_graph_sha256": "5cfe597955f4a03bb6c66a90891cb314b75483d254538691fc060b5deb557fc3"
     },
     {
       "key": "wf04",

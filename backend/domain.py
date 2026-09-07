@@ -737,7 +737,8 @@ def _live_schedule(rows: Any, envelope: Json, field: str, status: str) -> tuple[
     return (clean if field == "confirmed_supply_schedule" else clean[0]), spans
 
 
-def verify_live_extraction(envelope: Json, snapshot: Json, candidate: Any, model: str) -> Json:
+def verify_live_extraction(envelope: Json, snapshot: Json, candidate: Any, model: str,
+                           response_metadata: Json | None = None) -> Json:
     """Turn an untrusted Gemini candidate into verified facts or manual review.
 
     Model output never supplies status, business identity, recipients or actions. Every
@@ -746,7 +747,8 @@ def verify_live_extraction(envelope: Json, snapshot: Json, candidate: Any, model
     """
     result = {"status": "MANUAL_REVIEW", "incident_type": None, "business_key": None,
               "facts": {}, "evidence": {}, "review_reasons": [], "provider": "google-gemini",
-              "model": model, "prompt_version": "extraction-v2.0"}
+              "model": model, "prompt_version": "extraction-v2.0",
+              "response_metadata": response_metadata or {}}
     try:
         text = envelope.get("content_text", "")
         subject = envelope.get("subject", "")

@@ -185,11 +185,11 @@ def prepare_live_extract(body:Stage):
     with transaction() as conn:
         require_job(conn,data)
         conn.execute("SELECT pg_advisory_xact_lock(hashtext('apic:live-ai-budget'))")
-        existing=conn.execute("SELECT model FROM ops.live_ai_calls WHERE job_id=%s",(body.job_id,)).fetchone()
+        existing=conn.execute("SELECT model FROM ops.live_ai_calls WHERE job_id=%s AND execution_id=%s",(body.job_id,body.execution_id)).fetchone()
         used=conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls").fetchone()["count"]
         if not existing:
             if used>=limit: raise HTTPException(429,"The configured live AI call budget is exhausted")
-            conn.execute("INSERT INTO ops.live_ai_calls(job_id,scope_id,model) VALUES (%s,%s,%s)",(body.job_id,body.scope_id,model))
+            conn.execute("INSERT INTO ops.live_ai_calls(job_id,execution_id,scope_id,model) VALUES (%s,%s,%s,%s)",(body.job_id,body.execution_id,body.scope_id,model))
             used+=1
     return {**data,"llm_model":existing["model"] if existing else model,"llm_calls_used":used,"llm_calls_limit":limit}
 
@@ -198,7 +198,8 @@ def prepare_live_extract(body:Stage):
 def verify_live_extract(body:LiveExtractionInput):
     configured,model,_=live_ai_config()
     if not configured or body.model!=model: raise HTTPException(409,"Live AI model does not match the bounded runtime configuration")
-    return verify_live_extraction(body.envelope,body.snapshot,body.candidate,body.model)
+    return verify_live_extraction(body.envelope,body.snapshot,body.candidate,body.model,
+        body.response_metadata.model_dump(mode="json",exclude_none=False))
 
 
 @app.post("/internal/incidents/correlate",dependencies=[Depends(service)])

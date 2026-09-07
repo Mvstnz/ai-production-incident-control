@@ -31,10 +31,14 @@ def main():
     assert event["status"] == "VERIFIED", event
     detail = client.ok(f"/api/incidents/{event['incident_id']}?scope_id={source['scope_id']}")
     revision = detail["revisions"][-1]
-    assert revision["extraction_metadata"] == {
-        "provider": "google-gemini",
-        "model": "models/gemini-3.1-flash-lite",
-        "prompt_version": "extraction-v2.0",
+    metadata = revision["extraction_metadata"]
+    assert metadata["provider"] == "google-gemini"
+    assert metadata["model"] == "models/gemini-3.1-flash-lite"
+    assert metadata["prompt_version"] == "extraction-v2.0"
+    response_metadata = metadata["response_metadata"]
+    assert set(response_metadata) == {
+        "request_id", "finish_reason", "prompt_tokens", "completion_tokens",
+        "total_tokens", "latency_ms",
     }
     assert revision["facts"]["purchase_order"] == "4500192"
     assert revision["facts"]["confirmed_supply_schedule"][0]["quantity"] == 40
@@ -45,9 +49,10 @@ def main():
     evidence = {
         "status": "PASS",
         "profile": "DEMO_LOCAL",
-        "provider": revision["extraction_metadata"]["provider"],
-        "model": revision["extraction_metadata"]["model"],
-        "prompt_version": revision["extraction_metadata"]["prompt_version"],
+        "provider": metadata["provider"],
+        "model": metadata["model"],
+        "prompt_version": metadata["prompt_version"],
+        "response_metadata_fields": sorted(response_metadata),
         "tested_at": datetime.now(timezone.utc).isoformat(),
         "scope_id": source["scope_id"],
         "source_event_id": source["source_event_id"],

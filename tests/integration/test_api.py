@@ -172,8 +172,11 @@ def test_live_ai_budget_is_bounded_idempotent_and_model_locked(setup,monkeypatch
     second=post(t,"/internal/extract/live/prepare",context)
     assert first["llm_model"]==second["llm_model"]=="models/gemini-test"
     assert first["llm_calls_used"]==second["llm_calls_used"]
+    retry={**context,"execution_id":"api-integration-retry"}
+    third=post(t,"/internal/extract/live/prepare",retry)
+    assert third["llm_calls_used"]==first["llm_calls_used"]+1
     with transaction() as conn:
-        assert conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls WHERE job_id=%s",(accepted["job_id"],)).fetchone()["count"]==1
+        assert conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls WHERE job_id=%s",(accepted["job_id"],)).fetchone()["count"]==2
     mismatch=t["internal"].post("/internal/extract/live/verify",json={"envelope":context["envelope"],
         "snapshot":context["snapshot"],"candidate":{},"model":"models/other"})
     assert mismatch.status_code==409

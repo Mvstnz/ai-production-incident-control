@@ -61,7 +61,7 @@ def correlate(conn,s,extraction):
         previous=conn.execute("SELECT id FROM ops.incidents WHERE scope_id=%s AND incident_type=%s AND business_key=%s ORDER BY updated_at DESC LIMIT 1",(sid,kind,key)).fetchone()
         conn.execute("""INSERT INTO ops.incidents(id,scope_id,number,incident_type,business_key,title,status,updated_at,prior_incident_id)
             VALUES (%s,%s,%s,%s,%s,%s,'ANALYZING',%s,%s)""",(iid,sid,"INC-"+str(iid)[:8].upper(),kind,key,kind.replace("_"," ").title()+" · "+key,now(conn,sid),previous["id"] if previous else None))
-    metadata={key:extraction[key] for key in ("provider","model","prompt_version") if extraction.get(key)}
+    metadata={key:extraction[key] for key in ("provider","model","prompt_version","response_metadata") if extraction.get(key)}
     conn.execute("""INSERT INTO ops.incident_revisions(id,scope_id,incident_id,revision,fingerprint,facts,evidence,extraction_metadata)
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT(scope_id,incident_id,revision) DO NOTHING""",(uid(),sid,iid,revision,fingerprint,js(facts),js(extraction.get("evidence",[])),js(metadata)))
     conn.execute("INSERT INTO ops.incident_sources VALUES (%s,%s,%s,%s) ON CONFLICT DO NOTHING",(sid,iid,s["source_event_id"],revision))
