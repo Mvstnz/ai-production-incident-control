@@ -1,6 +1,7 @@
 """Local-only reproducible bootstrap; never targets the connected cloud instance."""
 from pathlib import Path
 import argparse,json,subprocess,sys,time,urllib.request,urllib.error,hashlib,http.client
+from n8n_io import backup_owned
 ROOT=Path(__file__).resolve().parents[1]
 def run(*args):
     result=subprocess.run(['rtk',*args],cwd=ROOT,check=True,text=True)
@@ -41,11 +42,7 @@ def deploy():
     run('proxy',sys.executable,'scripts/build_workflows.py')
     compose('exec','-T','n8n','n8n','import:credentials','--input=/project/local/n8n-credentials.json')
     manifest=json.loads((ROOT/'n8n/manifest.example.json').read_text())
-    # Capture previous local project version through supported CLI before modifying it.
-    for w in manifest['workflows']:
-        result=subprocess.run(['rtk','docker','compose','exec','-T','n8n','n8n','export:workflow',f"--id={w['id']}",f"--output=/project/local/rollback-{w['key']}.json"],cwd=ROOT,capture_output=True,text=True)
-        if result.returncode and 'No workflows found' not in result.stdout+result.stderr:
-            print(f"No prior export for {w['key']}; first import or export unavailable.")
+    backup_owned(manifest['workflows'])
     compose('exec','-T','n8n','n8n','import:workflow','--separate','--input=/project/n8n/workflows')
     for w in manifest['workflows']:
         compose('exec','-T','n8n','n8n','publish:workflow',f"--id={w['id']}")

@@ -2,10 +2,9 @@
 from pathlib import Path
 import subprocess,json,hashlib
 from datetime import datetime,timezone
+from n8n_io import export_all
 ROOT=Path(__file__).resolve().parents[1]
-command=['rtk','docker','compose','exec','-T','n8n','n8n','export:workflow','--all','--output=/project/local/all-readback.json']
-subprocess.run(command,cwd=ROOT,check=True)
-all_flows=json.loads((ROOT/'.local/all-readback.json').read_text(encoding='utf-8'))
+all_flows=export_all(ROOT/'.local/all-readback.json')
 source=json.loads((ROOT/'n8n/manifest.example.json').read_text())
 outdir=ROOT/'n8n/exports/local';outdir.mkdir(parents=True,exist_ok=True)
 report={'profile':'DEMO_LOCAL','readback_at':datetime.now(timezone.utc).isoformat(),'n8n_version':'2.37.10','workflows':[]}

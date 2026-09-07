@@ -18,12 +18,13 @@ jobs:
           node-version: '24.12.0'
           cache: npm
       - name: Install pinned command proxy
-        run: cargo install --git https://github.com/rtk-ai/rtk --rev 5a7880d404db8364d602f2ecdc41dd790f64013f --locked
+        run: python scripts/install_ci_rtk.py
       - run: rtk proxy python -m pip install -r backend/requirements.lock.txt
       - run: rtk npm ci
       - run: rtk npm run build
       - run: rtk proxy python -m pytest tests/unit -q
       - run: rtk proxy python scripts/bootstrap.py
+      - run: rtk proxy python scripts/test_rebootstrap.py
       - run: rtk proxy python -m backend.run_integration
       - run: rtk proxy python -X utf8 scripts/test_runtime.py
       - run: rtk proxy python scripts/scan_repository.py

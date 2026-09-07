@@ -56,7 +56,7 @@ GitHub [CI](.github/workflows/ci.yml) defines the build, domain, API, local n8n 
 
 - [Architecture](docs/architecture.md), [data model](docs/data-model.md), [security](docs/security.md), [limitations](docs/limitations.md)
 - [Demo walkthrough](docs/demo-guide.md), [portfolio narrative](docs/portfolio.md), [handover and rollback](docs/implementation/handover.md)
-- [Milestone progress](docs/implementation/progress.md), [API verification](docs/implementation/backend-verification.md)
+- [Milestone progress](docs/implementation/progress.md), [executed test report](docs/implementation/test-report.md), [API verification](docs/implementation/backend-verification.md)
 - [Real local workflow runs](evidence/workflow-runs/local-e2e.json), [resilience](evidence/workflow-runs/resilience.json), [fixture evaluation](evidence/evaluations/fixture-v1-report.json)
 - [Cloud deployment readback](evidence/workflow-runs/target-deployment.json), [screenshots](evidence/screenshots)
 
