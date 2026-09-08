@@ -136,22 +136,22 @@ def test_genuinely_computed_low_supplier_mail_still_cannot_dispatch_unapproved(s
     t = setup
     data = read_fixture_data(t, "SUPPLIER_DELAY")
     requirement = deepcopy(data["production_requirements"][0])
-    requirement.update(required_quantity=25, need_at="2026-11-19T08:00:00+01:00",
-                       customer_due_at="2026-11-22T08:00:00+01:00", open_net_line_value_cents=10000,
+    requirement.update(required_quantity=25, need_at="2026-07-19T08:00:00+02:00",
+                       customer_due_at="2026-07-22T08:00:00+02:00", open_net_line_value_cents=10000,
                        strategic_customer=False)
     data["production_requirements"] = [requirement]
     data["qualified_alternative_available"] = True
     with transaction() as conn:
-        conn.execute("UPDATE erp.supply_schedules SET available_at='2026-11-19T07:00:00Z' WHERE scope_id=%s",
+        conn.execute("UPDATE erp.supply_schedules SET available_at='2026-07-19T06:00:00Z' WHERE scope_id=%s",
                      (t["sid"],))
         conn.execute("DELETE FROM erp.production_requirements WHERE scope_id=%s AND id!='REQ-DEMO-MO-FRAME-41'", (t["sid"],))
-        conn.execute("UPDATE erp.production_requirements SET quantity=25,need_at='2026-11-19T07:00:00Z' WHERE scope_id=%s AND id='REQ-DEMO-MO-FRAME-41'", (t["sid"],))
+        conn.execute("UPDATE erp.production_requirements SET quantity=25,need_at='2026-07-19T06:00:00Z' WHERE scope_id=%s AND id='REQ-DEMO-MO-FRAME-41'", (t["sid"],))
         conn.execute("UPDATE erp.production_orders SET quantity=25 WHERE scope_id=%s AND id='DEMO-MO-FRAME-41'", (t["sid"],))
         conn.execute("UPDATE erp.production_sales_allocations SET quantity=25 WHERE scope_id=%s AND production_order_id='DEMO-MO-FRAME-41'", (t["sid"],))
-        conn.execute("UPDATE erp.sales_order_items SET open_quantity=25,open_net_line_value_cents=10000,customer_due_at='2026-11-22T07:00:00Z' WHERE scope_id=%s AND id='DEMO-SO-FRAME-41/20'", (t["sid"],))
+        conn.execute("UPDATE erp.sales_order_items SET open_quantity=25,open_net_line_value_cents=10000,customer_due_at='2026-07-22T06:00:00Z' WHERE scope_id=%s AND id='DEMO-SO-FRAME-41/20'", (t["sid"],))
     write_fixture_data(t, "SUPPLIER_DELAY", data)
     body = envelope(t, "supplier-split")
-    body["payload"]["confirmed_supply_schedule"] = [{"quantity": 75, "available_at": "2026-11-20T08:00:00+01:00", "status": "CONFIRMED"}]
+    body["payload"]["confirmed_supply_schedule"] = [{"quantity": 75, "available_at": "2026-07-20T08:00:00+02:00", "status": "CONFIRMED"}]
     result = pipeline(t, body)
     assert result["impact"]["has_operational_impact"] is True
     assert result["impact"]["total_shortage"] == 1
@@ -175,7 +175,7 @@ def test_dashboard_unions_same_sales_position_across_two_current_incidents(setup
     supplier_data = read_fixture_data(t, "SUPPLIER_DELAY")
     machine_data = read_fixture_data(t, "MACHINE_BREAKDOWN")
     shared = supplier_data["production_requirements"][1]
-    due = "2026-11-11T16:00:00+01:00"
+    due = "2026-07-11T16:00:00+02:00"
     shared["customer_due_at"] = due
     operation = machine_data["production_operations"][0]
     operation.update(sales_line=shared["sales_line"], open_net_line_value_cents=shared["open_net_line_value_cents"],

@@ -41,7 +41,7 @@ def setup(monkeypatch):
             user_id=uid(); password=secrets.token_urlsafe(24); username=role+"-"+sid[:8]
             conn.execute("INSERT INTO ops.users VALUES (%s,%s,%s,%s)",(user_id,username,passwords.hash(password),role))
             users[role]={"id":user_id,"username":username,"role":role}; passwords_[role]=password
-        conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,'API integration test',%s,'2026-11-09T07:00:00Z')",(sid,users["admin"]["id"]))
+        conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,'API integration test',%s,'2026-07-09T06:00:00Z')",(sid,users["admin"]["id"]))
         for user in users.values(): conn.execute("INSERT INTO ops.memberships VALUES (%s,%s)",(sid,user["id"]))
         seed_scope(conn,sid)
     erp=TestClient(erp_app)
@@ -83,7 +83,7 @@ def post(t,path,payload):
 
 
 def envelope(t,scenario="supplier-delay",source_id=None):
-    base={"schema_version":"1.0","scope_id":t["sid"],"source":"EMAIL","source_account_id":"test","source_id":source_id or uid(),"correlation_id":uid(),"received_at":"2026-11-09T07:00:00Z"}
+    base={"schema_version":"1.0","scope_id":t["sid"],"source":"EMAIL","source_account_id":"test","source_id":source_id or uid(),"correlation_id":uid(),"received_at":"2026-07-09T06:00:00Z"}
     if scenario=="supplier-delay": return {**base,**fixture("SUPPLIER_DELAY")["source_email"]}
     if scenario=="supplier-split":
         f=fixture("SUPPLIER_DELAY")
@@ -346,7 +346,7 @@ def test_immutable_snapshot_and_cross_scope_foreign_key(setup):
 def test_body_limit_and_unknown_timestamp_are_rejected(setup):
     t=setup
     assert t["internal"].post("/internal/source-events",content=b"x"*140000,headers={"content-type":"application/json"}).status_code==413
-    assert t["internal"].post("/internal/source-events",json={**envelope(t),"received_at":"2026-11-09"}).status_code==422
+    assert t["internal"].post("/internal/source-events",json={**envelope(t),"received_at":"2026-07-09"}).status_code==422
 
 
 def test_scoped_reset_keeps_other_scope_and_audit(setup):

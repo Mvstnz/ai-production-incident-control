@@ -3,7 +3,7 @@
   "dataset": "fictional-v2",
   "data_classification": "SYNTHETIC_ONLY",
   "provenance": "Invented exclusively for this portfolio. No reference products, customers or operating records.",
-  "analysis_time": "2026-11-09T08:00:00+01:00",
+  "analysis_time": "2026-07-09T08:00:00+02:00",
   "business_timezone": "Europe/Berlin",
   "currency": "EUR",
   "incident_type": "QUALITY_ISSUE",
@@ -32,7 +32,7 @@
       "result": "FAILED",
       "inspected_quantity": 48,
       "defect_type": "Mounting-plate holes measure 11 mm instead of the specified 10 mm",
-      "inspected_at": "2026-11-09T07:00:00+01:00",
+      "inspected_at": "2026-07-09T07:00:00+02:00",
       "evidence": "Synthetic inspection: 48 mounting plates have 11 mm holes; the invented drawing requires 10 mm holes. Two pending shipments use this batch."
     }
   ],
@@ -40,12 +40,12 @@
     {
       "shipment_id": "DEMO-SHIP-PLATE-51",
       "status": "PENDING",
-      "scheduled_at": "2026-11-10T08:00:00+01:00"
+      "scheduled_at": "2026-07-10T08:00:00+02:00"
     },
     {
       "shipment_id": "DEMO-SHIP-PLATE-52",
       "status": "PENDING",
-      "scheduled_at": "2026-11-11T08:00:00+01:00"
+      "scheduled_at": "2026-07-11T08:00:00+02:00"
     }
   ],
   "shipment_items": [
@@ -55,7 +55,7 @@
       "sales_line": "DEMO-SO-PLATE-51/40",
       "open_quantity": 30,
       "open_net_line_value_cents": 1650000,
-      "customer_due_at": "2026-11-10T08:00:00+01:00",
+      "customer_due_at": "2026-07-10T08:00:00+02:00",
       "strategic_customer": false
     },
     {
@@ -64,7 +64,7 @@
       "sales_line": "DEMO-SO-PLATE-52/40",
       "open_quantity": 18,
       "open_net_line_value_cents": 990000,
-      "customer_due_at": "2026-11-11T08:00:00+01:00",
+      "customer_due_at": "2026-07-11T08:00:00+02:00",
       "strategic_customer": false
     }
   ],
@@ -80,7 +80,7 @@
       "quantity": 18
     }
   ],
-  "replacement_available_at": "2026-11-12T08:00:00+01:00",
+  "replacement_available_at": "2026-07-12T08:00:00+02:00",
   "qualified_alternative_available": false,
   "facts": {
     "incident_type": "QUALITY_ISSUE",

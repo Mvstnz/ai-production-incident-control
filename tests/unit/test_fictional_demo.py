@@ -1,8 +1,23 @@
 from copy import deepcopy
 import json
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from backend.datasets import load_fixture
 from backend.domain import build_plan, evaluate_impact, evaluate_risk, extract_fixture
+
+
+def test_july_examples_keep_berlin_wall_times_and_summer_offset():
+    for kind in ('SUPPLIER_DELAY', 'MACHINE_BREAKDOWN', 'QUALITY_ISSUE'):
+        data = load_fixture(kind)
+        moment = datetime.fromisoformat(data['analysis_time'])
+        assert (moment.year, moment.month, moment.day, moment.hour) == (2026, 7, 9, 8)
+        assert moment.utcoffset() == timedelta(hours=2)
+        assert moment.astimezone(ZoneInfo('Europe/Berlin')).hour == 8
+    mail = load_fixture('SUPPLIER_DELAY')['source_email']['content_text']
+    assert '16 July 2026, 08:00 Berlin time' in mail
+    assert '11 July 2026, 08:00 Berlin time' in mail
+    assert 'November' not in mail
 
 
 def assess(kind):

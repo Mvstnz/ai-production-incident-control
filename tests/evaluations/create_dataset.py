@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DEST = ROOT / "fixtures/evaluation-v3.json"
+DEST = ROOT / "fixtures/evaluation-v4.json"
 
 
 def build_case(index, split, name, fixture_name, source, mutation, expected_status):
@@ -57,9 +57,9 @@ def build_case(index, split, name, fixture_name, source, mutation, expected_stat
         item = {k:facts[k] for k in ("purchase_order","purchase_order_item","material")}
         snapshot["data"]["purchase_order_items"] = [item, deepcopy(item)]
     elif mutation == "utc_dates":
-        facts["confirmed_supply_schedule"][0]["available_at"] = "2026-11-18T07:00:00Z"
+        facts["confirmed_supply_schedule"][0]["available_at"] = "2026-07-18T06:00:00Z"
     elif mutation == "delay_20":
-        facts["confirmed_supply_schedule"][0]["available_at"] = "2026-11-19T08:00:00+01:00"
+        facts["confirmed_supply_schedule"][0]["available_at"] = "2026-07-19T08:00:00+02:00"
     elif mutation == "no_offer": facts.pop("proposed_partial",None)
     elif mutation == "crlf": envelope["content_text"] = envelope["content_text"].replace("\n","\r\n")
     elif mutation == "attachment": envelope["attachments"] = [{"name":"synthetic-report.pdf","required_for_facts":True}]
@@ -130,11 +130,11 @@ def main():
     ]
     assert len(definitions) == 50
     cases = [build_case(i,"development" if i<=30 else "holdout",*definition) for i,definition in enumerate(definitions,1)]
-    content = {"dataset_version":"3.0","classification":"SYNTHETIC_ONLY","authorship":"Authored synthetic scenarios; no customer data or live model output",
-               "holdout_policy":"Version 3 updates supplier wording and readable dates in the existing 50 regression cases. The split is retained for comparison, not a newly unseen holdout. No prompts were tuned against these cases.","cases":cases}
+    content = {"dataset_version":"4.0","classification":"SYNTHETIC_ONLY","authorship":"Authored synthetic scenarios; no customer data or live model output",
+               "holdout_policy":"Version 4 moves the existing 50 regression cases to July 2026, preserving Berlin wall times and using the correct summer-time offset. The split is retained for comparison, not a newly unseen holdout. No prompts were tuned against these cases.","cases":cases}
     DEST.write_text(json.dumps(content,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     DEST.with_suffix(".sha256").write_text(hashlib.sha256(DEST.read_bytes()).hexdigest()+"\n",encoding="utf-8")
-    print(f"Created version 3: {len(cases)} synthetic regression cases with the existing 30/20 split.")
+    print(f"Created version 4: {len(cases)} synthetic regression cases with the existing 30/20 split.")
 
 
 if __name__ == "__main__": main()

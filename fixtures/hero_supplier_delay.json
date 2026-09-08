@@ -3,7 +3,7 @@
   "dataset": "fictional-v2",
   "data_classification": "SYNTHETIC_ONLY",
   "provenance": "Invented exclusively for this portfolio. No reference products, customers or operating records.",
-  "analysis_time": "2026-11-09T08:00:00+01:00",
+  "analysis_time": "2026-07-09T08:00:00+02:00",
   "business_timezone": "Europe/Berlin",
   "currency": "EUR",
   "supplier": "Metal supplier (fictional)",
@@ -20,7 +20,7 @@
   "original_supply_schedule": [
     {
       "quantity": 75,
-      "available_at": "2026-11-10T08:00:00+01:00",
+      "available_at": "2026-07-10T08:00:00+02:00",
       "status": "CONFIRMED"
     }
   ],
@@ -36,51 +36,51 @@
       "production_order": "DEMO-MO-FRAME-41",
       "product": "Welded mounting frame",
       "required_quantity": 18,
-      "need_at": "2026-11-11T08:00:00+01:00",
+      "need_at": "2026-07-11T08:00:00+02:00",
       "remaining_lead_time_calendar_days": 1,
       "sales_line": "DEMO-SO-FRAME-41/20",
       "open_net_line_value_cents": 990000,
-      "customer_due_at": "2026-11-12T08:00:00+01:00",
+      "customer_due_at": "2026-07-12T08:00:00+02:00",
       "strategic_customer": false
     },
     {
       "production_order": "DEMO-MO-FRAME-42",
       "product": "Welded mounting frame",
       "required_quantity": 26,
-      "need_at": "2026-11-12T08:00:00+01:00",
+      "need_at": "2026-07-12T08:00:00+02:00",
       "remaining_lead_time_calendar_days": 2,
       "sales_line": "DEMO-SO-FRAME-42/20",
       "open_net_line_value_cents": 3380000,
-      "customer_due_at": "2026-11-14T08:00:00+01:00",
+      "customer_due_at": "2026-07-14T08:00:00+02:00",
       "strategic_customer": true
     },
     {
       "production_order": "DEMO-MO-FRAME-43",
       "product": "Welded mounting frame",
       "required_quantity": 20,
-      "need_at": "2026-11-13T08:00:00+01:00",
+      "need_at": "2026-07-13T08:00:00+02:00",
       "remaining_lead_time_calendar_days": 1,
       "sales_line": "DEMO-SO-FRAME-43/20",
       "open_net_line_value_cents": 2160000,
-      "customer_due_at": "2026-11-14T08:00:00+01:00",
+      "customer_due_at": "2026-07-14T08:00:00+02:00",
       "strategic_customer": false
     },
     {
       "production_order": "DEMO-MO-FRAME-44",
       "product": "Welded mounting frame",
       "required_quantity": 12,
-      "need_at": "2026-11-18T08:00:00+01:00",
+      "need_at": "2026-07-18T08:00:00+02:00",
       "remaining_lead_time_calendar_days": 1,
       "sales_line": "DEMO-SO-FRAME-44/20",
       "open_net_line_value_cents": 780000,
-      "customer_due_at": "2026-11-19T08:00:00+01:00",
+      "customer_due_at": "2026-07-19T08:00:00+02:00",
       "strategic_customer": false
     }
   ],
   "source_email": {
     "sender": "supplier@example.test",
-    "subject": "Steel rods: delivery moved to 16 November",
-    "content_text": "Hello,\n\nOur delivery truck has broken down. This delays your purchase order DEMO-PO-8264, item 20: 75 steel rods, diameter 20 mm and length 2 m (article DEMO-ROD-20). Delivery was originally due on 10 November 2026, 08:00 Berlin time.\n\nWe confirm that all 75 steel rods will now be available at your workshop on 16 November 2026, 08:00 Berlin time. We apologise for the delay.\n\nWe may be able to deliver 30 of these rods earlier, on 11 November 2026, 08:00 Berlin time, using a replacement truck. This option is not confirmed. If it goes ahead, the remaining 45 rods would arrive on 16 November 2026, 08:00 Berlin time. You would still receive 75 rods in total.\n\nWould the earlier delivery help? Please let us know so we can check the replacement truck and confirm whether this option is available.\n\nKind regards,\nDispatch team"
+    "subject": "Steel rods: delivery moved to 16 July",
+    "content_text": "Hello,\n\nOur delivery truck has broken down. This delays your purchase order DEMO-PO-8264, item 20: 75 steel rods, diameter 20 mm and length 2 m (article DEMO-ROD-20). Delivery was originally due on 10 July 2026, 08:00 Berlin time.\n\nWe confirm that all 75 steel rods will now be available at your workshop on 16 July 2026, 08:00 Berlin time. We apologise for the delay.\n\nWe may be able to deliver 30 of these rods earlier, on 11 July 2026, 08:00 Berlin time, using a replacement truck. This option is not confirmed. If it goes ahead, the remaining 45 rods would arrive on 16 July 2026, 08:00 Berlin time. You would still receive 75 rods in total.\n\nWould the earlier delivery help? Please let us know so we can check the replacement truck and confirm whether this option is available.\n\nKind regards,\nDispatch team"
   },
   "scenarios": [
     {
@@ -88,13 +88,13 @@
       "confirmed_supply_schedule": [
         {
           "quantity": 75,
-          "available_at": "2026-11-16T08:00:00+01:00",
+          "available_at": "2026-07-16T08:00:00+02:00",
           "status": "CONFIRMED"
         }
       ],
       "proposed_partial": {
         "quantity": 30,
-        "available_at": "2026-11-11T08:00:00+01:00",
+        "available_at": "2026-07-11T08:00:00+02:00",
         "status": "PROPOSED",
         "replaces_quantity_from_final_delivery": true
       }
@@ -104,12 +104,12 @@
       "confirmed_supply_schedule": [
         {
           "quantity": 30,
-          "available_at": "2026-11-11T08:00:00+01:00",
+          "available_at": "2026-07-11T08:00:00+02:00",
           "status": "CONFIRMED"
         },
         {
           "quantity": 45,
-          "available_at": "2026-11-16T08:00:00+01:00",
+          "available_at": "2026-07-16T08:00:00+02:00",
           "status": "CONFIRMED"
         }
       ]

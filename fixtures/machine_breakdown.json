@@ -3,7 +3,7 @@
   "dataset": "fictional-v2",
   "data_classification": "SYNTHETIC_ONLY",
   "provenance": "Invented exclusively for this portfolio. No reference products, customers or operating records.",
-  "analysis_time": "2026-11-09T08:00:00+01:00",
+  "analysis_time": "2026-07-09T08:00:00+02:00",
   "business_timezone": "Europe/Berlin",
   "currency": "EUR",
   "incident_type": "MACHINE_BREAKDOWN",
@@ -36,38 +36,38 @@
   "capacity_calendar": [
     {
       "machine_id": "DEMO-SAW-01",
-      "start_at": "2026-11-10T08:00:00+01:00",
-      "end_at": "2026-11-10T14:00:00+01:00",
+      "start_at": "2026-07-10T08:00:00+02:00",
+      "end_at": "2026-07-10T14:00:00+02:00",
       "available_hours": 6
     },
     {
       "machine_id": "DEMO-SAW-01",
-      "start_at": "2026-11-10T14:00:00+01:00",
-      "end_at": "2026-11-10T18:00:00+01:00",
+      "start_at": "2026-07-10T14:00:00+02:00",
+      "end_at": "2026-07-10T18:00:00+02:00",
       "available_hours": 4
     },
     {
       "machine_id": "DEMO-SAW-01",
-      "start_at": "2026-11-12T08:00:00+01:00",
-      "end_at": "2026-11-12T16:00:00+01:00",
+      "start_at": "2026-07-12T08:00:00+02:00",
+      "end_at": "2026-07-12T16:00:00+02:00",
       "available_hours": 8
     },
     {
       "machine_id": "DEMO-SAW-01",
-      "start_at": "2026-11-13T08:00:00+01:00",
-      "end_at": "2026-11-13T14:00:00+01:00",
+      "start_at": "2026-07-13T08:00:00+02:00",
+      "end_at": "2026-07-13T14:00:00+02:00",
       "available_hours": 6
     },
     {
       "machine_id": "DEMO-SAW-02",
-      "start_at": "2026-11-10T08:00:00+01:00",
-      "end_at": "2026-11-10T14:00:00+01:00",
+      "start_at": "2026-07-10T08:00:00+02:00",
+      "end_at": "2026-07-10T14:00:00+02:00",
       "available_hours": 6
     },
     {
       "machine_id": "DEMO-DRILL-01",
-      "start_at": "2026-11-10T08:00:00+01:00",
-      "end_at": "2026-11-10T18:00:00+01:00",
+      "start_at": "2026-07-10T08:00:00+02:00",
+      "end_at": "2026-07-10T18:00:00+02:00",
       "available_hours": 10
     }
   ],
@@ -79,12 +79,12 @@
       "machine_id": "DEMO-SAW-01",
       "site": "DEMO-NORTH-HALL",
       "required_capability": "STEEL_BAR_CUTTING",
-      "start_at": "2026-11-10T08:00:00+01:00",
-      "end_at": "2026-11-10T14:00:00+01:00",
+      "start_at": "2026-07-10T08:00:00+02:00",
+      "end_at": "2026-07-10T14:00:00+02:00",
       "required_hours": 6,
       "sales_line": "DEMO-SO-CUT-61/30",
       "open_net_line_value_cents": 2740000,
-      "customer_due_at": "2026-11-11T16:00:00+01:00",
+      "customer_due_at": "2026-07-11T16:00:00+02:00",
       "strategic_customer": false
     },
     {
@@ -94,12 +94,12 @@
       "machine_id": "DEMO-SAW-01",
       "site": "DEMO-NORTH-HALL",
       "required_capability": "STEEL_BAR_CUTTING",
-      "start_at": "2026-11-10T14:00:00+01:00",
-      "end_at": "2026-11-10T18:00:00+01:00",
+      "start_at": "2026-07-10T14:00:00+02:00",
+      "end_at": "2026-07-10T18:00:00+02:00",
       "required_hours": 4,
       "sales_line": "DEMO-SO-CUT-62/30",
       "open_net_line_value_cents": 1380000,
-      "customer_due_at": "2026-11-11T16:00:00+01:00",
+      "customer_due_at": "2026-07-11T16:00:00+02:00",
       "strategic_customer": false
     },
     {
@@ -109,20 +109,20 @@
       "machine_id": "DEMO-SAW-01",
       "site": "DEMO-NORTH-HALL",
       "required_capability": "STEEL_BAR_CUTTING",
-      "start_at": "2026-11-13T08:00:00+01:00",
-      "end_at": "2026-11-13T14:00:00+01:00",
+      "start_at": "2026-07-13T08:00:00+02:00",
+      "end_at": "2026-07-13T14:00:00+02:00",
       "required_hours": 6,
       "sales_line": "DEMO-SO-CUT-63/30",
       "open_net_line_value_cents": 890000,
-      "customer_due_at": "2026-11-14T16:00:00+01:00",
+      "customer_due_at": "2026-07-14T16:00:00+02:00",
       "strategic_customer": false
     }
   ],
   "facts": {
     "incident_type": "MACHINE_BREAKDOWN",
     "machine_id": "DEMO-SAW-01",
-    "outage_start_at": "2026-11-10T08:00:00+01:00",
-    "outage_end_at": "2026-11-12T08:00:00+01:00",
+    "outage_start_at": "2026-07-10T08:00:00+02:00",
+    "outage_end_at": "2026-07-12T08:00:00+02:00",
     "reason": "Band saw S-01 has a broken drive belt and cannot cut steel bars for two days. Band saw S-02 has six free hours. Drill press B-01 cannot cut bars."
   },
   "description": "Steel sections for mounting frames"
