@@ -2,7 +2,7 @@
 
 IMPLEMENTED: ordinary manufacturing fixtures, Vercel app/API, private Supabase schemas and ten credentialed n8n workflows.
 
-2026-09-08 update: the German dashboard now explains the purpose and guides each case through report, impact, proposal and decision. Gemini mail extraction is enabled for authorized team members with 20 total provider reservations. An actual hosted mail completed successfully in WF03 execution 120; the derived supplier impact matches the current 40-piece / two-order baseline. [Details and evidence](dashboard-redesign.md).
+2026-09-08 restoration: the user rejected the guided redesign. The earlier dashboard from `187078a` is restored with ordinary fictional products and rewritten supplier mail. Gemini stays enabled for authorized team members with 20 total provider reservations. [Restoration and tests](dashboard-restoration.md). The previous hosted Gemini run in WF03 execution 120 remains historical evidence of the unchanged extraction integration.
 
 TARGET_TESTED: three HTTPS scenario analyses, six successful approved sandbox actions, repeated dispatch without repeated effects, public read-only access and private-scope isolation. See [hosting](hosting.md).
 

@@ -6,7 +6,7 @@
   "analysis_time": "2026-11-09T08:00:00+01:00",
   "business_timezone": "Europe/Berlin",
   "currency": "EUR",
-  "supplier": "Demo Metal Supply (fictional)",
+  "supplier": "Metal supplier (fictional)",
   "supplier_id": "DEMO-SUPPLIER-A",
   "site": "DEMO-NORTH-HALL",
   "material": "DEMO-ROD-20",
@@ -79,8 +79,8 @@
   ],
   "source_email": {
     "sender": "supplier@example.test",
-    "subject": "Fictional dispatch notice | DEMO-PO-8264 / item 20",
-    "content_text": "Hello North Hall planning team,\n\nThis is a fictional training message from Demo Metal Supply.\nOur delivery truck has broken down. The affected item is DEMO-ROD-20, a steel rod, diameter 20 mm and length 2 m, on purchase order DEMO-PO-8264, item 20.\n\nThe 75 pcs originally confirmed available at your plant on 2026-11-10T08:00:00+01:00 will now be available on 2026-11-16T08:00:00+01:00.\n\nA replacement truck may bring 30 pcs for availability at your plant on 2026-11-11T08:00:00+01:00. This is an unconfirmed proposal. If you confirm this split, the final delivery on 2026-11-16T08:00:00+01:00 becomes 45 pcs. The total remains 75 pcs.\n\nPlease review the four mounting-frame production batches and keep the replacement-truck offer separate from confirmed supply.\n\nDemo Metal Supply — invented portfolio supplier"
+    "subject": "Steel rods: delivery moved to 16 November",
+    "content_text": "Hello,\n\nOur delivery truck has broken down. This delays your purchase order DEMO-PO-8264, item 20: 75 steel rods, diameter 20 mm and length 2 m (article DEMO-ROD-20). Delivery was originally due on 10 November 2026, 08:00 Berlin time.\n\nWe confirm that all 75 steel rods will now be available at your workshop on 16 November 2026, 08:00 Berlin time. We apologise for the delay.\n\nWe may be able to deliver 30 of these rods earlier, on 11 November 2026, 08:00 Berlin time, using a replacement truck. This option is not confirmed. If it goes ahead, the remaining 45 rods would arrive on 16 November 2026, 08:00 Berlin time. You would still receive 75 rods in total.\n\nWould the earlier delivery help? Please let us know so we can check the replacement truck and confirm whether this option is available.\n\nKind regards,\nDispatch team"
   },
   "scenarios": [
     {

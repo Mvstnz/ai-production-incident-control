@@ -164,12 +164,12 @@ function DecisionDialog({
   }
   return (
     <Modal
-      title={`${kind === "MODIFY" ? "Ändern und erneut zur Freigabe vorlegen" : kind === "APPROVE" ? "Genauen Inhalt freigeben" : "Reaktion ablehnen"} · v${approval.plan_version}`}
+      title={`${kind === "MODIFY" ? "Modify and request new approval" : kind === "APPROVE" ? "Approve exact response" : "Reject response"} · v${approval.plan_version}`}
       onClose={onClose}
       wide
     >
       {query.loading && !body ? (
-        <Loading>Gespeicherter Inhalt wird geladen …</Loading>
+        <Loading>Loading the exact stored response…</Loading>
       ) : (
         <form onSubmit={submit}>
           <div className="modal-content">
@@ -178,26 +178,26 @@ function DecisionDialog({
               <div className="notice danger" role="alert">
                 <LockKeyhole size={18} />
                 <p>
-                  Der Fall oder die Reaktion hat sich geändert. Schließe diese
-                  Prüfung und lade die Entscheidungen neu.
+                  This incident or plan has changed. Close this review and
+                  refresh the inbox.
                 </p>
               </div>
             )}
             <div className="approval-binding">
               <span>
-                Bewertungsstand <b>{approval.revision}</b>
+                Incident revision <b>{approval.revision}</b>
               </span>
               <span>
-                Version der Reaktion <b>{approval.plan_version}</b>
+                Plan version <b>{approval.plan_version}</b>
               </span>
               <span>
-                Zuständig <b>{label(approval.required_role)}</b>
+                Required role <b>{label(approval.required_role)}</b>
               </span>
               <span>
-                Gültig bis <b>{date(approval.expires_at)} Berlin</b>
+                Expires <b>{date(approval.expires_at)} Berlin</b>
               </span>
               <Json
-                title="Technische Referenz"
+                title="Technical reference"
                 value={{ plan_hash: approval.plan_hash }}
               />
             </div>
@@ -205,7 +205,7 @@ function DecisionDialog({
               <>
                 {kind === "MODIFY" ? (
                   <label>
-                    Zusammenfassung
+                    Response summary
                     <textarea
                       rows={3}
                       value={body.summary}
@@ -227,8 +227,8 @@ function DecisionDialog({
                         {action.required_role
                           ? label(action.required_role)
                           : action.action_type === "INTERNAL_TICKET"
-                            ? "Interne Information · keine gesonderte Rollenfreigabe"
-                            : "Zuständigkeit fehlt"}
+                            ? "Internal action · no separate role approval"
+                            : "Role not specified"}
                       </small>
                     </header>
                     {kind === "MODIFY" ? (
@@ -255,14 +255,14 @@ function DecisionDialog({
               <div className="notice">
                 <Pencil size={18} />
                 <p>
-                  Änderungen erzeugen eine neue Version mit neuen
-                  Freigabeanfragen. Das Speichern führt die geänderte Reaktion
-                  noch nicht aus.
+                  Changes create a new immutable plan version and fresh approval
+                  requests. This submission does not approve or dispatch the
+                  revised response.
                 </p>
               </div>
             )}
             <label>
-              Begründung <span className="required">Pflichtfeld</span>
+              Decision rationale <span className="required">Required</span>
               <textarea
                 rows={3}
                 required
@@ -270,7 +270,7 @@ function DecisionDialog({
                 maxLength={2000}
                 value={comment}
                 onChange={(event) => setComment(event.target.value)}
-                placeholder="Warum ist diese Entscheidung fachlich sinnvoll?"
+                placeholder="Record the business reason for this decision."
               />
             </label>
             <label className="checkbox-label">
@@ -282,10 +282,10 @@ function DecisionDialog({
               />
               <span>
                 {kind === "APPROVE"
-                  ? "Ich habe Empfänger, genauen Nachrichtentext und Aktionsparameter dieser Version geprüft."
+                  ? "I have reviewed the exact recipients, message content and action parameters above for this plan version."
                   : kind === "MODIFY"
-                    ? "Ich habe den geänderten Inhalt geprüft. Eine neue Freigabe ist erforderlich."
-                    : "Ich lehne diese Reaktion ab. Der Fall bleibt offen."}
+                    ? "I have reviewed the revised content and understand that a new approval is required."
+                    : "I reject this response plan. The operational incident will remain open."}
               </span>
             </label>
             {error && <ErrorBox error={error} />}
@@ -297,7 +297,7 @@ function DecisionDialog({
               disabled={busy}
               onClick={onClose}
             >
-              Abbrechen
+              Cancel
             </button>
             <button
               className={`button ${kind === "REJECT" ? "destructive" : "primary"}`}
@@ -312,12 +312,12 @@ function DecisionDialog({
               }
             >
               {busy
-                ? "Entscheidung wird gespeichert …"
+                ? "Recording decision…"
                 : kind === "APPROVE"
-                  ? "Diese Version freigeben"
+                  ? "Approve this exact version"
                   : kind === "MODIFY"
-                    ? "Geänderte Version speichern"
-                    : "Diese Reaktion ablehnen"}
+                    ? "Create revised plan"
+                    : "Reject this response"}
             </button>
           </footer>
         </form>
@@ -325,13 +325,7 @@ function DecisionDialog({
     </Modal>
   );
 }
-export function Approvals({
-  scopeId,
-  refresh,
-  session,
-  onRefresh,
-  incidentId,
-}: ViewProps & { incidentId?: string }) {
+export function Approvals({ scopeId, refresh, session, onRefresh }: ViewProps) {
   const query = useQuery<{ items: Approval[] }>(
     scoped("/api/approvals", scopeId),
     refresh,
@@ -342,33 +336,17 @@ export function Approvals({
       kind: "APPROVE" | "REJECT" | "MODIFY";
     } | null>(null),
     [notice, setNotice] = useState("");
-  const latestVersion = Math.max(
-    0,
-    ...(query.data?.items
-      .filter((item) => item.incident_id === incidentId)
-      .map((item) => item.plan_version) || []),
-  );
   const approvals =
     query.data?.items.filter(
-      (item) =>
-        (!incidentId || item.incident_id === incidentId) &&
-        (showHistory ||
-          (incidentId
-            ? item.plan_version === latestVersion
-            : item.status === "PENDING")),
+      (item) => showHistory || item.status === "PENDING",
     ) || [];
   return (
     <>
-      {incidentId && (
-        <a className="text-link back-link" href={`#/incidents/${incidentId}`}>
-          Zur Erklärung dieses Falls
-        </a>
-      )}
       <div className="notice">
         <ShieldCheck size={19} />
         <p>
-          Prüfe Aktion, Zeitpunkt und genauen Nachrichtentext vor der Freigabe.
-          Änderungen brauchen eine neue Entscheidung.
+          Review the proposed action, timing and message before approving. Any
+          later change requires a new decision.
         </p>
       </div>
       {notice && (
@@ -381,14 +359,14 @@ export function Approvals({
         <div className="access-note">
           <LockKeyhole size={16} />
           <span>
-            Du bist als Besucher hier. Du kannst die vorgeschlagenen Aktionen
-            ansehen. Freigeben, ändern oder ablehnen kann das zuständige Team.
+            Viewer access: inspect evidence and exact action content. A
+            responsible operational role must submit decisions.
           </span>
         </div>
       )}
       <Section
-        title="Vorbereitete Entscheidungen"
-        subtitle="Aktionen zur Prüfung durch die zuständige Person"
+        title="Requests for review"
+        subtitle="Actions awaiting the responsible team's decision"
         action={
           <label className="checkbox-label compact">
             <input
@@ -396,7 +374,7 @@ export function Approvals({
               checked={showHistory}
               onChange={(e) => setShowHistory(e.target.checked)}
             />
-            Bisherige Entscheidungen anzeigen
+            Include history
           </label>
         }
       >
@@ -410,13 +388,11 @@ export function Approvals({
         ) : !approvals.length ? (
           <Empty
             title={
-              showHistory
-                ? "Keine Entscheidungen vorhanden"
-                : "Keine offenen Entscheidungen"
+              showHistory ? "No approval requests" : "No pending approvals"
             }
           >
-            Sobald eine geprüfte Reaktion eine Freigabe braucht, erscheint sie
-            hier.
+            Approval requests appear here when a verified action plan requires a
+            human decision.
           </Empty>
         ) : (
           <div className="approval-list">
@@ -429,14 +405,13 @@ export function Approvals({
                   <div>
                     <h3>
                       {incidentTitle({
-                        title:
-                          approval.incident_title || "Vorbereitete Reaktion",
+                        title: approval.incident_title || "Response plan",
                       })}
                     </h3>
                     <p>
-                      Bewertungsstand {approval.revision} ·{" "}
+                      Incident revision {approval.revision} ·{" "}
                       <a href={`#/incidents/${approval.incident_id}`}>
-                        Fall verstehen
+                        Open incident
                         <ArrowRight size={13} />
                       </a>
                     </p>
@@ -450,17 +425,24 @@ export function Approvals({
                   </span>
                   <span>
                     <Clock3 size={15} />
-                    Frist: {date(approval.expires_at)} Berlin
+                    Due {date(approval.expires_at)} Berlin
                   </span>
                 </div>
                 {approval.actions.map((action, index) => (
-                  <details className="approval-payload" key={index}>
+                  <details
+                    className="approval-payload"
+                    key={index}
+                    open={
+                      approval.status === "PENDING" &&
+                      action.action_type !== "INTERNAL_TICKET"
+                    }
+                  >
                     <summary>{actionName(action)}</summary>
                     <ActionDetails action={action} />
                   </details>
                 ))}
                 <Json
-                  title="Technische Referenz"
+                  title="Technical reference"
                   value={{
                     plan_hash: approval.plan_hash,
                     plan_id: approval.plan_id,
@@ -477,7 +459,7 @@ export function Approvals({
                         }
                       >
                         <Check size={16} />
-                        Prüfen und freigeben
+                        Review & approve
                       </button>
                       <button
                         className="button subtle"
@@ -486,7 +468,7 @@ export function Approvals({
                         }
                       >
                         <Pencil size={15} />
-                        Ändern
+                        Modify
                       </button>
                       <button
                         className="button danger-text"
@@ -495,14 +477,14 @@ export function Approvals({
                         }
                       >
                         <X size={16} />
-                        Ablehnen
+                        Reject
                       </button>
                     </>
                   ) : (
                     <span className="muted">
                       {approval.status === "PENDING"
-                        ? `Zuständig: ${label(approval.required_role)}. Dein Zugang: ${label(session.user.role)}.`
-                        : `Stand: ${label(approval.status)}. Diese Anfrage ist bereits abgeschlossen.`}
+                        ? `Requires ${label(approval.required_role)}. Your role: ${label(session.user.role)}.`
+                        : `This request is ${label(approval.status).toLowerCase()} and cannot accept another decision.`}
                     </span>
                   )}
                 </footer>
@@ -521,8 +503,8 @@ export function Approvals({
           onDone={() => {
             setNotice(
               selected.kind === "MODIFY"
-                ? "Eine neue Version wurde gespeichert. Sie braucht eine neue Freigabe."
-                : `${label(selected.kind)} wurde gespeichert. Der Verarbeitungsstand aktualisiert sich automatisch.`,
+                ? "A revised plan was recorded. Fresh approval is required."
+                : `${label(selected.kind)} decision recorded. The persisted workflow state will refresh automatically.`,
             );
             onRefresh();
           }}

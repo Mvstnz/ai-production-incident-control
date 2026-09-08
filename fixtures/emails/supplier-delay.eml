@@ -1,16 +1,16 @@
 From: supplier@example.test
 To: operations@example.test
-Subject: Fictional dispatch notice | DEMO-PO-8264 / item 20
+Subject: Steel rods: delivery moved to 16 November
 
-Hello North Hall planning team,
+Hello,
 
-This is a fictional training message from Demo Metal Supply.
-Our delivery truck has broken down. The affected item is DEMO-ROD-20, a steel rod, diameter 20 mm and length 2 m, on purchase order DEMO-PO-8264, item 20.
+Our delivery truck has broken down. This delays your purchase order DEMO-PO-8264, item 20: 75 steel rods, diameter 20 mm and length 2 m (article DEMO-ROD-20). Delivery was originally due on 10 November 2026, 08:00 Berlin time.
 
-The 75 pcs originally confirmed available at your plant on 2026-11-10T08:00:00+01:00 will now be available on 2026-11-16T08:00:00+01:00.
+We confirm that all 75 steel rods will now be available at your workshop on 16 November 2026, 08:00 Berlin time. We apologise for the delay.
 
-A replacement truck may bring 30 pcs for availability at your plant on 2026-11-11T08:00:00+01:00. This is an unconfirmed proposal. If you confirm this split, the final delivery on 2026-11-16T08:00:00+01:00 becomes 45 pcs. The total remains 75 pcs.
+We may be able to deliver 30 of these rods earlier, on 11 November 2026, 08:00 Berlin time, using a replacement truck. This option is not confirmed. If it goes ahead, the remaining 45 rods would arrive on 16 November 2026, 08:00 Berlin time. You would still receive 75 rods in total.
 
-Please review the four mounting-frame production batches and keep the replacement-truck offer separate from confirmed supply.
+Would the earlier delivery help? Please let us know so we can check the replacement truck and confirm whether this option is available.
 
-Demo Metal Supply — invented portfolio supplier
+Kind regards,
+Dispatch team

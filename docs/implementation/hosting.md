@@ -1,6 +1,6 @@
 # Hosted release — 2026-09-08
 
-[Open the application](https://ai-production-incident-control-dash.vercel.app) and select **Beispiele ohne Anmeldung ansehen**. The German overview explains the purpose and introduces three guided cases: report, impact, proposal and decision. Exact technical evidence is secondary. See the [dashboard change and verification](dashboard-redesign.md).
+[Open the application](https://ai-production-incident-control-dash.vercel.app) and select **Explore the workspace**. The earlier dashboard layout has been restored at the user's request, retaining ordinary manufacturing examples and readable supplier emails. See the [restoration and verification](dashboard-restoration.md). The guided redesign below is historical verification, not the current layout.
 
 The ordinary manufacturing examples are delayed steel rods, a stopped band saw and mounting plates with oversized holes. The current project, local database and hosted database no longer use the previous reference-product or invented-brand fixtures. Earlier fixture archives and screenshots were removed. The UI uses ordinary names and formatted dates; identifiers and exact technical references remain available in expandable details.
 
@@ -39,7 +39,7 @@ Exact results and execution IDs: [hosted analyses](../../evidence/workflow-runs/
 
 The public entry creates a viewer session for the shared workspace. Authorized operational accounts are listed in the ignored local file .local/hosted-credentials.json. Their passwords are not published in the repository.
 
-Supplier emails are stored in PostgreSQL and never delivered externally. The three shared example cases use stored fixture assessments; browsing them does not invoke a model. Authorized team members can submit a new synthetic supplier mail on **Mail auswerten** for actual Gemini extraction. The configured model is `models/gemini-3.1-flash-lite`, the total call budget is 20, and the provider credential remains in n8n. Public visitors cannot submit new mail or approve actions. Database writes affect only the synthetic ERP.
+Supplier emails are stored in PostgreSQL and never delivered externally. The three shared example cases use stored fixture assessments; browsing them does not invoke a model. Authorized team members can submit a new synthetic supplier mail through **Start an example → Analyze with Gemini** for actual extraction. The configured model is `models/gemini-3.1-flash-lite`, the total call budget is 20, and the provider credential remains in n8n. Public visitors cannot submit new mail or approve actions. Database writes affect only the synthetic ERP.
 
 Immediate recovery wakeups follow completed analyses and approval decisions. An hourly fallback avoids exhausting the n8n trial's execution allowance. Digests run daily in Europe/Berlin. The account showed eight trial days remaining on 2026-09-08; continued orchestration depends on the account remaining available. No paid plan was purchased.
 

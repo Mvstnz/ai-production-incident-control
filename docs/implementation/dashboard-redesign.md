@@ -1,5 +1,9 @@
 # Guided dashboard — 2026-09-08
 
+Historical release: rejected by the user and superseded by the
+[earlier-layout restoration](dashboard-restoration.md). The descriptions and
+screenshots below are not the current dashboard.
+
 The user requested a German interface that explains the manufacturing use case before exposing operational evidence. The public entry now foregrounds browsing without an account; team sign-in is secondary. The overview introduces three ordinary cases and the sequence report → impact → proposal → decision.
 
 Each case reads the existing incident API. Quantities, affected orders, dates, proposals, roles and approval states come from persisted results. Quality impact uses affected sales positions rather than the empty production-order list. The simple decision view shows the current plan; earlier plans remain in the expandable evidence/history. Step navigation is read-only. Actual decisions still use the existing role, CSRF, exact-version and hash checks.

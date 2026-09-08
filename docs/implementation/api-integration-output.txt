@@ -51,9 +51,9 @@ tests/integration/test_api.py::test_completed_early_approval_has_no_orphan_pendi
     _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-======================= 34 passed, 2 warnings in 42.58s ========================
+======================= 34 passed, 2 warnings in 48.39s ========================
  Container apic-portfolio-postgres-1 Running 
  Container apic-portfolio-postgres-1 Waiting 
  Container apic-portfolio-postgres-1 Healthy 
- Container apic-portfolio-bootstrap-run-03961cfe96b1 Creating 
- Container apic-portfolio-bootstrap-run-03961cfe96b1 Created 
+ Container apic-portfolio-bootstrap-run-68406585d15d Creating 
+ Container apic-portfolio-bootstrap-run-68406585d15d Created 

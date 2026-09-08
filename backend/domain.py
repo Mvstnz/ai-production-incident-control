@@ -860,7 +860,7 @@ def build_plan(impact: Json, risk: Json, incident_id: str, revision: int) -> Jso
         role = "production_manager" if plan["manager_review_required"] else "purchasing"
         plan["actions"].append({"action_type": "SUPPLIER_EMAIL", "required_role": role,
                                 "payload": {**base, "recipient": "supplier@example.test", "subject": "Please confirm material delivery and the proposed early shipment",
-                                            "body": "Dear Supplier,\n\n" + summary + "\n\nPlease confirm when the material will arrive and whether an early partial delivery is possible. We will update the production schedule once you confirm these dates.\n\nPurchasing team"}})
+                                            "body": "Hello,\n\nThank you for letting us know about the delivery delay. We are checking which production orders need to be rescheduled.\n\nPlease confirm the delivery date and quantity. If an earlier partial delivery is possible, please also confirm its quantity and arrival date, along with the date and quantity of the remaining delivery.\n\nWe will keep the current delivery plan until you confirm an alternative.\n\nKind regards,\nPurchasing team"}})
     elif incident_type == "MACHINE_BREAKDOWN":
         plan["sop_ids"] = ["SOP-MACHINE-BREAKDOWN-v1"]
         for proposal in impact.get("proposals", []):

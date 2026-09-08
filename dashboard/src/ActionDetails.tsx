@@ -7,15 +7,9 @@ export function ActionDetails({ action }: { action: Action }) {
   return (
     <div className="action-explanation">
       <p className="action-description">{actionDescription(action)}</p>
-      {!!(content.body || content.subject) && (
-        <p className="explanation-note">
-          Genauer gespeicherter Nachrichtentext (Originalsprache). Die Freigabe
-          bezieht sich auf diesen Inhalt.
-        </p>
-      )}
       <Fields data={content} />
       <Json
-        title="Technische Referenz"
+        title="Technical reference"
         value={{ action: action.action_type, incident_id, incident_revision }}
       />
     </div>
@@ -24,9 +18,9 @@ export function ActionDetails({ action }: { action: Action }) {
 
 export const actionName = (action: Action) =>
   ({
-    INTERNAL_TICKET: "Produktionsplanung informieren",
-    SUPPLIER_EMAIL: "Liefertermin bestätigen lassen",
-    RESCHEDULE: "Schneideauftrag auf zweite Säge verlegen",
-    QUALITY_BLOCK: "Betroffene Platten zurückhalten",
-    QUALITY_RELEASE: "Geprüfte Platten freigeben",
+    INTERNAL_TICKET: "Notify production planning",
+    SUPPLIER_EMAIL: "Confirm supplier delivery",
+    RESCHEDULE: "Move the cutting job",
+    QUALITY_BLOCK: "Hold the affected plates",
+    QUALITY_RELEASE: "Release the inspected plates",
   })[action.action_type] || label(action.action_type);

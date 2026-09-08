@@ -32,7 +32,7 @@ def critical_fields(facts):
 
 
 def main():
-    source = ROOT / "fixtures/evaluation-v2.json"
+    source = ROOT / "fixtures/evaluation-v3.json"
     digest = hashlib.sha256(source.read_bytes()).hexdigest()
     assert digest == source.with_suffix(".sha256").read_text(encoding="utf-8").strip(), "Frozen dataset changed"
     dataset = json.loads(source.read_text(encoding="utf-8"))
@@ -72,12 +72,13 @@ def main():
         splits[split]["critical_field_metrics"]={key:metric(sum(r["field_exact_matches"].get(key,False) for r in rows),sum(key in r["field_exact_matches"] for r in rows)) for key in ("purchase_order","purchase_order_item","material","dates","quantities")}
     report={"run_at":datetime.now(timezone.utc).isoformat(),"status":"LOCAL_TESTED","evaluation_mode":"deterministic fixture and structured-input validation; not model evaluation",
             "dataset_version":dataset["dataset_version"],"dataset_sha256":digest,"provider":"fixture","model":"fixture-v1","prompt_version":"extraction-v1.0",
-            "live_evaluation":"LIVE_EVAL_NOT_RUN","live_blocker":"No authorized configured live-model credential, model and call/cost budget available for this run",
+            "live_evaluation":"LIVE_EVAL_NOT_RUN","live_blocker":"This runner intentionally uses deterministic fixtures only; live smoke tests have separate evidence.",
             "provider_calls":0,"measured_provider_cost_eur":0,"splits":splits,"results":results,
             "limitations":["Structured API/form validation and exact known-email mapping do not establish free-text LLM accuracy.",
                             "Unsupported free text is intentionally reviewed, so incident-type accuracy can be below the live-model target.",
                             "Transport deduplication belongs to integration tests; duplicate inputs here test deterministic normalization only."]}
-    destination=ROOT / "evidence/evaluations/fixture-v2-report.json"
+    report['limitations'].append(dataset['holdout_policy'])
+    destination=ROOT / "evidence/evaluations/fixture-v3-report.json"
     destination.parent.mkdir(parents=True,exist_ok=True)
     destination.write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"report":str(destination),"splits":splits,"live_evaluation":"LIVE_EVAL_NOT_RUN"},indent=2))

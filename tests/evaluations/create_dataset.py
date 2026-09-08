@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DEST = ROOT / "fixtures/evaluation-v2.json"
+DEST = ROOT / "fixtures/evaluation-v3.json"
 
 
 def build_case(index, split, name, fixture_name, source, mutation, expected_status):
@@ -130,11 +130,11 @@ def main():
     ]
     assert len(definitions) == 50
     cases = [build_case(i,"development" if i<=30 else "holdout",*definition) for i,definition in enumerate(definitions,1)]
-    content = {"dataset_version":"2.0","classification":"SYNTHETIC_ONLY","authorship":"Authored synthetic scenarios; no customer data or live model output",
-               "holdout_policy":"Frozen before first evaluation. Do not tune prompts against holdout; create a new version and holdout for iteration.","cases":cases}
+    content = {"dataset_version":"3.0","classification":"SYNTHETIC_ONLY","authorship":"Authored synthetic scenarios; no customer data or live model output",
+               "holdout_policy":"Version 3 updates supplier wording and readable dates in the existing 50 regression cases. The split is retained for comparison, not a newly unseen holdout. No prompts were tuned against these cases.","cases":cases}
     DEST.write_text(json.dumps(content,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    (DEST.parent / "evaluation-v2.sha256").write_text(hashlib.sha256(DEST.read_bytes()).hexdigest()+"\n",encoding="utf-8")
-    print(f"Created and froze {len(cases)} synthetic cases: 30 development, 20 holdout.")
+    DEST.with_suffix(".sha256").write_text(hashlib.sha256(DEST.read_bytes()).hexdigest()+"\n",encoding="utf-8")
+    print(f"Created version 3: {len(cases)} synthetic regression cases with the existing 30/20 split.")
 
 
 if __name__ == "__main__": main()
