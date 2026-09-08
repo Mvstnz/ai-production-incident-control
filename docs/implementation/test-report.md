@@ -13,6 +13,7 @@ Only current ordinary manufacturing examples are represented. Missing runs are n
 | shared-showcase | PASS |
 | secret-scan | PASS |
 | browser | PASS |
+| github-ci | PASS |
 | hosted-demo | TARGET_TESTED |
 | hosted-actions | TARGET_TESTED |
 

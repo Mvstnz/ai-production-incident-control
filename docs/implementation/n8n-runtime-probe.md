@@ -1,5 +1,7 @@
-Gespeichert: [zwölf vollständige Node-Schemas](n8n/node-schemas.md), [SDK-Referenz](n8n/sdk-reference.md), [Probe-Export](n8n/probe.json) und [Nachweis samt Rollback](evidence/workflow-runs/m0-target-probe.json).
+# Current n8n runtime verification
 
-Probe **`Fm2mFkzgF0jwFJEA`** ist erstellt und unveröffentlicht. SDK-/Node-Validierung und lokale JavaScript-Prüfung bestanden. Instanzversion bleibt unbekannt. Branch: `main`, kein Commit erstellt.
+Runtime verification now uses the ten published APIC workflows and ordinary manufacturing scenarios. The [workflow inventory](workflow-inventory.md) lists actual IDs and the [target manifest](../../n8n/target/manifest.json) records published graph readback.
 
-**BLOCKED:** Die automatische Freigabeprüfung verweigerte sowohl `execute_workflow` als auch das idempotente `update_workflow`: „MCP tool call requires approval, but approval policy is never“. Deshalb existieren **keine Execution-IDs**; Zielausführung und Update sind nicht nachgewiesen. Fremde Workflows blieben unangetastet.
+The former approval blocker is resolved. Hosted verification completed three assessments and six approved sandbox actions, including captured supplier mail, a rescheduled saw job and a shipment hold. Repeated recovery did not repeat their effects. Actual cloud execution IDs are in [hosted analyses](../../evidence/workflow-runs/hosted-demo.json) and [hosted actions](../../evidence/workflow-runs/hosted-actions.json). These records replace the retired preliminary probe evidence.
+
+The cloud n8n release number remains unknown. No live model call or external supplier delivery is claimed. See [hosting](hosting.md) for service configuration and operational limits.

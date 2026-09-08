@@ -6,7 +6,7 @@
       "id": "AC01",
       "test": "Frischer lokaler Start",
       "expected": "Dienste healthy; Seeds/Migrationen bereit; Demo ohne externe Konten nutzbar.",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "evidence/test-results/github-ci.json"
       ],
@@ -383,11 +383,11 @@
       "verification_scope": "DEMO_LOCAL"
     }
   ],
-  "evaluated_at": "2026-09-08T10:37:53.871729+00:00",
+  "evaluated_at": "2026-09-08T10:45:25.128925+00:00",
   "summary": {
-    "PASS": 35,
+    "PASS": 36,
     "FAIL": 0,
     "BLOCKED": 0,
-    "NOT_RUN": 1
+    "NOT_RUN": 0
   }
 }

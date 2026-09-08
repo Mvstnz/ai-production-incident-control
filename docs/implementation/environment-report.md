@@ -1,11 +1,11 @@
 # Environment report
 
-Verified local host: Windows11 / PowerShell, Python3.12.10, Node24.12.0, DockerEngine29.2.1, RTK0.43.0. Actual runtime versions, image digests and dependency hashes are in versions.lock. Docker socket startup was repaired without deleting database volumes; details in handover.md.
+The local Windows / PowerShell environment runs the isolated apic-portfolio Docker stack. Pinned application dependencies, runtime images and hashes are recorded in [versions.lock](../../versions.lock). The application was also built and tested on a fresh GitHub Ubuntu runner; the exact revision and result are recorded separately in the acceptance evidence.
 
-The full v1.1 handoff was read and its isolated package verification passed. CODEX_BUILD_SPEC.md governs M0–M7/36criteria; earlier archived85/70score plans are superseded.
+[CODEX_BUILD_SPEC.md](../../CODEX_BUILD_SPEC.md) governs the 36 acceptance criteria. Current ordinary manufacturing fixtures replace all retired reference-product and invented-brand fixtures.
 
-The user supplied https://mvstnz1.app.n8n.cloud/mcp-server/http. The actual Codex MCP configuration and OAuth login succeeded. A fresh bounded Codex client discovered39MCPtools and seven authorized scopes. No token values were included in evidence. Target project: YS0S0X7u4Oc458ln. Target release is not exposed; do not infer it from node schema versions.
+The authorized n8n connector operates against mvstnz1.app.n8n.cloud, project YS0S0X7u4Oc458ln. All ten APIC workflows are published, credentialed and read back with their published graphs matching the saved drafts. The cloud release number is not exposed and is not inferred from node schema versions.
 
-Ten APIC workflows and an APIC probe were created and read back through MCP. Foreign workflows were never modified or executed. Automatic approval review rejected update_workflow and execute_workflow under policy never. Target executions remain NOT_RUN. No alternate transport bypassed the rejection.
+The earlier connector approval blocker is resolved. Three hosted scenario assessments and six approved actions completed through the real cloud workflows. Their actual execution IDs are retained in [hosted analyses](../../evidence/workflow-runs/hosted-demo.json) and [hosted actions](../../evidence/workflow-runs/hosted-actions.json).
 
-Cloud n8n cannot access local Docker DNS. Target E2E requires authorized reachable HTTPS Operations/MockERP APIs plus purpose-specific credentials. No public tunnel, firewall opening, paid infrastructure, real delivery or live LLM spending was initiated. GitHub public source publication was subsequently explicitly requested by the user.
+Vercel provides the public HTTPS dashboard and Operations/ERP endpoints. Supabase stores private application and synthetic ERP data. Purpose-specific server credentials connect n8n to those endpoints. See [hosting](hosting.md) for the live URL, service IDs, access boundaries, trial dependency and recovery instructions.

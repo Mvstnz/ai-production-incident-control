@@ -11,7 +11,9 @@ The ordinary manufacturing examples are delayed steel rods, a stopped band saw a
 | Vercel | ai-production-incident-control-dashboard in pattaya-pimps; production alias linked above |
 | Supabase | apic-portfolio; project kgymsfryvfhfwackheet, Frankfurt; private ops and erp schemas |
 | n8n cloud | mvstnz1.app.n8n.cloud; all ten APIC workflows published and credentialed |
-| Last verified production deployment | dpl_F1j15uPKt5etKC2snsHvtymMnTTK |
+| Last verified production deployment | dpl_9kAULLs5SayHiLH6nLVwb8CqaZmH; production alias confirmed after Git push |
+
+Application revision: `187078aab29acd1083685b97ed9912420240b633` on `main`. The [fresh GitHub acceptance run](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34216534629) passed in 4m46s. The final acceptance matrix records 36 PASS, zero FAIL, zero BLOCKED and zero NOT_RUN within its defined acceptance scope. Later documentation/evidence commits do not change the tested application.
 
 The [workflow inventory](workflow-inventory.md) lists every actual workflow ID, and the [manifest](../../n8n/target/manifest.json) records the published graph readback.
 
@@ -30,7 +32,7 @@ Supabase's Data API is disabled. Application, ERP and deployment roles have sepa
 - Browser checks cover readable overview, approvals, dates, machine names, expandable references and processing history. Screenshots were inspected in the task.
 - The 50-case deterministic fixture evaluation ran with zero live-model calls.
 
-Exact results and execution IDs: [hosted analyses](../../evidence/workflow-runs/hosted-demo.json), [hosted actions](../../evidence/workflow-runs/hosted-actions.json), [local runtime](../../evidence/workflow-runs/local-e2e.json), [resilience](../../evidence/workflow-runs/resilience.json), [ordering](../../evidence/workflow-runs/acceptance-ordering.json), [API output](api-integration-output.txt), [unit JUnit](../../evidence/test-results/domain-junit.xml). Fresh GitHub CI has its own report when complete.
+Exact results and execution IDs: [hosted analyses](../../evidence/workflow-runs/hosted-demo.json), [hosted actions](../../evidence/workflow-runs/hosted-actions.json), [local runtime](../../evidence/workflow-runs/local-e2e.json), [resilience](../../evidence/workflow-runs/resilience.json), [ordering](../../evidence/workflow-runs/acceptance-ordering.json), [API output](api-integration-output.txt), [unit JUnit](../../evidence/test-results/domain-junit.xml), [fresh GitHub CI](../../evidence/test-results/github-ci.json).
 
 ## Access and operations
 
