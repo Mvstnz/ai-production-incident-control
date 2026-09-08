@@ -70,6 +70,13 @@ export function MailAnalysis({
                   : "Der Workflow für die KI-Auswertung ist vorhanden, in dieser Umgebung aber nicht für Aufrufe freigeschaltet. Die gespeicherten Fälle lassen sich trotzdem Schritt für Schritt nachvollziehen."}
               </p>
             </div>
+            <p className="explanation-note">
+              Die automatische Belegprüfung unterstützt aktuell englische
+              Liefermeldungen. Verwende die Vorlage mit ihren Bestell- und
+              Materialnummern aus dem Beispielbetrieb; Mengen und Liefertermine
+              kannst du ändern. Andere oder unklare Angaben können eine manuelle
+              Prüfung erfordern.
+            </p>
             <form onSubmit={submit} className="mail-form">
               <label>
                 Betreff
@@ -83,7 +90,7 @@ export function MailAnalysis({
                 />
               </label>
               <label>
-                Beispiel einer Lieferanten-Mail
+                Englische Beispiel-Mail
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}

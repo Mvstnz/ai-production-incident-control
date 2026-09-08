@@ -45,6 +45,7 @@ export function workspaceName(
 ): string {
   if (!name || name.includes("Invented manufacturing world"))
     return "Metallwerkstatt Nord";
+  if (name === "Demo · Gemini mail") return "Eigene Mail-Auswertung";
   if (/^(Demo|APIC)/i.test(name))
     return index === undefined ? "Werkstatt" : `Arbeitsbereich ${index + 1}`;
   return name;

@@ -84,8 +84,8 @@ export function CaseOverview({
         <div>
           <h2>Einen Fall Schritt für Schritt ansehen</h2>
           <p>
-            Drei erfundene Situationen aus einer Metallwerkstatt. Jeder Fall
-            erklärt Meldung, Folgen und Entscheidung.
+            Gespeicherte Situationen aus einer erfundenen Metallwerkstatt. Jeder
+            Fall erklärt Meldung, Folgen und Entscheidung.
           </p>
         </div>
         <span className="quiet-tag">Gespeicherte Beispielfälle</span>

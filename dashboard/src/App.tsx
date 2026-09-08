@@ -246,8 +246,6 @@ function DemoDialog({
 }) {
   const [busy, setBusy] = useState<Scenario | "custom-email" | null>(null),
     [error, setError] = useState<Error | null>(null),
-    [subject, setSubject] = useState(""),
-    [content, setContent] = useState(""),
     [liveEnabled, setLiveEnabled] = useState(false);
   useEffect(() => {
     const abort = new AbortController();
@@ -256,8 +254,6 @@ function DemoDialog({
       source_email: { subject: string; content_text: string };
     }>("/api/demo/catalog", undefined, abort.signal)
       .then((data) => {
-        setSubject(data.source_email.subject);
-        setContent(data.source_email.content_text);
         setLiveEnabled(data.live_ai_enabled);
       })
       .catch((err) => {
@@ -288,23 +284,6 @@ function DemoDialog({
         return;
       }
       const run = await api<Run>("/api/demo/runs", { scenario });
-      await onRun(run);
-      onClose();
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setBusy(null);
-    }
-  }
-  async function startCustom(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setBusy("custom-email");
-    setError(null);
-    try {
-      const run = await api<Run>("/api/demo/custom-email", {
-        subject,
-        content_text: content,
-      });
       await onRun(run);
       onClose();
     } catch (err) {
@@ -369,64 +348,19 @@ function DemoDialog({
           )}
         </div>
         {liveEnabled && !readOnly && (
-          <>
-            <div className="demo-divider">
-              <span>OR CHECK YOUR OWN SAMPLE MAIL</span>
+          <div className="next-entry">
+            <MailSearch size={24} />
+            <div>
+              <h3>Eine neue Lieferanten-Mail auswerten</h3>
+              <p>
+                Bearbeite eine Beispiel-Mail und lasse Gemini die gemeldeten
+                Änderungen herauslesen.
+              </p>
             </div>
-            <form className="custom-mail" onSubmit={startCustom}>
-              <div className="custom-mail-heading">
-                <span className="demo-icon">
-                  <MailSearch size={23} />
-                </span>
-                <div>
-                  <strong>Analyze with Gemini</strong>
-                  <p>
-                    Edit this synthetic supplier email. Gemini extracts a
-                    candidate; the backend accepts only exact quoted and
-                    ERP-consistent facts.
-                  </p>
-                </div>
-              </div>
-              <label>
-                Subject
-                <input
-                  value={subject}
-                  onChange={(event) => setSubject(event.target.value)}
-                  required
-                  maxLength={500}
-                  disabled={!!busy || readOnly}
-                />
-              </label>
-              <label>
-                Email body
-                <textarea
-                  value={content}
-                  onChange={(event) => setContent(event.target.value)}
-                  required
-                  maxLength={50000}
-                  rows={10}
-                  disabled={!!busy || readOnly}
-                />
-              </label>
-              <div className="custom-mail-actions">
-                <small>
-                  Sender is fixed to supplier@example.test. Nothing is sent to a
-                  real mailbox.
-                </small>
-                <button
-                  className="button primary"
-                  disabled={!!busy || readOnly}
-                >
-                  {busy === "custom-email" ? (
-                    <RefreshCw className="spin" size={17} />
-                  ) : (
-                    <MailSearch size={17} />
-                  )}
-                  Check sample mail
-                </button>
-              </div>
-            </form>
-          </>
+            <a className="button subtle" href="#/mail" onClick={onClose}>
+              Zur Mail-Auswertung <ArrowRight size={16} />
+            </a>
+          </div>
         )}
         <p className="footnote">
           {readOnly
