@@ -55,5 +55,5 @@ tests/integration/test_api.py::test_completed_early_approval_has_no_orphan_pendi
  Container apic-portfolio-postgres-1 Running 
  Container apic-portfolio-postgres-1 Waiting 
  Container apic-portfolio-postgres-1 Healthy 
- Container apic-portfolio-bootstrap-run-68406585d15d Creating 
- Container apic-portfolio-bootstrap-run-68406585d15d Created 
+ Container apic-portfolio-bootstrap-run-68406585d15d Creating
+ Container apic-portfolio-bootstrap-run-68406585d15d Created

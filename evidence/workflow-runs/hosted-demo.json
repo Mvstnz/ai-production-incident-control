@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-08T11:49:54.725589+00:00",
+  "run_at": "2026-09-08T12:55:42.524095+00:00",
   "origin": "https://ai-production-incident-control-dash.vercel.app",
   "dataset": "fictional-v2",
   "checks": [
@@ -26,21 +26,21 @@
   ],
   "incidents": [
     {
-      "id": "42050072-3f66-4134-9315-868d056ea1fe",
+      "id": "d5b74574-f081-4972-9e66-078dd1ed2643",
       "incident_type": "SUPPLIER_DELAY",
       "risk_score": 83,
       "severity": "CRITICAL",
       "status": "WAITING_APPROVAL"
     },
     {
-      "id": "cd1a5634-b0ea-4c06-8a5c-9fd8ff26ba2a",
+      "id": "4466e1f8-dfda-4980-8dc2-7d3b587f6f6c",
       "incident_type": "MACHINE_BREAKDOWN",
       "risk_score": 62,
       "severity": "HIGH",
       "status": "WAITING_APPROVAL"
     },
     {
-      "id": "bbe352f8-1e69-4a8a-9601-825c91c3a205",
+      "id": "383c4aeb-8a2f-4e15-844d-cfb2f5280a52",
       "incident_type": "QUALITY_ISSUE",
       "risk_score": 70,
       "severity": "CRITICAL",

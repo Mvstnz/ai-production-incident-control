@@ -24,3 +24,25 @@ model evaluation. The restored overview was also inspected in the browser.
 
 The guided-dashboard report and screenshots describe a superseded release.
 LinkedIn remains unpublished while the user reviews the restored application.
+
+Hosted verification: application `0f681d1` is live on deployment
+`dpl_6N84zW9cgUvqMsxZYsJgAa6gYovf`. Only the shared synthetic showcase was reset
+through its owner-authorized API after an ignored local backup. Its audit trail
+and all private workspaces were preserved. Three replacement assessments passed
+with scores 83, 62 and 70; the new source mail and supplier reply are stored in
+the public case, with fresh approvals pending. [HTTPS checks](../../evidence/workflow-runs/hosted-demo.json).
+
+A real Gemini run with the rewritten mail also passed: 40 missing rods, two
+affected orders, EUR 55,400 and the partial shipment still PROPOSED. The final
+analysis stage records cloud workflow WF05, execution `154`; this is not the
+Gemini-node execution ID. [Persisted live result](../../evidence/workflow-runs/hosted-gemini-readable-mail.json).
+The runtime reported four of twenty reservations used after this check.
+
+The complete [GitHub acceptance run](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34228754578)
+passed, including clean bootstrap, repeat bootstrap, integration and n8n runtime
+checks. Screenshots: [restored overview](../../evidence/screenshots/restored/overview.jpg)
+and [readable source email](../../evidence/screenshots/restored/supplier-email.jpg).
+
+Recovery baseline: redeploy application commit `0f681d1` or promote the verified
+Vercel deployment above. The restoration is a new commit on `main`; Git history
+was not rewritten. No schema or workflow rollback is required.

@@ -11,9 +11,9 @@ The ordinary manufacturing examples are delayed steel rods, a stopped band saw a
 | Vercel | ai-production-incident-control-dashboard in pattaya-pimps; production alias linked above |
 | Supabase | apic-portfolio; project kgymsfryvfhfwackheet, Frankfurt; private ops and erp schemas |
 | n8n cloud | mvstnz1.app.n8n.cloud; all ten APIC workflows published and credentialed |
-| Last verified production deployment | dpl_H9ctmCkWmhSsp6atNLmtyMV9gVYM; production alias confirmed after Git push |
+| Last verified production deployment | dpl_6N84zW9cgUvqMsxZYsJgAa6gYovf; restored dashboard, production alias confirmed after Git push |
 
-Application revision: `8520a591373f043d23a7a7a1edd68118b1c1d5f4` on `main`. The [GitHub acceptance run for this revision](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34223684112) passed. The previous full acceptance baseline recorded 36 PASS within its defined scope. This dashboard update reran the production build, 112 unit tests and all 34 API integration tests, followed by local responsive and hosted browser checks. Later documentation/evidence commits do not change the tested application.
+Application revision: `0f681d19437ba5d28addb99f6a4988b59f5a05f8` on `main`. The [GitHub acceptance run for this revision](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34228754578) records the current checks. The previous full acceptance baseline recorded 36 PASS within its defined scope. This restoration reran the production build, 112 unit tests, all 34 API integration tests and 50 deterministic regression cases, followed by hosted browser and API checks. Later documentation/evidence commits do not change the tested application.
 
 The [workflow inventory](workflow-inventory.md) lists every actual workflow ID, and the [manifest](../../n8n/target/manifest.json) records the published graph readback.
 

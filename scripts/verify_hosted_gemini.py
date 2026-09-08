@@ -10,7 +10,7 @@ import time
 from verify_hosted import ROOT, ORIGIN, client
 
 
-def main():
+def main(report_name='hosted-gemini.json'):
     c = client()
     catalog = c.get('/api/demo/catalog').json()
     assert catalog['live_ai_enabled'], 'Hosted Gemini is not enabled'
@@ -57,7 +57,7 @@ def main():
         and report.get('result') == {'risk_score': 83, 'severity': 'CRITICAL', 'shortage': 40,
             'affected_orders': 2, 'affected_value_cents': 5540000, 'partial_status': 'PROPOSED'}
     ) else 'FAIL'
-    dest = ROOT / 'evidence/workflow-runs/hosted-gemini.json'
+    dest = ROOT / 'evidence/workflow-runs' / report_name
     dest.write_text(json.dumps(report, indent=2, default=str) + '\n', encoding='utf-8')
     print(json.dumps(report, default=str), flush=True)
     assert report['status'] == 'PASS', 'Inspect persisted evidence and the referenced n8n execution'
