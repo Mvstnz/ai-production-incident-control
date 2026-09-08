@@ -22,12 +22,16 @@ def main():
     origin = 'https://ai-production-incident-control-dash.vercel.app'
     env.update(DATABASE_URL=connection('apic_app',6543), ERP_DATABASE_URL=connection('apic_erp',6543),
         MIGRATION_DATABASE_URL=connection('apic_deployer',5432), PROFILE='CONNECTED_SANDBOX',
-        DEMO_DATASET='fictional-v2', AI_MODE='fixture', LLM_MAX_CALLS='0', EXTERNAL_ACTIONS_ENABLED='false',
+        DEMO_DATASET='fictional-v2', EXTERNAL_ACTIONS_ENABLED='false',
         COOKIE_SECURE='true', PUBLIC_DEMO_ENABLED='true', DASHBOARD_ORIGIN=origin, ERP_BASE_URL=origin,
         N8N_BASE_URL='https://mvstnz1.app.n8n.cloud', N8N_ALLOWED_RESUME_ORIGIN='https://mvstnz1.app.n8n.cloud',
         N8N_INTAKE_EMAIL_URL='https://mvstnz1.app.n8n.cloud/webhook/apic-email',
         N8N_INTAKE_API_URL='https://mvstnz1.app.n8n.cloud/webhook/apic-intake', MAIL_TRANSPORT='database')
     env['N8N_RECOVERY_URL']='https://mvstnz1.app.n8n.cloud/webhook/apic-recovery'
+    # New installations start without provider calls. Re-preparing an existing
+    # deployment preserves its deliberately configured, bounded AI mode.
+    env.setdefault('AI_MODE', 'fixture')
+    env.setdefault('LLM_MAX_CALLS', '0')
     config_path.write_text(json.dumps(env,indent=2),encoding='utf-8')
     credentials_path=PRIVATE/'hosted-credentials.json'
     if not credentials_path.exists():

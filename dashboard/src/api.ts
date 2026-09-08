@@ -31,11 +31,11 @@ export interface Incident {
 }
 export function incidentTitle(incident: Pick<Incident, "title">): string {
   const examples: [string, string][] = [
-    ["SUPPLIER_DELAY:DEMO-PO-8264:20", "Steel rods delayed"],
-    ["MACHINE_BREAKDOWN:DEMO-SAW-01", "Band saw S-01 stops"],
+    ["SUPPLIER_DELAY:DEMO-PO-8264:20", "Stahlstangen kommen zu spät"],
+    ["MACHINE_BREAKDOWN:DEMO-SAW-01", "Bandsäge 1 steht still"],
     [
       "QUALITY_ISSUE:DEMO-LOT-PLATE-01:DEMO-QI-PLATE-01",
-      "Mounting plates: holes too large",
+      "Montageplatten mit zu großen Bohrungen",
     ],
   ];
   return (
@@ -45,6 +45,7 @@ export function incidentTitle(incident: Pick<Incident, "title">): string {
 }
 export interface Action {
   id?: string;
+  plan_id?: string;
   action_type: string;
   payload: RecordData;
   required_role?: string;
@@ -206,38 +207,76 @@ export const string = (value: unknown): string =>
       : String(value);
 export const text = (value: unknown): string => string(value) || "—";
 const readableLabels: Record<string, string> = {
-  INTERNAL_TICKET: "Planning notification",
-  SUPPLIER_EMAIL: "Supplier message",
-  RESCHEDULE: "Reschedule cutting",
-  QUALITY_BLOCK: "Shipment hold",
-  QUALITY_RELEASE: "Quality release",
-  SUPPLIER_DELAY: "Delivery delay",
-  MACHINE_BREAKDOWN: "Machine outage",
-  QUALITY_ISSUE: "Quality issue",
-  SUCCEEDED: "Completed",
-  WAITING_APPROVAL: "Awaiting approval",
-  MANUAL_REVIEW: "Needs review",
-  DEAD_LETTER: "Needs intervention",
-  UNKNOWN_OUTCOME: "Outcome needs checking",
-  RETRY_SCHEDULED: "Retry scheduled",
-  NORMALIZE: "Checking reported facts",
-  PENDING: "Awaiting review",
-  VIEWER: "Read-only access",
-  RELIABILITY: "Processing history",
-  MACHINE_ID: "Machine",
-  OPERATION_ID: "Cutting job",
-  SITE: "Location",
-  REQUIRED_HOURS: "Time needed",
+  CANCELLED: "Abgebrochen",
+  NEW: "Neu",
+  RUNNING: "In Bearbeitung",
+  OVERVIEW: "Fälle ansehen",
+  ABOUT: "So funktioniert es",
+  MAIL: "Mail auswerten",
+  REGISTER: "Fallregister",
+  APPROVE: "Freigabe",
+  REJECT: "Ablehnung",
+  MODIFY: "Änderung",
+  PRODUCTION_MANAGER: "Produktionsleitung",
+  QUALITY_MANAGER: "Qualitätsmanagement",
+  PURCHASING: "Einkauf",
+  OPERATOR: "Sachbearbeitung",
+  ADMIN: "Administration",
+  APPROVED: "Freigegeben",
+  REJECTED: "Abgelehnt",
+  EXPIRED: "Abgelaufen",
+  SUPERSEDED: "Durch neuere Version ersetzt",
+  MONITORING: "In Nachverfolgung",
+  RESOLVED: "Gelöst",
+  OPEN: "Offen",
+  ANALYZING: "Wird geprüft",
+  CRITICAL: "Kritisch",
+  HIGH: "Hoch",
+  MEDIUM: "Mittel",
+  LOW: "Niedrig",
+  PROPOSED: "Vorgeschlagen",
+  CONFIRMED: "Bestätigt",
+  VERIFIED: "Geprüft",
+  QUEUED: "Eingeplant",
+  FAILED: "Fehlgeschlagen",
+  IN_PROGRESS: "In Bearbeitung",
+  PRODUCTION_ORDER: "Produktionsauftrag",
+  QUANTITY: "Menge",
+  SUBJECT: "Betreff",
+  TITLE: "Titel",
+  STATUS: "Stand",
+  INTERNAL_TICKET: "Info an die Produktionsplanung",
+  SUPPLIER_EMAIL: "Lieferanten-Nachricht",
+  RESCHEDULE: "Schneideauftrag umplanen",
+  QUALITY_BLOCK: "Lieferung sperren",
+  QUALITY_RELEASE: "Qualitätsfreigabe",
+  SUPPLIER_DELAY: "Lieferverzug",
+  MACHINE_BREAKDOWN: "Maschinenausfall",
+  QUALITY_ISSUE: "Qualitätsmangel",
+  SUCCEEDED: "Abgeschlossen",
+  WAITING_APPROVAL: "Freigabe ausstehend",
+  MANUAL_REVIEW: "Prüfung erforderlich",
+  DEAD_LETTER: "Eingriff erforderlich",
+  UNKNOWN_OUTCOME: "Ergebnis prüfen",
+  RETRY_SCHEDULED: "Erneuter Versuch geplant",
+  NORMALIZE: "Meldung wird geprüft",
+  PENDING: "Entscheidung offen",
+  VIEWER: "Besucherzugang",
+  RELIABILITY: "Verarbeitungsverlauf",
+  MACHINE_ID: "Maschine",
+  OPERATION_ID: "Schneideauftrag",
+  SITE: "Standort",
+  REQUIRED_HOURS: "Benötigte Zeit",
   START_AT: "Start",
-  END_AT: "Finish",
-  LOT_ID: "Batch",
-  INSPECTION_ID: "Inspection",
-  SHIPMENT_ITEM_IDS: "Affected shipments",
-  INCIDENT_REVISION: "Assessment version",
-  PURCHASE_ORDER_ITEM: "Order item",
-  CAPABILITY: "Operation",
-  RECIPIENT: "To",
-  BODY: "Message",
+  END_AT: "Ende",
+  LOT_ID: "Charge",
+  INSPECTION_ID: "Prüfung",
+  SHIPMENT_ITEM_IDS: "Betroffene Lieferungen",
+  INCIDENT_REVISION: "Bewertungsstand",
+  PURCHASE_ORDER_ITEM: "Bestellposition",
+  CAPABILITY: "Bearbeitung",
+  RECIPIENT: "Empfänger",
+  BODY: "Nachricht",
 };
 export const label = (value: unknown): string =>
   readableLabels[string(value).toUpperCase()] ||
@@ -245,13 +284,13 @@ export const label = (value: unknown): string =>
     .toLowerCase()
     .replaceAll("_", " ")
     .replace(/\b\w/g, (c) => c.toUpperCase()) ||
-  "Unknown";
+  "Unbekannt";
 export function money(value: unknown, currency = "EUR") {
   return value === null ||
     value === undefined ||
     !Number.isFinite(Number(value))
     ? "—"
-    : new Intl.NumberFormat("en-GB", {
+    : new Intl.NumberFormat("de-DE", {
         style: "currency",
         currency,
         maximumFractionDigits: 0,
@@ -260,7 +299,7 @@ export function money(value: unknown, currency = "EUR") {
 let displayTimezone = "Europe/Berlin";
 export function setDisplayTimezone(value: string) {
   try {
-    new Intl.DateTimeFormat("en-GB", { timeZone: value });
+    new Intl.DateTimeFormat("de-DE", { timeZone: value });
     displayTimezone = value;
   } catch {
     /* Keep the configured default. */
@@ -268,7 +307,7 @@ export function setDisplayTimezone(value: string) {
 }
 export function date(value: unknown) {
   if (!value || !Number.isFinite(Date.parse(string(value)))) return "—";
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat("de-DE", {
     timeZone: displayTimezone,
     day: "2-digit",
     month: "short",

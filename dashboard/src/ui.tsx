@@ -126,18 +126,18 @@ export function ErrorBox({
       <div>
         <strong>
           {error instanceof ApiError && error.status === 403
-            ? "Access restricted"
+            ? "Zugang eingeschränkt"
             : error instanceof ApiError && error.status === 409
-              ? "This version is no longer current"
-              : "Request could not be completed"}
+              ? "Diese Version ist nicht mehr aktuell"
+              : "Anfrage konnte nicht abgeschlossen werden"}
         </strong>
         <p>{error.message}</p>
         {error instanceof ApiError && error.correlationId && (
-          <small>Reference: {error.correlationId}</small>
+          <small>Technische Referenz: {error.correlationId}</small>
         )}
         {retry && (
           <button className="text-button" onClick={retry}>
-            Refresh data <ChevronRight size={14} />
+            Daten neu laden <ChevronRight size={14} />
           </button>
         )}
       </div>
@@ -145,7 +145,7 @@ export function ErrorBox({
   );
 }
 export function Loading({
-  children = "Loading records…",
+  children = "Daten werden geladen …",
 }: {
   children?: ReactNode;
 }) {

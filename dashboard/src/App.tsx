@@ -48,7 +48,10 @@ import {
   useRoute,
 } from "./ui";
 import { Overview } from "./Overview";
-import { IncidentDetail } from "./IncidentDetail";
+import { GuidedIncident } from "./GuidedIncident";
+import { CaseOverview } from "./CaseOverview";
+import { About } from "./About";
+import { MailAnalysis } from "./MailAnalysis";
 import { Approvals } from "./Approvals";
 import { Reliability } from "./Reliability";
 import { rememberScope, restoreScope } from "./scope-preference";
@@ -56,13 +59,13 @@ import { workspaceName } from "./presentation";
 
 function Brand() {
   return (
-    <a className="brand" href="#/overview" aria-label="APIC overview">
+    <a className="brand" href="#/overview" aria-label="Zur Fallübersicht">
       <span className="brand-symbol">
         <Activity size={24} />
       </span>
       <span>
         <b>APIC</b>
-        <small>Incident control</small>
+        <small>Produktionsplanung</small>
       </span>
     </a>
   );
@@ -112,34 +115,37 @@ function Login({ onLogin }: { onLogin: (session: Session) => void }) {
         <div>
           <span className="eyebrow">AI PRODUCTION INCIDENT CONTROL</span>
           <h1>
-            Clarity when
+            Material fehlt.
             <br />
-            operations change.
+            Was nun?
           </h1>
           <p>
-            From an unstructured incident to a verified impact assessment, a
-            human-approved response and an auditable action trail.
+            Dieses Portfolio zeigt, welche Aufträge von einer Störung betroffen
+            sind und welche Reaktion ein Mensch freigeben kann.
           </p>
           <div className="login-principles">
             <span>
-              <CheckCheck size={18} /> Verified operational facts
+              <CheckCheck size={18} /> Meldung mit Betriebsdaten prüfen
             </span>
             <span>
-              <ClipboardCheck size={18} /> Human-approved response
+              <ClipboardCheck size={18} /> Reaktion durch Menschen freigeben
             </span>
             <span>
-              <Activity size={18} /> Persisted execution evidence
+              <Activity size={18} /> Ergebnisse nachvollziehen
             </span>
           </div>
         </div>
-        <small>Portfolio examples using fictional business records</small>
+        <small>
+          Portfolio-Projekt mit vollständig erfundenen Betriebsdaten
+        </small>
       </aside>
       <main className="login-main">
         <div className="login-form">
-          <span className="eyebrow">OPERATIONS WORKSPACE</span>
-          <h2>Sign in to incident control</h2>
+          <span className="eyebrow">METALLWERKSTATT NORD</span>
+          <h2>Was passiert, wenn Material fehlt?</h2>
           <p>
-            Follow a delayed delivery, a stopped saw and a quality inspection.
+            Sieh dir an, wie aus einer Störungsmeldung eine konkrete
+            Entscheidung wird.
           </p>
           {catalog.data?.public_demo_enabled && (
             <button
@@ -147,49 +153,48 @@ function Login({ onLogin }: { onLogin: (session: Session) => void }) {
               disabled={busy}
               onClick={() => void explore()}
             >
-              Explore the workspace <ArrowRight size={17} />
+              Beispiele ohne Anmeldung ansehen <ArrowRight size={17} />
             </button>
           )}
-          <form onSubmit={submit}>
-            {error && <ErrorBox error={error} />}
-            <label>
-              Username
-              <input
-                name="username"
-                autoComplete="username"
-                required
-                autoFocus
-                maxLength={100}
-                placeholder="Your username"
-              />
-            </label>
-            <label>
-              Password
-              <input
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                maxLength={500}
-                placeholder="Your generated password"
-              />
-            </label>
-            <button className="button primary full" disabled={busy}>
-              {busy ? "Signing in…" : "Open workspace"}
-              <ArrowRight size={17} />
-            </button>
-          </form>
+          <details className="team-login">
+            <summary>Team-Zugang: anmelden</summary>
+            <form onSubmit={submit}>
+              {error && <ErrorBox error={error} />}
+              <label>
+                Benutzername
+                <input
+                  name="username"
+                  autoComplete="username"
+                  required
+                  maxLength={100}
+                  placeholder="Dein Benutzername"
+                />
+              </label>
+              <label>
+                Passwort
+                <input
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  maxLength={500}
+                  placeholder="Dein Passwort"
+                />
+              </label>
+              <button className="button primary full" disabled={busy}>
+                {busy ? "Anmeldung läuft …" : "Als Team-Mitglied anmelden"}
+                <ArrowRight size={17} />
+              </button>
+            </form>
+          </details>
           <div className="login-note">
             <ShieldCheck size={20} />
             <p>
-              Visitors can inspect the examples. Authorized team members can
-              review and approve actions.
+              Du kannst alle Beispiele als Besucher ansehen. Team-Mitglieder
+              können zusätzlich Meldungen einreichen und Aktionen freigeben.
             </p>
           </div>
-          <small>
-            Public visitors can inspect the cases. Operational decisions require
-            an authorized account.
-          </small>
+          <small>Es werden keine echten Lieferanten kontaktiert.</small>
         </div>
       </main>
     </div>
@@ -205,29 +210,27 @@ const scenarios: {
 }[] = [
   {
     id: "supplier-delay",
-    title: "Steel rods delayed",
+    title: "Stahlstangen kommen zu spät",
     icon: Truck,
     description:
-      "A delivery truck breaks down. Seventy-five steel rods arrive late. They are needed for four orders for welded mounting frames.",
-    journey:
-      "Verify the message → compare impact → review the supplier response",
+      "Ein Lieferwagen fällt aus. Stahlstangen kommen später und fehlen für bestellte Metallrahmen.",
+    journey: "Meldung → betroffene Aufträge → Lieferant kontaktieren",
   },
   {
     id: "machine-breakdown",
-    title: "Band saw S-01 stops",
+    title: "Bandsäge 1 steht still",
     icon: Factory,
     description:
-      "A broken drive belt stops the band saw for two days. The second saw has six free hours and can take over one cutting job.",
-    journey:
-      "Verify the outage → inspect capacity → review the new cutting schedule",
+      "Ein gerissener Antriebsriemen stoppt die Bandsäge. Eine zweite Säge könnte einen Schneideauftrag übernehmen.",
+    journey: "Ausfall → verfügbare Zeiten → Umplanung prüfen",
   },
   {
     id: "quality-issue",
-    title: "Mounting plates: holes too large",
+    title: "Montageplatten mit zu großen Bohrungen",
     icon: ShieldCheck,
     description:
-      "Forty-eight mounting plates have 11 mm holes instead of 10 mm. Two shipments are waiting; the affected batch needs a quality decision.",
-    journey: "Verify the inspection → trace the lot → request Quality approval",
+      "Montageplatten haben Bohrungen mit 11 statt 10 mm Durchmesser. Die Qualität muss vor der Lieferung geklärt werden.",
+    journey: "Prüfung → betroffene Lieferungen → Qualität entscheiden lassen",
   },
 ];
 function DemoDialog({
@@ -312,7 +315,7 @@ function DemoDialog({
   }
   return (
     <Modal
-      title={readOnly ? "Choose an example" : "Start an example"}
+      title={readOnly ? "Einen Fall auswählen" : "Neuen Beispielfall starten"}
       onClose={onClose}
       wide
     >
@@ -321,19 +324,19 @@ function DemoDialog({
           <div className="notice">
             <ShieldCheck size={18} />
             <p>
-              Select an example to inspect its source, calculation and proposed
-              actions.
+              Jeder Fall erklärt die Meldung, ihre Folgen und eine mögliche
+              Reaktion.
             </p>
           </div>
         )}
         <p className="muted">
           {readOnly
-            ? "Choose a problem to see its impact and proposed response."
-            : "Each example opens a separate workspace and prepares an assessment."}
+            ? "Wähle eine Situation aus der Werkstatt."
+            : "Jeder neue Fall erhält einen eigenen Arbeitsbereich und wird durch die Workflows geprüft."}
         </p>
         <div className="notice">
           <ShieldCheck size={18} />
-          <p>Delivery, production and quality</p>
+          <p>Material, Maschine und Qualität</p>
         </div>
         {error && <ErrorBox error={error} />}
         <div className="demo-options">
@@ -349,7 +352,7 @@ function DemoDialog({
                   <Icon size={23} />
                 </span>
                 <span className="demo-copy">
-                  <small>SCENARIO 0{i + 1}</small>
+                  <small>FALL 0{i + 1}</small>
                   <strong>{title}</strong>
                   <span>{description}</span>
                   <em>{journey}</em>
@@ -427,8 +430,8 @@ function DemoDialog({
         )}
         <p className="footnote">
           {readOnly
-            ? "Visitors can inspect each assessment. The responsible role must approve the exact plan before an action runs."
-            : "The assessment prepares a response. The responsible team reviews it before an action runs."}
+            ? "Als Besucher kannst du den Ablauf ansehen. Freigaben erfolgen durch die zuständige Person."
+            : "Die Prüfung bereitet eine Reaktion vor. Anschließend entscheidet das zuständige Team."}
         </p>
       </div>
     </Modal>
@@ -455,20 +458,20 @@ function RunTracker({
         <Activity size={20} />
       </span>
       <div>
-        <strong>Guided run</strong>
+        <strong>Neue Meldung</strong>
         <p>
           {event ? (
             <>
               <Badge value={event.status} />
-              <span className="inline-label">Analysis job</span>
+              <span className="inline-label">Prüfung</span>
               <Badge value={event.job_status} />
             </>
           ) : (
-            "Checking the report…"
+            "Meldung wird geprüft …"
           )}
         </p>
         <Json
-          title="Technical details"
+          title="Technische Details"
           value={{ source: run.source_event_id, analysis: run.job_id }}
         />
         {Array.isArray(event?.review_reasons) && (
@@ -481,13 +484,13 @@ function RunTracker({
           className="button subtle"
           href={`#/incidents/${string(event.incident_id)}`}
         >
-          View incident
+          Fall ansehen
           <ArrowRight size={16} />
         </a>
       ) : null}
       <button
         className="icon-button"
-        aria-label="Dismiss guided run status"
+        aria-label="Meldungsstatus schließen"
         onClick={onDismiss}
       >
         <X size={18} />
@@ -600,7 +603,7 @@ export default function App() {
   if (booting)
     return (
       <div className="boot">
-        <Loading>Checking your session…</Loading>
+        <Loading>Zugang wird geprüft …</Loading>
       </div>
     );
   if (!session)
@@ -616,11 +619,17 @@ export default function App() {
     );
   const page = route.startsWith("/incidents/")
     ? "detail"
-    : route === "/approvals"
+    : route.startsWith("/approvals")
       ? "approvals"
       : route === "/reliability"
         ? "reliability"
-        : "overview";
+        : route === "/about"
+          ? "about"
+          : route === "/mail"
+            ? "mail"
+            : route === "/register"
+              ? "register"
+              : "overview";
   const scope = scopes.find((item) => item.id === scopeId);
   const common = {
     scopeId,
@@ -638,22 +647,22 @@ export default function App() {
           document.getElementById("main-content")?.focus();
         }}
       >
-        Skip to content
+        Zum Inhalt
       </a>
       <aside className={`sidebar ${mobile ? "open" : ""}`}>
         <Brand />
         <button
           ref={navigationClose}
           className="icon-button mobile-nav-close"
-          aria-label="Close navigation"
+          aria-label="Navigation schließen"
           onClick={closeNavigation}
         >
           <X size={18} />
         </button>
-        <div className="sidebar-kicker">WORKSPACE</div>
+        <div className="sidebar-kicker">DIE WERKSTATT</div>
         <nav
           id="workspace-navigation"
-          aria-label="Main navigation"
+          aria-label="Hauptnavigation"
           onClick={() => {
             if (mobile) closeNavigation();
           }}
@@ -663,31 +672,32 @@ export default function App() {
             className={page === "overview" || page === "detail" ? "active" : ""}
           >
             <LayoutDashboard size={19} />
-            <span>Overview</span>
+            <span>Fälle ansehen</span>
           </a>
           <a
             href="#/approvals"
             className={page === "approvals" ? "active" : ""}
           >
             <ClipboardCheck size={19} />
-            <span>Approval inbox</span>
+            <span>Entscheidungen</span>
             {kpis.data && kpis.data.pending_approvals > 0 && (
               <span className="nav-count">{kpis.data.pending_approvals}</span>
             )}
           </a>
-          <a
-            href="#/reliability"
-            className={page === "reliability" ? "active" : ""}
-          >
+          <a href="#/mail" className={page === "mail" ? "active" : ""}>
+            <MailSearch size={19} />
+            <span>Mail auswerten</span>
+          </a>
+          <a href="#/about" className={page === "about" ? "active" : ""}>
             <Activity size={19} />
-            <span>Processing history</span>
+            <span>So funktioniert es</span>
           </a>
         </nav>
         <div className="sidebar-bottom">
           <div className="environment-label">
             <span className="status-dot" />
-            <b>Operations workspace</b>
-            <p>Production planning</p>
+            <b>Portfolio-Projekt</b>
+            <p>Metallwerkstatt Nord</p>
           </div>
           <div className="sidebar-user">
             <span className="avatar">
@@ -696,14 +706,14 @@ export default function App() {
             <div>
               <strong>
                 {session.user.username === "public_viewer"
-                  ? "Visitor"
+                  ? "Besucher"
                   : session.user.username}
               </strong>
               <small>{label(session.user.role)}</small>
             </div>
             <button
               className="icon-button"
-              aria-label="Sign out"
+              aria-label="Abmelden / Team-Zugang"
               onClick={() => void logout()}
             >
               <LogOut size={17} />
@@ -714,7 +724,7 @@ export default function App() {
       {mobile && (
         <button
           className="nav-backdrop"
-          aria-label="Dismiss navigation"
+          aria-label="Navigation schließen"
           onClick={closeNavigation}
         />
       )}
@@ -724,7 +734,7 @@ export default function App() {
             <button
               ref={navigationToggle}
               className="icon-button mobile-menu"
-              aria-label="Toggle navigation"
+              aria-label="Navigation umschalten"
               aria-expanded={mobile}
               aria-controls="workspace-navigation"
               onClick={() => {
@@ -735,25 +745,27 @@ export default function App() {
               <Menu size={21} />
             </button>
             <span className="breadcrumb">
-              Operations <ChevronRight size={14} />
+              Werkstatt <ChevronRight size={14} />
               <b>
                 {page === "detail"
-                  ? "Incident detail"
+                  ? "Fall verstehen"
                   : page === "approvals"
-                    ? "Approval inbox"
+                    ? "Entscheidungen"
                     : label(page)}
               </b>
             </span>
           </div>
           <div className="topbar-actions">
             <label className="scope-select">
-              <span>Workspace</span>
+              <span>Arbeitsbereich</span>
               <select
                 value={scopeId}
                 onChange={(e) => changeScope(e.target.value)}
-                aria-label="Workspace"
+                aria-label="Arbeitsbereich"
               >
-                {!scopes.length && <option value="">No scopes yet</option>}
+                {!scopes.length && (
+                  <option value="">Noch kein Arbeitsbereich</option>
+                )}
                 {scopes.map((item, index) => (
                   <option key={item.id} value={item.id}>
                     {workspaceName(item.name, index)}
@@ -763,42 +775,44 @@ export default function App() {
             </label>
             <button className="button primary" onClick={() => setDemo(true)}>
               <Play size={15} />
-              Browse examples
+              Fall auswählen
             </button>
           </div>
         </header>
         <div className="mode-strip">
           <span>
             <ShieldCheck size={14} />
-            <b>Production planning</b>
+            <b>Metallwerkstatt Nord</b>
           </span>
           <span>
             {kpis.data
-              ? `Planning date · ${date(kpis.data.clock)} · ${kpis.data.timezone}`
-              : "Waiting for the scope data clock"}
+              ? `Planungsstand · ${date(kpis.data.clock)} · ${kpis.data.timezone}`
+              : "Planungsstand wird geladen"}
           </span>
         </div>
         <main id="main-content" tabIndex={-1}>
-          <div className="page-heading">
+          <div
+            className={`page-heading ${["overview", "detail", "about", "mail"].includes(page) ? "compact-heading" : ""}`}
+          >
             <div>
               <span className="eyebrow">{workspaceName(scope?.name)}</span>
               <h1>
                 {page === "detail"
-                  ? "Incident detail"
+                  ? "Fall verstehen"
                   : page === "approvals"
-                    ? "Approval inbox"
+                    ? "Entscheidungen"
                     : page === "reliability"
-                      ? "Processing history"
-                      : "Operations overview"}
+                      ? "Verarbeitungsverlauf"
+                      : "Fallübersicht"}
               </h1>
               <p>
                 {page === "detail"
-                  ? "Follow the facts, assessment and response in one place."
+                  ? "Die Meldung, ihre Folgen und der nächste Schritt."
                   : page === "approvals"
-                    ? "Review exactly what will happen before an action is released."
+                    ? "Hier prüft die zuständige Person den genauen Inhalt und entscheidet über die vorbereitete Reaktion."
                     : page === "reliability"
-                      ? "Follow each assessment, approval and completed action."
-                      : "Prioritize operational impact. Keep every decision traceable."}
+                      ? "Gespeicherte Verarbeitungsschritte und technische Nachweise."
+                      : "Meldungen, Auswirkungen und Entscheidungen auf einen Blick."}
               </p>
             </div>
             <button
@@ -806,7 +820,7 @@ export default function App() {
               onClick={() => setRefresh((n) => n + 1)}
             >
               <RefreshCw size={16} />
-              Refresh
+              Aktualisieren
             </button>
           </div>
           {authError && <ErrorBox error={authError} />}{" "}
@@ -828,39 +842,52 @@ export default function App() {
               <Loading />
             ) : (
               <Empty
-                title="Your workspace is ready"
+                title="Dein Arbeitsbereich ist bereit"
                 action={
                   <button
                     className="button primary"
                     onClick={() => setDemo(true)}
                   >
                     <Play size={16} />
-                    Choose a scenario
+                    Neuen Fall starten
                   </button>
                 }
               >
-                Choose an example to create a workspace. Follow its assessment
-                and the actions that need review.
+                Einen Fall auswählen to create a workspace. Follow its
+                assessment and the actions that need review.
               </Empty>
             )
           ) : page === "overview" ? (
+            <CaseOverview {...common} kpis={kpis} />
+          ) : page === "about" ? (
+            <About />
+          ) : page === "mail" ? (
+            <MailAnalysis {...common} onRun={onRun} />
+          ) : page === "register" ? (
             <Overview {...common} kpis={kpis} onDemo={() => setDemo(true)} />
           ) : page === "detail" ? (
-            <IncidentDetail
+            <GuidedIncident
+              key={scopeId + route}
               {...common}
               incidentId={route.slice("/incidents/".length)}
               onRun={onRun}
             />
           ) : page === "approvals" ? (
-            <Approvals {...common} />
+            <Approvals
+              key={route}
+              {...common}
+              incidentId={
+                route.startsWith("/approvals/")
+                  ? route.slice("/approvals/".length)
+                  : undefined
+              }
+            />
           ) : (
             <Reliability {...common} />
           )}
           <footer className="page-footer">
             <span>AI Production Incident Control</span>
-            <span>
-              Sample data · Rule-based assessment · No live supplier delivery
-            </span>
+            <span>Erfundene Betriebsdaten · Entscheidungen durch Menschen</span>
           </footer>
         </main>
       </div>
