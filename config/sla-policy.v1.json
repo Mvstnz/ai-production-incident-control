@@ -4,6 +4,6 @@
   "escalation_stages": 2,
   "approval_expiry_hours": 24,
   "action_followup_business_hours": 4,
-  "business_calendar": {"timezone": "Asia/Bangkok", "weekdays": [0, 1, 2, 3, 4], "open_hour": 8, "close_hour": 17, "holidays": []},
+  "business_calendar": {"timezone": "Europe/Berlin", "weekdays": [0, 1, 2, 3, 4], "open_hour": 8, "close_hour": 17, "holidays": []},
   "note": "Synthetic demo policy. No automatic approval. Calendar omits public holidays. n8n Wait uses real runtime time."
 }

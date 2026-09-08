@@ -13,6 +13,7 @@ import {
   api,
   canDecide,
   date,
+  incidentTitle,
   label,
   scoped,
   type Approval,
@@ -24,13 +25,15 @@ import {
   Badge,
   Empty,
   ErrorBox,
-  Fields,
   Loading,
   Modal,
   Section,
   useQuery,
 } from "./ui";
 import type { ViewProps } from "./App";
+import { ActionDetails, actionName } from "./ActionDetails";
+import { readableSummary } from "./presentation";
+import { Json } from "./ui";
 
 function PayloadEditor({
   payload,
@@ -191,9 +194,12 @@ function DecisionDialog({
                 Required role <b>{label(approval.required_role)}</b>
               </span>
               <span>
-                Expires <b>{date(approval.expires_at)} Bangkok</b>
+                Expires <b>{date(approval.expires_at)} Berlin</b>
               </span>
-              <code>{approval.plan_hash}</code>
+              <Json
+                title="Technical reference"
+                value={{ plan_hash: approval.plan_hash }}
+              />
             </div>
             {body && (
               <>
@@ -209,12 +215,14 @@ function DecisionDialog({
                     />
                   </label>
                 ) : (
-                  <p className="summary-text">{body.summary}</p>
+                  <p className="summary-text">
+                    {readableSummary(body.summary)}
+                  </p>
                 )}
                 {body.actions.map((action, index) => (
                   <section className="payload-card" key={index}>
                     <header>
-                      <h3>{label(action.action_type)}</h3>
+                      <h3>{actionName(action)}</h3>
                       <small>
                         {action.required_role
                           ? label(action.required_role)
@@ -237,7 +245,7 @@ function DecisionDialog({
                         }
                       />
                     ) : (
-                      <Fields data={action.payload} />
+                      <ActionDetails action={action} />
                     )}
                   </section>
                 ))}
@@ -337,8 +345,8 @@ export function Approvals({ scopeId, refresh, session, onRefresh }: ViewProps) {
       <div className="notice">
         <ShieldCheck size={19} />
         <p>
-          Each decision binds a plan version and hash. The server rechecks your
-          role, expiry and current incident revision before accepting it.
+          Review the proposed action, timing and message before approving. Any
+          later change requires a new decision.
         </p>
       </div>
       {notice && (
@@ -358,7 +366,7 @@ export function Approvals({ scopeId, refresh, session, onRefresh }: ViewProps) {
       )}
       <Section
         title="Requests for review"
-        subtitle="All requests in the selected scope; role restrictions are shown on each request"
+        subtitle="Actions awaiting the responsible team's decision"
         action={
           <label className="checkbox-label compact">
             <input
@@ -395,7 +403,11 @@ export function Approvals({ scopeId, refresh, session, onRefresh }: ViewProps) {
                     <ClipboardCheck size={21} />
                   </span>
                   <div>
-                    <h3>Response plan · Version {approval.plan_version}</h3>
+                    <h3>
+                      {incidentTitle({
+                        title: approval.incident_title || "Response plan",
+                      })}
+                    </h3>
                     <p>
                       Incident revision {approval.revision} ·{" "}
                       <a href={`#/incidents/${approval.incident_id}`}>
@@ -413,22 +425,29 @@ export function Approvals({ scopeId, refresh, session, onRefresh }: ViewProps) {
                   </span>
                   <span>
                     <Clock3 size={15} />
-                    Due {date(approval.expires_at)} Bangkok
+                    Due {date(approval.expires_at)} Berlin
                   </span>
                 </div>
                 {approval.actions.map((action, index) => (
                   <details
                     className="approval-payload"
                     key={index}
-                    open={approval.status === "PENDING"}
+                    open={
+                      approval.status === "PENDING" &&
+                      action.action_type !== "INTERNAL_TICKET"
+                    }
                   >
-                    <summary>{label(action.action_type)}</summary>
-                    <Fields data={action.payload} />
+                    <summary>{actionName(action)}</summary>
+                    <ActionDetails action={action} />
                   </details>
                 ))}
-                <p className="hash">
-                  Plan hash <code>{approval.plan_hash}</code>
-                </p>
+                <Json
+                  title="Technical reference"
+                  value={{
+                    plan_hash: approval.plan_hash,
+                    plan_id: approval.plan_id,
+                  }}
+                />
                 <footer>
                   {approval.status === "PENDING" &&
                   canDecide(session.user.role, approval.required_role) ? (

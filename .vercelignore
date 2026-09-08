@@ -1,0 +1,13 @@
+.local
+.env*
+.git
+node_modules
+dashboard/node_modules
+tests
+evidence
+graphify-out
+docs
+n8n
+__pycache__
+.pytest_cache
+scripts

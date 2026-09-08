@@ -9,15 +9,15 @@ import json
 from runtime_client import Client, ROOT
 
 
-SUBJECT = "Delivery update for PO 4500192 item 10"
+SUBJECT = "Delivery update for PO DEMO-PO-8264 item 10"
 CONTENT = """Hello Purchasing Team,
 
-Material: SHAFT-DN300
-Purchase order PO 4500192, item 10.
+Material: DEMO-ROD-20
+Purchase order PO DEMO-PO-8264, item 10.
 
-Because of capacity problems in our heat treatment department, the new confirmed availability at your plant is 19 October 2026, 08:00 Bangkok time, for the full quantity of 40 pcs.
+Because of A broken delivery truck has delayed the steel rods needed for four mounting-frame orders., the new confirmed availability at your plant is 19 October 2026, 08:00 Berlin time, for the full quantity of 40 pcs.
 
-We may be able to make 10 of these 40 pcs available at your plant on 13 October 2026, 08:00 Bangkok time. This early partial delivery is not confirmed yet.
+We may be able to make 10 of these 40 pcs available at your plant on 13 October 2026, 08:00 Berlin time. This early partial delivery is not confirmed yet.
 
 Best regards,
 Synthetic Supplier"""
@@ -40,10 +40,10 @@ def main():
         "request_id", "finish_reason", "prompt_tokens", "completion_tokens",
         "total_tokens", "latency_ms",
     }
-    assert revision["facts"]["purchase_order"] == "4500192"
+    assert revision["facts"]["purchase_order"] == "DEMO-PO-8264"
     assert revision["facts"]["confirmed_supply_schedule"][0]["quantity"] == 40
     assert revision["facts"]["proposed_partial"]["status"] == "PROPOSED"
-    assert detail["risk_score"] == 88 and detail["severity"] == "CRITICAL"
+    assert detail["risk_score"] == 83 and detail["severity"] == "CRITICAL"
     system = client.ok("/api/system?scope_id=" + source["scope_id"])
     job = next(item for item in system["jobs"] if str(item["id"]) == source["job_id"])
     evidence = {

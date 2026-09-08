@@ -3,7 +3,7 @@ from runtime_client import Client,ROOT
 from seed_showcase import main as seed
 from uuid import NAMESPACE_URL,uuid5
 import json
-scope_id=str(uuid5(NAMESPACE_URL,'apic-portfolio/default-demo'))
+scope_id=str(uuid5(NAMESPACE_URL,'apic-portfolio/default-demo/fictional-v2'))
 viewer=Client('viewer')
 def state():
     return {

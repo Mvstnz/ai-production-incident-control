@@ -1,12 +1,12 @@
 {
   "spec_version": "1.1",
-  "note": "Executed local evidence only. Target runtime and live model evaluation are separate; blocked or unexecuted checks are never passed.",
+  "note": "Current retained evidence for ordinary manufacturing examples. Local, connected and live-model checks are distinguished.",
   "criteria": [
     {
       "id": "AC01",
       "test": "Frischer lokaler Start",
       "expected": "Dienste healthy; Seeds/Migrationen bereit; Demo ohne externe Konten nutzbar.",
-      "status": "PASS",
+      "status": "NOT_RUN",
       "evidence": [
         "evidence/test-results/github-ci.json"
       ],
@@ -25,7 +25,7 @@
     {
       "id": "AC03",
       "test": "Liefer-Hero Baseline",
-      "expected": "38 Bedarf, 14 verfügbar, 24 Fehlmenge; drei geprüft, zwei betroffen; €126.400; 88 CRITICAL.",
+      "expected": "76 Bedarf, 24 verfügbar, 40 Fehlmenge; vier geprüft, zwei betroffen; €55.400; 83 CRITICAL.",
       "status": "PASS",
       "evidence": [
         "evidence/workflow-runs/local-e2e.json#hero_baseline_and_proposed_partial"
@@ -34,7 +34,7 @@
     },
     {
       "id": "AC04",
-      "test": "Nur angebotene zehn Stück",
+      "test": "Nur angebotene 30 Stück",
       "expected": "Baseline bleibt unverändert; Angebot nur als Was-wäre-wenn sichtbar.",
       "status": "PASS",
       "evidence": [
@@ -44,8 +44,8 @@
     },
     {
       "id": "AC05",
-      "test": "Bestätigter Split 10 + 30",
-      "expected": "Insgesamt 40 Zugang; 14 Fehlmenge; ein betroffener MO; €54.400; 69 HIGH.",
+      "test": "Bestätigter Split 30 + 45",
+      "expected": "Insgesamt 75 Zugang; 10 Fehlmenge; ein betroffener MO; €21.600; 56 HIGH.",
       "status": "PASS",
       "evidence": [
         "evidence/workflow-runs/local-e2e.json#confirmed_split_replaces_supply_and_revises"
@@ -208,8 +208,8 @@
       "expected": "Begrenzte Retries, Backoff/Retry-After; am Ende Erfolg oder nachvollziehbare DLQ.",
       "status": "PASS",
       "evidence": [
-        "evidence/workflow-runs/resilience.json#ERP_503_stops_after_four_attempts_in_DLQ",
-        "evidence/workflow-runs/resilience.json#ERP_429_respects_retry_after_then_recovers"
+        "evidence/workflow-runs/resilience.json#ERP_429_respects_retry_after_then_recovers",
+        "evidence/workflow-runs/resilience.json#ERP_503_stops_after_four_attempts_in_DLQ"
       ],
       "verification_scope": "DEMO_LOCAL"
     },
@@ -246,7 +246,7 @@
     {
       "id": "AC24",
       "test": "Maschinenfixture",
-      "expected": "Qualifizierte Alternative belegt; Capacity Gap korrekt; Score 52 HIGH; Umplanung nur genehmigt.",
+      "expected": "Qualifizierte Alternative belegt; Capacity Gap korrekt; Score 62 HIGH; Umplanung nur genehmigt.",
       "status": "PASS",
       "evidence": [
         "evidence/workflow-runs/local-e2e.json#machine_approved_mock_erp_reschedule"
@@ -318,14 +318,14 @@
       "id": "AC31",
       "test": "Zielinstanz-Test",
       "expected": "Zehn Projektworkflows gelesen/deployed; durchgeführte E2E-Läufe mit Execution-IDs belegt.",
-      "status": "BLOCKED",
+      "status": "PASS",
       "evidence": [
-        "evidence/workflow-runs/target-deployment.json",
-        "n8n/target/manifest.json",
-        "docs/BLOCKERS.md"
+        "evidence/workflow-runs/hosted-demo.json",
+        "evidence/workflow-runs/hosted-actions.json",
+        "n8n/target/manifest.json"
       ],
       "verification_scope": "CONNECTED_SANDBOX",
-      "note": "Ten target workflows created and read back. Zero target executions; update/execute approval gate and required reachable endpoints/credentials missing."
+      "note": "Three connected scenario analyses and six successful approved sandbox actions; public read-only access and private-scope isolation checked."
     },
     {
       "id": "AC32",
@@ -333,7 +333,7 @@
       "expected": "Fixture vs. Live klar getrennt; Modell-/Datensatzversion und Nenner angegeben; nicht gelaufen ist nicht bestanden.",
       "status": "PASS",
       "evidence": [
-        "evidence/evaluations/fixture-v1-report.json"
+        "evidence/evaluations/fixture-v2-report.json"
       ],
       "verification_scope": "DEMO_LOCAL",
       "note": "50 deterministic fixture cases; development/holdout denominators and versions reported. LIVE_EVAL_NOT_RUN; no model-performance claim."
@@ -378,17 +378,16 @@
       "status": "PASS",
       "evidence": [
         "evidence/test-results/browser.json",
-        "evidence/screenshots/n8n-action-execution-670.png",
-        "evidence/screenshots/dashboard-actions.png"
+        "evidence/workflow-runs/hosted-actions.json"
       ],
       "verification_scope": "DEMO_LOCAL"
     }
   ],
-  "evaluated_at": "2026-09-07T13:07:06.007011+00:00",
+  "evaluated_at": "2026-09-08T10:37:53.871729+00:00",
   "summary": {
     "PASS": 35,
     "FAIL": 0,
-    "BLOCKED": 1,
-    "NOT_RUN": 0
+    "BLOCKED": 0,
+    "NOT_RUN": 1
   }
 }

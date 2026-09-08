@@ -5,18 +5,14 @@ from pathlib import Path
 from psycopg import sql
 
 from backend.db import js
+from backend.datasets import FILES, load_fixture
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURE_FILES = {"SUPPLIER_DELAY":"hero_supplier_delay.json", "MACHINE_BREAKDOWN":"machine_breakdown.json", "QUALITY_ISSUE":"quality_issue.json"}
+FIXTURE_FILES = FILES
 
 
 def fixture(kind):
-    name = FIXTURE_FILES[kind]
-    path = ROOT / "fixtures" / name
-    if not path.exists():
-        alternatives = {"machine_breakdown.json":"hero_machine_breakdown.json","quality_issue.json":"hero_quality_issue.json"}
-        path = ROOT / "fixtures" / alternatives.get(name,name)
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_fixture(kind)
 
 
 def insert(conn, table, scope_id, **values):
@@ -40,18 +36,22 @@ def seed_scope(conn, sid):
         data = {k:v for k,v in raw.items() if k not in ("expected","scenarios","facts","source_email")}
         insert(conn,"fixture_data",sid,incident_type=kind,body=js(data))
         if kind == "SUPPLIER_DELAY":
-            insert(conn,"suppliers",sid,id="APC",name=data["supplier"])
-            insert(conn,"materials",sid,id=data["material"],description="Synthetic precision shaft",unit=data["unit"],material_type="COMPONENT")
-            insert(conn,"supplier_materials",sid,supplier_id="APC",material_id=data["material"],qualified=True,available_at=None)
-            insert(conn,"purchase_orders",sid,id=data["purchase_order"],supplier_id="APC")
+            supplier_id=data["supplier_id"]
+            insert(conn,"suppliers",sid,id=supplier_id,name=data["supplier"])
+            insert(conn,"materials",sid,id=data["material"],description=data.get("material_description","Invented demo component"),unit=data["unit"],material_type="COMPONENT")
+            insert(conn,"supplier_materials",sid,supplier_id=supplier_id,material_id=data["material"],qualified=True,available_at=None)
+            insert(conn,"purchase_orders",sid,id=data["purchase_order"],supplier_id=supplier_id)
             poi=f'{data["purchase_order"]}/{data["purchase_order_item"]}'
             insert(conn,"purchase_order_items",sid,id=poi,purchase_order_id=data["purchase_order"],material_id=data["material"],ordered_quantity=data["open_purchase_quantity"],open_quantity=data["open_purchase_quantity"])
             for i,row in enumerate(data["original_supply_schedule"]):
                 insert(conn,"supply_schedules",sid,id=f"{poi}/{i}",purchase_order_item_id=poi,quantity=row["quantity"],available_at=row["available_at"],status=row["status"],revision=1)
             inv=data["inventory"]
-            insert(conn,"inventory_lots",sid,id="LOT-SHAFT-AVAILABLE",material_id=data["material"],site="BKK",quantity=inv["physical"],quality_status="RELEASED")
+            lot_id=data["inventory_lot_id"]
+            insert(conn,"inventory_lots",sid,id=lot_id,material_id=data["material"],site=data["site"],quantity=inv["physical"]-inv["quarantined"],quality_status="RELEASED")
+            if inv["quarantined"]:
+                insert(conn,"inventory_lots",sid,id=lot_id+"-HOLD",material_id=data["material"],site=data["site"],quantity=inv["quarantined"],quality_status="QUARANTINED")
             insert(conn,"production_orders",sid,id="MO-OTHER",quantity=inv["reserved_for_other_demands"],priority=0)
-            insert(conn,"inventory_reservations",sid,id="RES-OTHER",lot_id="LOT-SHAFT-AVAILABLE",production_order_id="MO-OTHER",quantity=inv["reserved_for_other_demands"])
+            insert(conn,"inventory_reservations",sid,id="RES-OTHER",lot_id=lot_id,production_order_id="MO-OTHER",quantity=inv["reserved_for_other_demands"])
             for index,row in enumerate(data["production_requirements"]):
                 mo=row["production_order"]
                 insert(conn,"production_orders",sid,id=mo,quantity=row["required_quantity"],priority=index+1)
@@ -78,7 +78,7 @@ def seed_quality(conn,sid,data):
     for row in data["inventory_lots"]:
         material=row.get("material",row.get("material_id"))
         insert(conn,"materials",sid,id=material,description="Synthetic quality demo material",unit="pcs",material_type="COMPONENT")
-        insert(conn,"inventory_lots",sid,id=row["lot_id"],material_id=material,site=row.get("site","BKK"),quantity=row["physical_quantity"],quality_status=row.get("quality_status","QUARANTINED"))
+        insert(conn,"inventory_lots",sid,id=row["lot_id"],material_id=material,site=row["site"],quantity=row["physical_quantity"],quality_status=row.get("quality_status","QUARANTINED"))
     for row in data["shipments"]:
         insert(conn,"shipments",sid,id=row["shipment_id"],status=row["status"],planned_at=row.get("scheduled_at",data["analysis_time"]))
     for row in data["shipment_items"]:

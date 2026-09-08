@@ -39,7 +39,7 @@ Basisprofil ohne Redis; Queue-Profil optional. Versionen und Dependency-Lockfile
 - LOW hebt die Freigabepflicht für externe Aktionen nicht auf. Wait-Resume ist keine fachliche Autorisierung.
 - Versand-Timeout mit unbekanntem Ergebnis darf keine blinde Wiederholung auslösen. Keine pauschale Exactly-once-Zusage.
 - Eine Nachricht oder ein Ticket löst den fachlichen Incident nicht. MONITORING ist nicht RESOLVED.
-- Hero-Basis: 24 Fehlmenge, zwei betroffene MOs, €126.400, 88 CRITICAL. Bestätigter Split: 14 Fehlmenge, ein betroffener MO, €54.400, 69 HIGH. Diese Werte berechnen, nicht hardcoden.
+- Aktuelle Stahlstangen-Demo: 40 Fehlmenge, zwei betroffene MOs, €55.400, 83 CRITICAL. Bestätigter Split: 10 Fehlmenge, ein betroffener MO, €21.600, 56 HIGH. Diese Werte berechnen, nicht hardcoden.
 
 ## Tests und Änderungen
 
@@ -59,6 +59,6 @@ Liefere Commit-/Branch-Referenz, Startbefehle, echte Workflow-IDs/Zustände, Tes
 
 All shell commands are prefixed with `rtk`, as specified in `C:/Users/marvi/.codex/RTK.md`.
 
-## Superseded handoff
+## Current demo data
 
-The original AGENTS.md is preserved in `docs/archive/initial-handoff/AGENTS.md`. The subsequently supplied CODEX_BUILD_SPEC.md and rules above supersede conflicting original requirements (including the old TypeScript engine, score 85/70, and automatic quality block). Do not implement the archived plan.
+Use only the current ordinary manufacturing examples. The user explicitly requested complete removal of earlier reference-product and invented-brand fixtures.

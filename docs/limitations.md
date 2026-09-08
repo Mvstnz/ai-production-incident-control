@@ -6,43 +6,15 @@ file is not a passed test. `IMPLEMENTED`, `LOCAL_TESTED`, `TARGET_TESTED`,
 acceptance matrix and `evidence/` for final scenario status; these notes do not
 upgrade an unexecuted test.
 
-## Connected sandbox blockers
+## Connected sandbox
 
-The authorized n8n MCP endpoint is
-`https://mvstnz1.app.n8n.cloud/mcp-server/http`. Connector discovery and creation
-of the unpublished project probe `Fm2mFkzgF0jwFJEA` succeeded. All ten core
-workflows were subsequently created and read back; their actual IDs and
-inactive states are in [the inventory](implementation/workflow-inventory.md).
-Automatic approval
-review rejected execute and update operations with: `MCP tool call requires
-approval, but approval policy is never`. This is a concrete tool-approval
-restriction, not a successfully tested workflow or an inferred n8n permission.
-No alternative transport is used to bypass that rejection.
+Vercel serves the dashboard and authenticated APIs; Supabase stores state in private schemas. All ten n8n cloud workflows are published. Three current examples and six approved actions were executed; see [hosting](implementation/hosting.md).
 
-The cloud instance cannot resolve local Compose names such as `ops-api` or
-`mock-erp`. Target application execution requires an authorized reachable HTTPS
-Operations/ERP route and purpose-specific credentials. No public tunnel,
-firewall opening or paid infrastructure was created. The cloud instance's exact
-release was not exposed by the discovered connector; local image versions do
-not prove target compatibility.
-
-Creation and graph readback do not satisfy the requirement for executed target workflows.
-Local publication/import and local execution evidence must remain separate from
-AC31 target acceptance.
+The n8n instance is a trial. Continued availability depends on that account. Hosted recovery uses immediate wakeups and an hourly fallback. There is no availability SLA.
 
 ## AI evaluation
 
-`LIVE_EVAL_NOT_RUN`: no authorized configured live-model credential, model and
-call/cost budget were available for the recorded evaluation. Real email and
-Slack delivery are also untested and disabled.
-
-The fixture evaluation has 50 frozen synthetic cases, 30 development and 20
-holdout. It verifies deterministic normalization and safe review decisions, not
-general free-text intelligence. Mandatory-review recall is 100% in the recorded
-run, while automatic processing is 33.3% development and 40% holdout. Type
-accuracy is 86.7% and 90%; the live-model 95% target is not demonstrated. The
-full result includes denominators, field matches, latency and zero provider
-calls in [evaluation evidence](../evidence/evaluations/README.md).
+**LIVE_EVAL_NOT_RUN**: the deployed configuration uses deterministic fixture extraction and zero model calls. The 50 frozen development/holdout cases measure those decisions, not general model accuracy. See [fixture evaluation](../evidence/evaluations/fixture-v2-report.json) for exact outcomes and denominators.
 
 ## Business-model scope
 
@@ -83,6 +55,6 @@ Four automatic analysis attempts, leases, an outbox and recovery schedules are
 implemented design mechanisms. Their restart/race behavior counts as passed
 only when separately exercised. The n8n Wait clock is independent of the demo
 business clock. Redis/queue mode is optional and not part of the demonstrated
-base profile. Public hosting, load testing, backup restoration, disaster
+base profile. Load testing, backup restoration, disaster
 recovery, security certification and real-user production operation are outside
 the current evidence.

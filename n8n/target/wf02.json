@@ -1,13 +1,7 @@
 {
   "id": "BGz4AwLb1Y6S4Zfv",
   "name": "APIC | WF02 | API and Form Intake",
-  "active": false,
-  "isArchived": false,
-  "versionId": "42fc0a86-e6dd-4a2e-b5ab-31d9c39f4a2c",
-  "activeVersionId": null,
-  "createdAt": "2026-09-07T11:39:33.040Z",
-  "updatedAt": "2026-09-07T11:39:33.040Z",
-  "description": "apic-portfolio: API and Form Intake. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+  "active": true,
   "nodes": [
     {
       "id": "4e7ef72c-5962-448c-aca4-bab722dcac9b",
@@ -19,7 +13,7 @@
         -270
       ],
       "parameters": {
-        "content": "## WF02 · API and Form Intake\nAuthenticated intake → durable event/job transaction → 202 → asynchronous analysis. Idempotency lives in PostgreSQL, not this execution.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "content": "## WF02 · API and Form Intake\nAuthenticated intake → durable event/job transaction → 202 → asynchronous analysis. Idempotency lives in PostgreSQL, not this execution.\n\nSynthetic data · simulated AI · hosted synthetic sandbox.",
         "height": 190,
         "width": 700
       }
@@ -39,10 +33,16 @@
         "authentication": "headerAuth",
         "responseMode": "responseNode",
         "options": {
-          "allowedOrigins": "http://127.0.0.1:5173"
+          "allowedOrigins": "https://ai-production-incident-control-dash.vercel.app"
         }
       },
-      "webhookId": "784b6639-5151-4f61-b055-cdd2320b1231"
+      "webhookId": "784b6639-5151-4f61-b055-cdd2320b1231",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "cVh9gXbvqwX7wfDa",
+          "name": "APIC | Hosted intake webhook"
+        }
+      }
     },
     {
       "id": "66f8215b-5121-4f67-be89-e851b69f6385",
@@ -70,7 +70,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://configure-apic-ops.invalid/internal/source-events",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/source-events",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -78,6 +78,12 @@
         "jsonBody": "={{ $json }}",
         "options": {
           "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
         }
       }
     },
@@ -178,7 +184,13 @@
           }
         }
       },
-      "webhookId": "59480404-f9aa-4422-bf2d-14e65b6febe7"
+      "webhookId": "59480404-f9aa-4422-bf2d-14e65b6febe7",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "gpJzkFVicv4v0K7P",
+          "name": "APIC | Hosted supplier form"
+        }
+      }
     },
     {
       "id": "7c24c115-31e9-40c2-8f46-4b3cf119890b",
@@ -192,7 +204,7 @@
       "parameters": {
         "mode": "runOnceForAllItems",
         "language": "javaScript",
-        "jsCode": "const d=$json; return [{json:{schema_version:'1.0',scope_id:'928d1daf-6ffe-54e4-8cf3-5d4032986821',source:'FORM',source_account_id:'apic-authenticated-form',source_id:'form-'+$execution.id,received_at:$now.toISO(),correlation_id:'00000000-0000-4000-8000-'+String($execution.id).padStart(12,'0'),sender:'operator@example.test',subject:'Structured supplier delay',content_text:'Authenticated structured supplier form',payload:{incident_type:'SUPPLIER_DELAY',purchase_order:d.purchase_order,purchase_order_item:d.purchase_order_item,material:d.material,confirmed_supply_schedule:[{quantity:Number(d.quantity),available_at:d.available_at,status:'CONFIRMED'}],reason:'Supplier form report'}}}];"
+        "jsCode": "const d=$json; return [{json:{schema_version:'1.0',scope_id:'df7540ff-dfa1-5883-9ea7-fdf4a4dd5e10',source:'FORM',source_account_id:'apic-authenticated-form',source_id:'form-'+$execution.id,received_at:$now.toISO(),correlation_id:'00000000-0000-4000-8000-'+String($execution.id).padStart(12,'0'),sender:'operator@example.test',subject:'Structured supplier delay',content_text:'Authenticated structured supplier form',payload:{incident_type:'SUPPLIER_DELAY',purchase_order:d.purchase_order,purchase_order_item:d.purchase_order_item,material:d.material,confirmed_supply_schedule:[{quantity:Number(d.quantity),available_at:d.available_at,status:'CONFIRMED'}],reason:'Supplier form report'}}}];"
       }
     },
     {
@@ -206,7 +218,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://configure-apic-ops.invalid/internal/source-events",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/source-events",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -214,6 +226,12 @@
         "jsonBody": "={{ $json }}",
         "options": {
           "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
         }
       }
     },
@@ -237,22 +255,6 @@
         "options": {
           "waitForSubWorkflow": false
         }
-      }
-    },
-    {
-      "id": "44c5cda6-dfaa-406a-8335-2ab8e3a6eddc",
-      "name": "Target Configuration BLOCKED",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -160,
-        -720
-      ],
-      "parameters": {
-        "content": "## BLOCKED — inactive / unpublished\nConfigure authorized Operations and ERP HTTPS endpoints and missing APIC credentials before any separately authorized execution.\n\nhttps://configure-apic-ops.invalid and https://configure-apic-erp.invalid are deliberately non-routable configuration placeholders. Preserve every endpoint path. Dynamic wakeup URLs must be backend-validated for the authorized n8n host and protected by APIC Webhook Intake.\n\nWorkflow settings (Asia/Bangkok, caller policy, retention and shared WF09 error routing) are pending: no documented SDK creation settings; update is blocked by the approval gate. WF09 must remain unpublished. No runtime test has run.",
-        "width": 980,
-        "height": 390,
-        "color": 3
       }
     }
   ],
@@ -337,8 +339,12 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": true
+    "availableInMCP": true,
+    "errorWorkflow": "KF1ttQVhDbDHBDmY",
+    "timezone": "Europe/Berlin",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "tags": []
 }
-

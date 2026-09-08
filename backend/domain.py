@@ -628,13 +628,16 @@ def extract_fixture(envelope: Json, snapshot: Json) -> Json:
         if _INJECTION.search(text) or _INJECTION.search(json.dumps(envelope.get("payload", {}))):
             raise DomainValidationError("Instruction-like untrusted content: prompt-injection review")
         if envelope.get("source") == "EMAIL":
-            if envelope.get("sender") != HERO["source_email"]["sender"]:
+            from backend.datasets import load_fixture
+            dataset = snapshot.get("data", {}).get("dataset", "fictional-v2")
+            supplied = load_fixture("SUPPLIER_DELAY", dataset)
+            if envelope.get("sender") != supplied["source_email"]["sender"]:
                 raise DomainValidationError("Unknown supplier sender: no verified fixture supplier association")
-            if text.replace("\r\n", "\n") != HERO["source_email"]["content_text"]:
+            if text.replace("\r\n", "\n") != supplied["source_email"]["content_text"]:
                 raise DomainValidationError("Unknown free text: fixture mode supports the exact supplied synthetic email only; live AI or structured input required")
-            facts = {"incident_type": "SUPPLIER_DELAY", **{k: HERO[k] for k in ("purchase_order", "purchase_order_item", "material")},
-                     "confirmed_supply_schedule": deepcopy(HERO["scenarios"][0]["confirmed_supply_schedule"]),
-                     "proposed_partial": deepcopy(HERO["scenarios"][0]["proposed_partial"]), "reason": "Heat treatment capacity problems"}
+            facts = {"incident_type": "SUPPLIER_DELAY", **{k: supplied[k] for k in ("purchase_order", "purchase_order_item", "material")},
+                     "confirmed_supply_schedule": deepcopy(supplied["scenarios"][0]["confirmed_supply_schedule"]),
+                     "proposed_partial": deepcopy(supplied["scenarios"][0]["proposed_partial"]), "reason": supplied.get("reason", "A broken delivery truck has delayed the steel rods needed for four mounting-frame orders.")}
             result["evidence"] = {key: {"value": deepcopy(value), "evidence": {"source": "content_text", "start": 0, "end": len(text), "quote": text}} for key, value in facts.items()}
         elif envelope.get("source") in ("API", "FORM"):
             facts = deepcopy(_required(envelope, "payload"))
@@ -686,12 +689,12 @@ def _date_in_quote(value: Any, quote: str, field: str) -> None:
     candidates = []
     for match in re.finditer(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})\b", quote):
         candidates.append(timestamp(match.group(0), field + " evidence"))
-    pattern = r"\b(\d{1,2}) (" + "|".join(_ENGLISH_MONTHS) + r") (\d{4}),? (\d{1,2}):(\d{2}) Bangkok time\b"
+    pattern = r"\b(\d{1,2}) (" + "|".join(_ENGLISH_MONTHS) + r") (\d{4}),? (\d{1,2}):(\d{2}) Berlin time\b"
     for match in re.finditer(pattern, quote, re.I):
         month = next(number for name, number in _ENGLISH_MONTHS.items() if name.lower() == match.group(2).lower())
         try:
             local = datetime(int(match.group(3)), month, int(match.group(1)), int(match.group(4)),
-                             int(match.group(5)), tzinfo=ZoneInfo("Asia/Bangkok"))
+                             int(match.group(5)), tzinfo=ZoneInfo("Europe/Berlin"))
         except ValueError:
             raise DomainValidationError(f"{field}: invalid date in evidence quote") from None
         candidates.append(local.astimezone(timezone.utc))
@@ -813,10 +816,19 @@ def _summary(impact: Json, risk: Json) -> str:
     if not impact.get("data_complete") or not risk.get("data_complete"):
         return "Manual review required. " + " ".join(impact.get("review_reasons", [])) + " " + risk.get("explanation", "")
     amount = Decimal(impact["affected_open_order_value_cents"]) / 100
-    return (f"{impact['incident_type']}: {len(impact['reviewed_production_orders'])} production orders reviewed; "
-            f"{len(impact['affected_production_orders'])} affected. Resource shortage: {impact['total_shortage']}. "
-            f"Affected open-order value: EUR {amount:,.2f}. Risk: {risk['risk_score']} / {risk['severity']}. "
-            "Synthetic ERP assessment; affected value is not a forecast revenue loss.")
+    if impact["incident_type"] == "QUALITY_ISSUE":
+        return (f"Quality issue affecting {len(impact.get('affected_sales_lines', []))} customer order items. "
+                f"{impact['total_shortage']} units require a quality decision. "
+                f"Value of affected customer orders: EUR {amount:,.2f}. Priority: {risk['risk_score']} / {risk['severity']}. "
+                "Keep the affected shipments on hold until the inspection outcome is resolved.")
+    topic = {"SUPPLIER_DELAY": "Delayed material delivery", "MACHINE_BREAKDOWN": "Machine outage",
+             "QUALITY_ISSUE": "Quality issue"}.get(impact["incident_type"], "Operational issue")
+    unit = "cutting hours" if impact["incident_type"] == "MACHINE_BREAKDOWN" else "units"
+    return (f"{topic}. {len(impact['reviewed_production_orders'])} production orders checked; "
+            f"{len(impact['affected_production_orders'])} affected. "
+            f"{impact['total_shortage']} {unit} are unavailable when needed. "
+            f"Value of affected customer orders: EUR {amount:,.2f}. Priority: {risk['risk_score']} / {risk['severity']}. "
+            "This order value shows exposure, not a predicted loss.")
 
 
 def validate_draft(candidate: str, impact: Json, risk: Json) -> Json:
@@ -838,7 +850,7 @@ def build_plan(impact: Json, risk: Json, incident_id: str, revision: int) -> Jso
         return plan
     base = {"incident_id": incident_id, "incident_revision": revision}
     plan["actions"].append({"action_type": "INTERNAL_TICKET", "required_role": None,
-                            "payload": {**base, "recipient": "operations@example.test", "title": f"{risk.get('severity')} incident {incident_id}", "body": summary}})
+                            "payload": {**base, "recipient": "operations@example.test", "title": "Production planning: review affected orders", "body": summary}})
     if not impact.get("data_complete") or not risk.get("data_complete"):
         plan["sop_ids"] = ["SOP-MANUAL-REVIEW-v1"]
         return plan
@@ -847,8 +859,8 @@ def build_plan(impact: Json, risk: Json, incident_id: str, revision: int) -> Jso
         plan["sop_ids"] = ["SOP-SUPPLIER-DELAY-v1"]
         role = "production_manager" if plan["manager_review_required"] else "purchasing"
         plan["actions"].append({"action_type": "SUPPLIER_EMAIL", "required_role": role,
-                                "payload": {**base, "recipient": "supplier@example.test", "subject": f"Availability confirmation requested — {incident_id} revision {revision}",
-                                            "body": "Dear Supplier,\n\n" + summary + "\n\nPlease confirm feasible material availability and any proposed split. An unconfirmed offer does not change our confirmed plan.\n\nSynthetic APIC purchasing team"}})
+                                "payload": {**base, "recipient": "supplier@example.test", "subject": "Please confirm material delivery and the proposed early shipment",
+                                            "body": "Dear Supplier,\n\n" + summary + "\n\nPlease confirm when the material will arrive and whether an early partial delivery is possible. We will update the production schedule once you confirm these dates.\n\nPurchasing team"}})
     elif incident_type == "MACHINE_BREAKDOWN":
         plan["sop_ids"] = ["SOP-MACHINE-BREAKDOWN-v1"]
         for proposal in impact.get("proposals", []):

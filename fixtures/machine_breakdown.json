@@ -1,23 +1,129 @@
 {
-  "fixture_version": "1.0",
+  "fixture_version": "2.0",
+  "dataset": "fictional-v2",
   "data_classification": "SYNTHETIC_ONLY",
-  "incident_type": "MACHINE_BREAKDOWN",
-  "analysis_time": "2026-10-10T08:00:00+07:00",
+  "provenance": "Invented exclusively for this portfolio. No reference products, customers or operating records.",
+  "analysis_time": "2026-11-09T08:00:00+01:00",
+  "business_timezone": "Europe/Berlin",
   "currency": "EUR",
+  "incident_type": "MACHINE_BREAKDOWN",
   "machines": [
-    {"machine_id": "CNC-01", "site": "BKK-DEMO", "capabilities": ["SHAFT_FINISH"]},
-    {"machine_id": "CNC-02", "site": "BKK-DEMO", "capabilities": ["SHAFT_FINISH"]}
+    {
+      "machine_id": "DEMO-SAW-01",
+      "site": "DEMO-NORTH-HALL",
+      "capabilities": [
+        "STEEL_BAR_CUTTING"
+      ],
+      "name": "Band saw S-01"
+    },
+    {
+      "machine_id": "DEMO-SAW-02",
+      "site": "DEMO-NORTH-HALL",
+      "capabilities": [
+        "STEEL_BAR_CUTTING"
+      ],
+      "name": "Band saw S-02"
+    },
+    {
+      "machine_id": "DEMO-DRILL-01",
+      "site": "DEMO-NORTH-HALL",
+      "capabilities": [
+        "DRILLING"
+      ],
+      "name": "Drill press B-01"
+    }
   ],
   "capacity_calendar": [
-    {"machine_id": "CNC-01", "start_at": "2026-10-11T08:00:00+07:00", "end_at": "2026-10-11T16:00:00+07:00", "available_hours": 8},
-    {"machine_id": "CNC-01", "start_at": "2026-10-13T08:00:00+07:00", "end_at": "2026-10-13T16:00:00+07:00", "available_hours": 8},
-    {"machine_id": "CNC-01", "start_at": "2026-10-14T08:00:00+07:00", "end_at": "2026-10-14T16:00:00+07:00", "available_hours": 8},
-    {"machine_id": "CNC-02", "start_at": "2026-10-11T08:00:00+07:00", "end_at": "2026-10-11T16:00:00+07:00", "available_hours": 8}
+    {
+      "machine_id": "DEMO-SAW-01",
+      "start_at": "2026-11-10T08:00:00+01:00",
+      "end_at": "2026-11-10T14:00:00+01:00",
+      "available_hours": 6
+    },
+    {
+      "machine_id": "DEMO-SAW-01",
+      "start_at": "2026-11-10T14:00:00+01:00",
+      "end_at": "2026-11-10T18:00:00+01:00",
+      "available_hours": 4
+    },
+    {
+      "machine_id": "DEMO-SAW-01",
+      "start_at": "2026-11-12T08:00:00+01:00",
+      "end_at": "2026-11-12T16:00:00+01:00",
+      "available_hours": 8
+    },
+    {
+      "machine_id": "DEMO-SAW-01",
+      "start_at": "2026-11-13T08:00:00+01:00",
+      "end_at": "2026-11-13T14:00:00+01:00",
+      "available_hours": 6
+    },
+    {
+      "machine_id": "DEMO-SAW-02",
+      "start_at": "2026-11-10T08:00:00+01:00",
+      "end_at": "2026-11-10T14:00:00+01:00",
+      "available_hours": 6
+    },
+    {
+      "machine_id": "DEMO-DRILL-01",
+      "start_at": "2026-11-10T08:00:00+01:00",
+      "end_at": "2026-11-10T18:00:00+01:00",
+      "available_hours": 10
+    }
   ],
   "production_operations": [
-    {"operation_id": "OP-301", "production_order": "MO-3001", "machine_id": "CNC-01", "site": "BKK-DEMO", "required_capability": "SHAFT_FINISH", "start_at": "2026-10-11T08:00:00+07:00", "end_at": "2026-10-11T16:00:00+07:00", "required_hours": 8, "sales_line": "SO-3001/10", "open_net_line_value_cents": 4800000, "customer_due_at": "2026-10-12T16:00:00+07:00", "strategic_customer": false},
-    {"operation_id": "OP-302", "production_order": "MO-3002", "machine_id": "CNC-01", "site": "BKK-DEMO", "required_capability": "SHAFT_FINISH", "start_at": "2026-10-14T08:00:00+07:00", "end_at": "2026-10-14T16:00:00+07:00", "required_hours": 8, "sales_line": "SO-3002/10", "open_net_line_value_cents": 1600000, "customer_due_at": "2026-10-15T16:00:00+07:00", "strategic_customer": false}
+    {
+      "operation_id": "DEMO-OP-CUT-61",
+      "production_order": "DEMO-MO-CUT-61",
+      "product": "Steel sections for mounting frames",
+      "machine_id": "DEMO-SAW-01",
+      "site": "DEMO-NORTH-HALL",
+      "required_capability": "STEEL_BAR_CUTTING",
+      "start_at": "2026-11-10T08:00:00+01:00",
+      "end_at": "2026-11-10T14:00:00+01:00",
+      "required_hours": 6,
+      "sales_line": "DEMO-SO-CUT-61/30",
+      "open_net_line_value_cents": 2740000,
+      "customer_due_at": "2026-11-11T16:00:00+01:00",
+      "strategic_customer": false
+    },
+    {
+      "operation_id": "DEMO-OP-CUT-62",
+      "production_order": "DEMO-MO-CUT-62",
+      "product": "Steel sections for mounting frames",
+      "machine_id": "DEMO-SAW-01",
+      "site": "DEMO-NORTH-HALL",
+      "required_capability": "STEEL_BAR_CUTTING",
+      "start_at": "2026-11-10T14:00:00+01:00",
+      "end_at": "2026-11-10T18:00:00+01:00",
+      "required_hours": 4,
+      "sales_line": "DEMO-SO-CUT-62/30",
+      "open_net_line_value_cents": 1380000,
+      "customer_due_at": "2026-11-11T16:00:00+01:00",
+      "strategic_customer": false
+    },
+    {
+      "operation_id": "DEMO-OP-CUT-63",
+      "production_order": "DEMO-MO-CUT-63",
+      "product": "Steel sections for mounting frames",
+      "machine_id": "DEMO-SAW-01",
+      "site": "DEMO-NORTH-HALL",
+      "required_capability": "STEEL_BAR_CUTTING",
+      "start_at": "2026-11-13T08:00:00+01:00",
+      "end_at": "2026-11-13T14:00:00+01:00",
+      "required_hours": 6,
+      "sales_line": "DEMO-SO-CUT-63/30",
+      "open_net_line_value_cents": 890000,
+      "customer_due_at": "2026-11-14T16:00:00+01:00",
+      "strategic_customer": false
+    }
   ],
-  "facts": {"incident_type": "MACHINE_BREAKDOWN", "machine_id": "CNC-01", "outage_start_at": "2026-10-11T08:00:00+07:00", "outage_end_at": "2026-10-13T08:00:00+07:00", "reason": "Verified synthetic spindle maintenance outage"},
-  "expected": {"required_hours": 16, "uncovered_hours": 8, "uncovered_resource_ratio": 0.5, "disruption_days": 2, "affected_open_order_value_cents": 4800000, "risk_score": 52, "severity": "HIGH"}
+  "facts": {
+    "incident_type": "MACHINE_BREAKDOWN",
+    "machine_id": "DEMO-SAW-01",
+    "outage_start_at": "2026-11-10T08:00:00+01:00",
+    "outage_end_at": "2026-11-12T08:00:00+01:00",
+    "reason": "Band saw S-01 has a broken drive belt and cannot cut steel bars for two days. Band saw S-02 has six free hours. Drill press B-01 cannot cut bars."
+  },
+  "description": "Steel sections for mounting frames"
 }

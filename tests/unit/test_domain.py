@@ -20,24 +20,24 @@ def fixture(name="hero_supplier_delay", scenario=0):
     if kind == "SUPPLIER_DELAY":
         facts = {"incident_type": kind, **{k: raw[k] for k in ("purchase_order", "purchase_order_item", "material")},
                  **{k: deepcopy(v) for k, v in raw["scenarios"][scenario].items() if k not in ("id", "expected")},
-                 "reason": "Heat treatment capacity problems"}
+                 "reason": "A broken delivery truck has delayed the steel rods needed for four mounting-frame orders."}
     return snapshot, facts
 
 
 @pytest.mark.parametrize("scenario,allocation,shortage,orders,value,score,severity", [
-    (0, [10, 4, 0], 24, ["MO-1002", "MO-1003"], 12640000, 88, "CRITICAL"),
-    (1, [10, 12, 2], 14, ["MO-1003"], 5440000, 69, "HIGH")])
+    (0, [18, 6, 0, 12], 40, ["DEMO-MO-FRAME-42", "DEMO-MO-FRAME-43"], 5540000, 83, "CRITICAL"),
+    (1, [18, 26, 10, 12], 10, ["DEMO-MO-FRAME-43"], 2160000, 56, "HIGH")])
 def test_hero(scenario, allocation, shortage, orders, value, score, severity):
     snapshot, facts = fixture(scenario=scenario)
     original = deepcopy((snapshot, facts))
     impact = evaluate_impact(snapshot, facts)
     risk = evaluate_risk(impact)
     assert impact["data_complete"] is True
-    assert impact["total_required"] == 38
-    assert impact["initial_available_inventory"] == 14
+    assert impact["total_required"] == 76
+    assert impact["initial_available_inventory"] == 24
     assert impact["allocations_at_need"] == allocation
     assert impact["total_shortage"] == shortage
-    assert impact["reviewed_production_orders"] == ["MO-1001", "MO-1002", "MO-1003"]
+    assert impact["reviewed_production_orders"] == ["DEMO-MO-FRAME-41", "DEMO-MO-FRAME-42", "DEMO-MO-FRAME-43", "DEMO-MO-FRAME-44"]
     assert impact["affected_production_orders"] == orders
     assert impact["affected_open_order_value_cents"] == value
     assert (risk["risk_score"], risk["severity"]) == (score, severity)
@@ -47,60 +47,60 @@ def test_hero(scenario, allocation, shortage, orders, value, score, severity):
 def test_unconfirmed_offer_is_separate_and_replaces_quantity():
     snapshot, facts = fixture()
     impact = evaluate_impact(snapshot, facts)
-    assert impact["confirmed_supply_quantity"] == 40
+    assert impact["confirmed_supply_quantity"] == 75
     hypothetical = impact["what_if"]["impact"]
-    assert hypothetical["confirmed_supply_quantity"] == 40
-    assert hypothetical["total_shortage"] == 14
-    assert impact["what_if"]["risk"]["risk_score"] == 69
+    assert hypothetical["confirmed_supply_quantity"] == 75
+    assert hypothetical["total_shortage"] == 10
+    assert impact["what_if"]["risk"]["risk_score"] == 56
     facts.pop("proposed_partial")
-    assert evaluate_impact(snapshot, facts)["total_shortage"] == 24
+    assert evaluate_impact(snapshot, facts)["total_shortage"] == 40
 
 
 def test_later_arrivals_cover_backlog_first_and_complete_orders():
     snapshot, facts = fixture()
     facts.pop("proposed_partial")
     facts["confirmed_supply_schedule"] = [
-        {"quantity": 8, "available_at": "2026-10-15T08:00:00+07:00", "status": "CONFIRMED"},
-        {"quantity": 32, "available_at": "2026-10-19T08:00:00+07:00", "status": "CONFIRMED"}]
+        {"quantity": 20, "available_at": "2026-11-14T08:00:00+01:00", "status": "CONFIRMED"},
+        {"quantity": 55, "available_at": "2026-11-16T08:00:00+01:00", "status": "CONFIRMED"}]
     result = evaluate_impact(snapshot, facts)
-    assert result["allocations_at_need"] == [10, 4, 0]
-    assert result["projected"][1]["full_cover_at"] == "2026-10-15T01:00:00Z"
-    assert result["projected"][2]["full_cover_at"] == "2026-10-19T01:00:00Z"
+    assert result["allocations_at_need"] == [18, 6, 0, 12]
+    assert result["projected"][1]["full_cover_at"] == "2026-11-14T07:00:00Z"
+    assert result["projected"][2]["full_cover_at"] == "2026-11-16T07:00:00Z"
 
 
 def test_priority_stable_id_and_same_time_receipts():
     snapshot, facts = fixture(scenario=1)
     for row in snapshot["data"]["production_requirements"]:
-        row["need_at"] = "2026-10-13T01:00:00Z"
+        row["need_at"] = "2026-11-11T07:00:00Z"
     snapshot["data"]["production_requirements"][2]["priority"] = 1
     result = evaluate_impact(snapshot, facts)
-    assert [r["production_order"] for r in result["projected"]] == ["MO-1003", "MO-1001", "MO-1002"]
-    assert result["allocations_at_need"] == [16, 8, 0]
+    assert [r["production_order"] for r in result["projected"]] == ["DEMO-MO-FRAME-43", "DEMO-MO-FRAME-41", "DEMO-MO-FRAME-42", "DEMO-MO-FRAME-44"]
+    assert result["allocations_at_need"] == [20, 18, 16, 0]
 
 
 def test_own_reservation_is_protected_without_double_subtraction():
     snapshot, facts = fixture()
-    snapshot["data"]["inventory"]["reserved_for_own_demands"] = {"MO-1003": 5}
+    snapshot["data"]["inventory"]["reserved_for_own_demands"] = {"DEMO-MO-FRAME-43": 5}
     result = evaluate_impact(snapshot, facts)
-    assert result["initial_available_inventory"] == 14
-    assert result["allocations_at_need"] == [9, 0, 5]
-    assert result["total_shortage"] == 24
+    assert result["initial_available_inventory"] == 24
+    assert result["allocations_at_need"] == [18, 1, 5, 12]
+    assert result["total_shortage"] == 40
 
 
 def test_lot_inventory_excludes_blocked_and_foreign_reservations():
     snapshot, facts = fixture()
     snapshot["data"]["inventory_lots"] = [
-        {"lot_id": "L1", "material": "SHAFT-DN300", "physical_quantity": 20, "quality_status": "RELEASED"},
-        {"lot_id": "L2", "material": "SHAFT-DN300", "physical_quantity": 100, "quality_status": "QUARANTINED"}]
+        {"lot_id": "L1", "material": "DEMO-ROD-20", "physical_quantity": 20, "quality_status": "RELEASED"},
+        {"lot_id": "L2", "material": "DEMO-ROD-20", "physical_quantity": 100, "quality_status": "QUARANTINED"}]
     snapshot["data"]["inventory_reservations"] = [
         {"lot_id": "L1", "quantity": 6, "production_order": "MO-OTHER"},
-        {"lot_id": "L1", "quantity": 5, "production_order": "MO-1003"}]
+        {"lot_id": "L1", "quantity": 5, "production_order": "DEMO-MO-FRAME-43"}]
     result = evaluate_impact(snapshot, facts)
-    assert result["allocations_at_need"] == [9, 0, 5]
-    assert result["total_shortage"] == 24
+    assert result["allocations_at_need"] == [9, 0, 5, 12]
+    assert result["total_shortage"] == 50
 
 
-@pytest.mark.parametrize("field,value", [("physical", -1), ("quarantined", 30), ("reserved_for_other_demands", 21), ("available_to_this_scope", 999)])
+@pytest.mark.parametrize("field,value", [("physical", -1), ("quarantined", 50), ("reserved_for_other_demands", 50), ("available_to_this_scope", 999)])
 def test_inventory_inconsistency_does_not_silently_clamp(field, value):
     snapshot, facts = fixture()
     snapshot["data"]["inventory"][field] = value
@@ -114,7 +114,7 @@ def test_unchanged_preexisting_delay_has_no_new_operational_impact():
     snapshot, facts = fixture()
     snapshot["data"]["original_supply_schedule"] = deepcopy(facts["confirmed_supply_schedule"])
     result = evaluate_impact(snapshot, facts)
-    assert result["total_shortage"] == 24
+    assert result["total_shortage"] == 40
     assert result["affected_production_orders"] == []
     assert result["projected"][1]["already_late_in_baseline"] is True
     assert evaluate_risk(result)["risk_score"] == 0
@@ -122,15 +122,16 @@ def test_unchanged_preexisting_delay_has_no_new_operational_impact():
 
 def test_preexisting_delay_worsened_is_identified():
     snapshot, facts = fixture()
-    snapshot["data"]["original_supply_schedule"][0]["available_at"] = "2026-10-18T08:00:00+07:00"
+    snapshot["data"]["original_supply_schedule"][0]["available_at"] = "2026-11-15T08:00:00+01:00"
     result = evaluate_impact(snapshot, facts)
-    assert result["affected_production_orders"] == ["MO-1002", "MO-1003"]
+    assert result["affected_production_orders"] == ["DEMO-MO-FRAME-42", "DEMO-MO-FRAME-43"]
     assert result["projected"][1]["already_late_in_baseline"] is True
 
 
 def test_sales_line_union_and_full_open_position_convention():
     snapshot, facts = fixture()
     rows = snapshot["data"]["production_requirements"]
+    rows[1]["open_net_line_value_cents"] = 7200000
     rows[2].update(sales_line=rows[1]["sales_line"], open_net_line_value_cents=7200000, strategic_customer=True)
     result = evaluate_impact(snapshot, facts)
     assert result["affected_open_order_value_cents"] == 7200000
@@ -140,12 +141,12 @@ def test_sales_line_union_and_full_open_position_convention():
 def test_non_one_to_one_production_sales_mapping():
     snapshot, facts = fixture()
     snapshot["data"]["production_sales_allocations"] = [
-        {"production_order": "MO-1002", "sales_line": "SHARED/10", "quantity": 4},
-        {"production_order": "MO-1002", "sales_line": "SECOND/10", "quantity": 8},
-        {"production_order": "MO-1003", "sales_line": "SHARED/10", "quantity": 16}]
+        {"production_order": "DEMO-MO-FRAME-42", "sales_line": "SHARED/10", "quantity": 4},
+        {"production_order": "DEMO-MO-FRAME-42", "sales_line": "SECOND/10", "quantity": 8},
+        {"production_order": "DEMO-MO-FRAME-43", "sales_line": "SHARED/10", "quantity": 16}]
     snapshot["data"]["sales_order_items"] = [
-        {"sales_line": "SHARED/10", "open_net_line_value_cents": 12300, "customer_due_at": "2026-10-16T01:00:00Z", "strategic_customer": False},
-        {"sales_line": "SECOND/10", "open_net_line_value_cents": 4500, "customer_due_at": "2026-10-16T01:00:00Z", "strategic_customer": True}]
+        {"sales_line": "SHARED/10", "open_net_line_value_cents": 12300, "customer_due_at": "2026-11-15T07:00:00Z", "strategic_customer": False},
+        {"sales_line": "SECOND/10", "open_net_line_value_cents": 4500, "customer_due_at": "2026-11-15T07:00:00Z", "strategic_customer": True}]
     result = evaluate_impact(snapshot, facts)
     assert result["affected_sales_lines"] == ["SECOND/10", "SHARED/10"]
     assert result["affected_open_order_value_cents"] == 16800
@@ -154,7 +155,7 @@ def test_non_one_to_one_production_sales_mapping():
 def test_aggregate_rejects_conflict_and_scopes_excludes_history():
     base = evaluate_impact(*fixture())
     other = deepcopy(base)
-    other["sales_line_values"]["SO-2001/10"] += 1
+    other["sales_line_values"]["DEMO-SO-FRAME-42/20"] += 1
     assert aggregate_values([base, other])["data_complete"] is False
     other["scope_id"] = "foreign-scope"
     assert aggregate_values([base, other])["affected_open_order_value_cents"] is None
@@ -174,7 +175,7 @@ def test_mixed_or_incomplete_snapshots(path, value):
     assert evaluate_impact(snapshot, facts)["data_complete"] is False
 
 
-@pytest.mark.parametrize("bad", ["2026-10-19", "19 October", "2026-10-19T08:00:00", "next Friday", "2026-02-30T00:00:00Z"])
+@pytest.mark.parametrize("bad", ["2026-11-18", "19 October", "2026-11-18T08:00:00", "next Friday", "2026-02-30T00:00:00Z"])
 def test_ambiguous_dates_are_review(bad):
     snapshot, facts = fixture()
     facts["confirmed_supply_schedule"][0]["available_at"] = bad
@@ -182,7 +183,7 @@ def test_ambiguous_dates_are_review(bad):
 
 
 def test_timezone_equivalence_and_zero_demand():
-    assert timestamp("2026-10-10T08:00:00+07:00") == timestamp("2026-10-10T01:00:00Z")
+    assert timestamp("2026-11-09T08:00:00+01:00") == timestamp("2026-11-09T07:00:00Z")
     snapshot, facts = fixture()
     snapshot["data"]["production_requirements"] = []
     impact = evaluate_impact(snapshot, facts)
@@ -233,12 +234,12 @@ def test_machine_gap_and_qualified_unreserved_alternative():
     impact = evaluate_impact(snapshot, facts)
     risk = evaluate_risk(impact)
     assert impact["required_hours"] == 16
-    assert impact["uncovered_hours"] == 8
-    assert impact["uncovered_resource_ratio"] == .5
+    assert impact["uncovered_hours"] == 10
+    assert impact["uncovered_resource_ratio"] == .625
     assert impact["disruption_days"] == 2
-    assert impact["affected_open_order_value_cents"] == 4800000
+    assert impact["affected_open_order_value_cents"] == 4120000
     assert impact["proposals"][0]["capacity_reserved"] is False
-    assert risk["risk_score"] == 52
+    assert risk["risk_score"] == 62
     assert risk["severity"] == "HIGH"
     plan = build_plan(impact, risk, "incident", 1)
     assert plan["actions"][1]["required_role"] == "production_manager"
@@ -252,9 +253,9 @@ def test_invalid_machine_alternative_not_claimed(change):
     elif change == "capability":
         snapshot["data"]["machines"][1]["capabilities"] = []
     elif change == "capacity":
-        snapshot["data"]["capacity_calendar"][-1]["available_hours"] = 7
+        snapshot["data"]["capacity_calendar"][4]["available_hours"] = 5
     else:
-        snapshot["data"]["capacity_calendar"][-1].update(start_at="2026-10-15T08:00:00+07:00", end_at="2026-10-15T16:00:00+07:00")
+        snapshot["data"]["capacity_calendar"][4].update(start_at="2026-11-14T08:00:00+01:00", end_at="2026-11-14T16:00:00+01:00")
     impact = evaluate_impact(snapshot, facts)
     assert impact["qualified_alternative_available"] is False
     assert impact["proposals"] == []
@@ -264,8 +265,8 @@ def test_verified_quality_trace_requires_manager_approval():
     snapshot, facts = fixture("quality_issue")
     impact = evaluate_impact(snapshot, facts)
     risk = evaluate_risk(impact)
-    assert impact["blockable_quantity"] == 20
-    assert impact["trace"][0]["sales_line"] == "SO-4001/10"
+    assert impact["blockable_quantity"] == 48
+    assert impact["trace"][0]["sales_line"] == "DEMO-SO-PLATE-51/40"
     assert impact["usable_inventory_quantity"] == 0
     assert impact["hard_override"] == "VERIFIED_DEFECTIVE_LOT_PENDING_SHIPMENT"
     assert risk["severity"] == "CRITICAL"
@@ -288,9 +289,10 @@ def test_unverified_quality_is_urgent_review(verified, result):
 
 def test_already_shipped_quality_is_review_not_recall_or_block():
     snapshot, facts = fixture("quality_issue")
-    snapshot["data"]["shipments"][0]["status"] = "SHIPPED"
+    for shipment in snapshot["data"]["shipments"]:
+        shipment["status"] = "SHIPPED"
     impact = evaluate_impact(snapshot, facts)
-    assert impact["shipped_quantity"] == 20
+    assert impact["shipped_quantity"] == 48
     assert impact["blockable_quantity"] == 0
     assert impact["data_complete"] is False
     assert impact["hard_override"] is None
@@ -306,33 +308,14 @@ def test_unknown_free_text_and_prompt_injection_never_automated():
 
 
 def live_supplier_candidate():
-    return {
-        "incident_type": "SUPPLIER_DELAY",
-        "purchase_order": "4500192",
-        "purchase_order_item": "10",
-        "material": "SHAFT-DN300",
-        "confirmed_supply_schedule": [{
-            "quantity": 40,
-            "available_at": "2026-10-19T08:00:00+07:00",
-            "status": "CONFIRMED",
-            "evidence_quote": "New confirmed availability at your plant: 19 October 2026, 08:00 Bangkok time, for the full quantity of 40 pcs.",
-        }],
-        "proposed_partial": {
-            "quantity": 10,
-            "available_at": "2026-10-13T08:00:00+07:00",
-            "status": "PROPOSED",
-            "replaces_quantity_from_final_delivery": True,
-            "evidence_quote": "We may be able to make 10 of these 40 pcs available at your plant on 13 October 2026, 08:00 Bangkok time. This early partial delivery is not confirmed yet.",
-        },
-        "reason": "capacity problems in our heat treatment department",
-        "evidence": {
-            "purchase_order": "PO 4500192",
-            "purchase_order_item": "item 10",
-            "material": "Material: SHAFT-DN300",
-            "reason": "capacity problems in our heat treatment department",
-        },
-        "ambiguities": [],
-    }
+    paragraph = HERO["source_email"]["content_text"].split("\n\n")
+    return {"incident_type":"SUPPLIER_DELAY", "purchase_order":HERO["purchase_order"],
+        "purchase_order_item":HERO["purchase_order_item"], "material":HERO["material"],
+        "confirmed_supply_schedule":[{**HERO["scenarios"][0]["confirmed_supply_schedule"][0],"evidence_quote":paragraph[2]}],
+        "proposed_partial":{**HERO["scenarios"][0]["proposed_partial"],"evidence_quote":paragraph[3]},
+        "reason":"Our delivery truck has broken down.",
+        "evidence":{"purchase_order":"purchase order DEMO-PO-8264", "purchase_order_item":"item 20", "material":"DEMO-ROD-20",
+            "reason":"Our delivery truck has broken down."}, "ambiguities":[]}
 
 
 def test_live_extraction_accepts_only_grounded_erp_verified_supplier_facts():
@@ -342,13 +325,13 @@ def test_live_extraction_accepts_only_grounded_erp_verified_supplier_facts():
     response_metadata = {"request_id": "request-1", "finish_reason": "STOP", "total_tokens": 321}
     result = verify_live_extraction(envelope, snapshot, live_supplier_candidate(), "models/gemini-test", response_metadata)
     assert result["status"] == "VERIFIED"
-    facts["reason"] = "capacity problems in our heat treatment department"
+    facts["reason"] = "Our delivery truck has broken down."
     assert result["facts"] == facts
-    assert result["business_key"] == "SUPPLIER_DELAY:4500192:10"
+    assert result["business_key"] == "SUPPLIER_DELAY:DEMO-PO-8264:20"
     assert result["provider"] == "google-gemini"
     assert result["model"] == "models/gemini-test"
     assert result["response_metadata"] == response_metadata
-    assert result["evidence"]["purchase_order"]["evidence"]["quote"] == "PO 4500192"
+    assert result["evidence"]["purchase_order"]["evidence"]["quote"] == "purchase order DEMO-PO-8264"
 
 
 def test_live_extraction_accepts_explicit_null_as_no_reported_ambiguity():
@@ -365,9 +348,9 @@ def test_live_extraction_accepts_explicit_null_as_no_reported_ambiguity():
 def test_live_extraction_can_ground_a_fact_in_the_subject():
     snapshot, _ = fixture()
     candidate = live_supplier_candidate()
-    content = HERO["source_email"]["content_text"].replace("PO 4500192", "the purchase order")
+    content = HERO["source_email"]["content_text"].replace("purchase order DEMO-PO-8264", "the purchase order")
     result = verify_live_extraction(
-        {"source": "EMAIL", "sender": "supplier@example.test", "subject": "Update: PO 4500192",
+        {"source": "EMAIL", "sender": "supplier@example.test", "subject": "Update: purchase order DEMO-PO-8264",
          "content_text": content, "ai_mode": "live"}, snapshot, candidate, "models/gemini-test")
     assert result["status"] == "VERIFIED"
     assert result["evidence"]["purchase_order"]["evidence"]["source"] == "subject"
@@ -418,7 +401,7 @@ def test_email_and_structured_facts_have_same_business_identity():
     assert email["status"] == form["status"] == "VERIFIED"
     assert email["business_key"] == form["business_key"]
     assert email["facts"] == form["facts"]
-    assert email["evidence"]["purchase_order"]["value"] == "4500192"
+    assert email["evidence"]["purchase_order"]["value"] == "DEMO-PO-8264"
 
 
 def test_forged_draft_numbers_are_replaced_and_low_email_still_needs_approval():
@@ -426,7 +409,7 @@ def test_forged_draft_numbers_are_replaced_and_low_email_still_needs_approval():
     risk = evaluate_risk(impact)
     draft = validate_draft("No disruption: 1000 units available, LOW", impact, risk)
     assert draft["candidate_accepted"] is False
-    assert "88 / CRITICAL" in draft["text"]
+    assert "83 / CRITICAL" in draft["text"]
     risk.update(risk_score=10, severity="LOW")
     plan = build_plan(impact, risk, "incident", 1)
     assert plan["actions"][1]["action_type"] == "SUPPLIER_EMAIL"
@@ -436,13 +419,13 @@ def test_forged_draft_numbers_are_replaced_and_low_email_still_needs_approval():
 def test_no_expected_fixture_outputs_consumed():
     snapshot, facts = fixture()
     snapshot["data"]["expected"] = {"total_shortage": 9999, "risk_score": 3}
-    assert evaluate_risk(evaluate_impact(snapshot, facts))["risk_score"] == 88
+    assert evaluate_risk(evaluate_impact(snapshot, facts))["risk_score"] == 83
 
 
 def test_alternative_machine_existing_booking_prevents_double_use():
     snapshot, facts = fixture("machine_breakdown")
     other = deepcopy(snapshot["data"]["production_operations"][0])
-    other.update(operation_id="OTHER-OP", production_order="OTHER-MO", machine_id="CNC-02")
+    other.update(operation_id="OTHER-OP", production_order="OTHER-MO", machine_id="DEMO-SAW-02")
     snapshot["data"]["production_operations"].append(other)
     impact = evaluate_impact(snapshot, facts)
     assert impact["data_complete"] is True
@@ -452,7 +435,7 @@ def test_alternative_machine_existing_booking_prevents_double_use():
 
 def test_invalid_original_machine_booking_is_review():
     snapshot, facts = fixture("machine_breakdown")
-    snapshot["data"]["capacity_calendar"][0]["available_hours"] = 7
+    snapshot["data"]["capacity_calendar"][0]["available_hours"] = 5
     assert evaluate_impact(snapshot, facts)["data_complete"] is False
 
 
@@ -473,9 +456,9 @@ def test_severity_edges(values, expected):
 def released_quality():
     snapshot, facts = fixture("quality_issue")
     snapshot["data"]["inventory_lots"][0]["quality_status"] = "RELEASED"
-    snapshot["data"]["quality_dispositions"] = [{"disposition_id":"QD-100","lot_id":"LOT-Q100","inspection_id":"QI-100",
+    snapshot["data"]["quality_dispositions"] = [{"disposition_id":"QD-100","lot_id":"DEMO-LOT-PLATE-01","inspection_id":"DEMO-QI-PLATE-01",
         "verified":True,"result":"RELEASED","evidence":"Authorized synthetic quality reinspection confirms accepted disposition",
-        "decided_at":"2026-10-10T07:45:00+07:00"}]
+        "decided_at":"2026-11-09T07:45:00+01:00"}]
     return snapshot, facts
 
 
@@ -488,7 +471,7 @@ def test_quality_resolution_requires_verified_matching_disposition_and_released_
     assert impact["hard_override"] is None
     assert impact["blockable_quantity"] == 0
     assert impact["total_shortage"] == 0
-    assert impact["usable_inventory_quantity"] == 20
+    assert impact["usable_inventory_quantity"] == 48
     assert impact["affected_sales_lines"] == []
     assert evaluate_risk(impact)["risk_score"] == 0
     assert build_plan(impact,evaluate_risk(impact),"incident",1)["actions"] == []
@@ -496,8 +479,8 @@ def test_quality_resolution_requires_verified_matching_disposition_and_released_
 
 
 @pytest.mark.parametrize("key,value", [("verified",False),("inspection_id","QI-OTHER"),("lot_id","LOT-OTHER"),
-    ("result","PROPOSED"),("evidence",""),("decided_at","2026-10-09T08:00:00+07:00"),
-    ("decided_at","2026-10-11T08:00:00+07:00")])
+    ("result","PROPOSED"),("evidence",""),("decided_at","2026-11-08T08:00:00+01:00"),
+    ("decided_at","2026-11-10T08:00:00+01:00")])
 def test_unverified_mismatched_or_mistimed_disposition_cannot_resolve(key,value):
     snapshot, facts = released_quality()
     snapshot["data"]["quality_dispositions"][0][key] = value
@@ -514,4 +497,4 @@ def test_disposition_alone_does_not_release_blocked_inventory_or_shipped_trace()
     impact = evaluate_impact(snapshot,facts)
     assert impact["data_complete"] is False
     assert impact["has_operational_impact"] is True
-    assert impact["shipped_quantity"] == 20
+    assert impact["shipped_quantity"] == 30

@@ -2641,3 +2641,29 @@ td.date-cell {
     scroll-behavior: auto !important;
   }
 }
+.action-explanation {
+  padding: 4px 0 12px;
+}
+.action-description {
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 70ch;
+  font-weight: 500;
+  margin: 12px 0 18px;
+}
+.action-explanation .fields dd {
+  max-width: 76ch;
+  white-space: pre-wrap;
+  line-height: 1.65;
+}
+.source-original > summary {
+  cursor: pointer;
+  color: var(--accent, #24665e);
+  margin: 16px 0;
+}
+.approval-card > .json-details {
+  margin: 8px 24px 18px;
+}
+.fields + .json-details {
+  margin-top: 12px;
+}

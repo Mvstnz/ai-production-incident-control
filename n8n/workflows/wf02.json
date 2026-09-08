@@ -204,7 +204,7 @@
       "parameters": {
         "mode": "runOnceForAllItems",
         "language": "javaScript",
-        "jsCode": "const d=$json; return [{json:{schema_version:'1.0',scope_id:'928d1daf-6ffe-54e4-8cf3-5d4032986821',source:'FORM',source_account_id:'apic-authenticated-form',source_id:'form-'+$execution.id,received_at:$now.toISO(),correlation_id:'00000000-0000-4000-8000-'+String($execution.id).padStart(12,'0'),sender:'operator@example.test',subject:'Structured supplier delay',content_text:'Authenticated structured supplier form',payload:{incident_type:'SUPPLIER_DELAY',purchase_order:d.purchase_order,purchase_order_item:d.purchase_order_item,material:d.material,confirmed_supply_schedule:[{quantity:Number(d.quantity),available_at:d.available_at,status:'CONFIRMED'}],reason:'Supplier form report'}}}];"
+        "jsCode": "const d=$json; return [{json:{schema_version:'1.0',scope_id:'df7540ff-dfa1-5883-9ea7-fdf4a4dd5e10',source:'FORM',source_account_id:'apic-authenticated-form',source_id:'form-'+$execution.id,received_at:$now.toISO(),correlation_id:'00000000-0000-4000-8000-'+String($execution.id).padStart(12,'0'),sender:'operator@example.test',subject:'Structured supplier delay',content_text:'Authenticated structured supplier form',payload:{incident_type:'SUPPLIER_DELAY',purchase_order:d.purchase_order,purchase_order_item:d.purchase_order_item,material:d.material,confirmed_supply_schedule:[{quantity:Number(d.quantity),available_at:d.available_at,status:'CONFIRMED'}],reason:'Supplier form report'}}}];"
       }
     },
     {
@@ -339,7 +339,7 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "timezone": "Asia/Bangkok",
+    "timezone": "Europe/Berlin",
     "saveDataErrorExecution": "all",
     "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",

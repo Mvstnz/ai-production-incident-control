@@ -59,9 +59,10 @@ def summary(sid,i):
 hero={}
 def baseline():
     s,e,i=source('supplier-delay');hero.update(source=s,event=e,incident=i)
-    x=i['impact'];assert (x['total_required'],x['total_available'],x['total_shortage'])==(38,14,24)
-    assert len(x['reviewed_production_orders'])==3 and len(x['affected_production_orders'])==2
-    assert i['risk_score']==88 and i['severity']=='CRITICAL' and i['affected_open_order_value_cents']==12640000
+    x=i['impact'];assert (x['total_required'],x['total_available'],x['total_shortage'])==(76,36,40)
+    assert x['initial_available_inventory']==24
+    assert len(x['reviewed_production_orders'])==4 and len(x['affected_production_orders'])==2
+    assert i['risk_score']==83 and i['severity']=='CRITICAL' and i['affected_open_order_value_cents']==5540000
     assert x['proposals'] and x['what_if'];assert i['status']=='WAITING_APPROVAL'
     return summary(s['scope_id'],i)
 case('hero_baseline_and_proposed_partial',['AC03','AC04'],baseline)
@@ -79,8 +80,8 @@ case('approval_replay_early_decision_and_delivery',['AC14','AC15','AC27'],delive
 def split():
     sid=hero['source']['scope_id'];s,e,i=source('supplier-split',sid)
     assert i['id']==hero['incident']['id'] and i['revision']==2 and len(i['revisions'])==2
-    assert i['impact']['total_shortage']==14 and len(i['impact']['affected_production_orders'])==1
-    assert i['risk_score']==69 and i['severity']=='HIGH' and i['affected_open_order_value_cents']==5440000
+    assert i['impact']['total_shortage']==10 and len(i['impact']['affected_production_orders'])==1
+    assert i['risk_score']==56 and i['severity']=='HIGH' and i['affected_open_order_value_cents']==2160000
     return summary(sid,i)
 case('confirmed_split_replaces_supply_and_revises',['AC05','AC08'],split)
 
@@ -100,8 +101,8 @@ def duplicate():
 case('parallel_deduplication_and_cross_channel_correlation',['AC06','AC07'],duplicate)
 
 def machine():
-    s,e,i=source('machine-breakdown');sid=s['scope_id'];assert i['risk_score']==52 and i['severity']=='HIGH'
-    assert i['impact']['qualified_alternative_available'] is True
+    s,e,i=source('machine-breakdown');sid=s['scope_id'];assert i['risk_score']==62 and i['severity']=='HIGH'
+    assert i['impact']['qualified_alternative_available'] is False
     approve(sid);dispatch();actions=wait_actions(sid)
     return {**summary(sid,detail(sid,i['id'])),'actions':actions}
 case('machine_approved_mock_erp_reschedule',['AC24'],machine)

@@ -93,7 +93,7 @@ local n8n release does not establish the cloud instance's release.
 ## Time, money and reliability
 
 The scope clock supplies deterministic business time; timestamps include offsets
-and business display uses `Asia/Bangkok`. Worker leases and n8n Wait use runtime
+and business display uses `Europe/Berlin`. Worker leases and n8n Wait use runtime
 time. Advancing the demo clock does not alter n8n's internal clock.
 
 Resource arithmetic uses Decimal. EUR values are integer cents. Each affected
@@ -109,10 +109,4 @@ guarantee for external providers.
 
 ## Evidence boundaries
 
-[Domain test evidence](../evidence/test-results/domain.txt) and
-[fixture evaluation](../evidence/evaluations/README.md) are local evidence.
-[Environment discovery](implementation/environment-report.md) and the
-[runtime probe](implementation/n8n-runtime-probe.md) record connector capabilities
-and restrictions. Neither a deployed workflow nor a successful unit test proves
-an end-to-end target execution. Refer to the current acceptance matrix and
-workflow-run evidence for scenario-specific outcomes.
+Domain and fixture tests, local runtime tests and connected HTTPS execution are recorded separately in [hosting](implementation/hosting.md) and the current acceptance matrix. A deployed graph alone is not execution evidence.

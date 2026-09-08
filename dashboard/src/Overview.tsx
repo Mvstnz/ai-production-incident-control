@@ -11,7 +11,15 @@ import {
   Search,
   ShieldAlert,
 } from "lucide-react";
-import { date, label, money, scoped, type Incident, type Kpis } from "./api";
+import {
+  date,
+  incidentTitle,
+  label,
+  money,
+  scoped,
+  type Incident,
+  type Kpis,
+} from "./api";
 import { Badge, Empty, ErrorBox, Loading, Section, useQuery } from "./ui";
 import type { ViewProps } from "./App";
 
@@ -50,7 +58,7 @@ export function Overview({
   );
   const list =
     query.data?.items.filter((item) =>
-      `${item.number} ${item.title}`
+      `${item.number} ${item.title} ${incidentTitle(item)}`
         .toLowerCase()
         .includes(search.toLowerCase()),
     ) || [];
@@ -124,15 +132,15 @@ export function Overview({
           <span className="last-read">
             Last read{" "}
             {kpis.loadedAt.toLocaleTimeString("en-GB", {
-              timeZone: "Asia/Bangkok",
+              timeZone: "Europe/Berlin",
             })}{" "}
-            Bangkok
+            Berlin
           </span>
         )}
       </div>
       <Section
         title="Incident register"
-        subtitle="Current persisted assessments and response states"
+        subtitle="Current problems, business impact and next steps"
         action={
           <span className="count-label">
             {query.data?.total ?? "—"} incidents
@@ -208,7 +216,7 @@ export function Overview({
             </summary>
             <div>
               <label>
-                Updated after (Bangkok)
+                Updated after (Berlin)
                 <input
                   type="datetime-local"
                   value={filters.updated_after}
@@ -216,7 +224,7 @@ export function Overview({
                 />
               </label>
               <label>
-                Updated before (Bangkok)
+                Updated before (Berlin)
                 <input
                   type="datetime-local"
                   value={filters.updated_before}
@@ -252,13 +260,13 @@ export function Overview({
             action={
               <button className="button subtle" onClick={onDemo}>
                 <Play size={15} />
-                Start a guided demo
+                Browse examples
               </button>
             }
           >
             {Object.values(filters).some(Boolean) || search
-              ? "Adjust the filters to see other persisted incidents."
-              : "Run a synthetic scenario to follow its journey from intake to assessment and approval."}
+              ? "Adjust the filters to see other incidents."
+              : "Choose an example to follow its assessment and proposed response."}
           </Empty>
         ) : (
           <div className="table-scroll">
@@ -283,10 +291,8 @@ export function Overview({
                         className="incident-link"
                         href={`#/incidents/${item.id}`}
                       >
-                        <small>
-                          {item.number} <span>· Revision {item.revision}</span>
-                        </small>
-                        <strong>{item.title}</strong>
+                        <small>Assessment version {item.revision}</small>
+                        <strong>{incidentTitle(item)}</strong>
                         <span>{label(item.incident_type)}</span>
                       </a>
                     </td>
@@ -309,7 +315,7 @@ export function Overview({
                       <a
                         className="icon-button"
                         href={`#/incidents/${item.id}`}
-                        aria-label={`Open incident ${item.number}`}
+                        aria-label={`Open ${incidentTitle(item)}`}
                       >
                         <ArrowRight size={18} />
                       </a>

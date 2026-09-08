@@ -1,27 +1,16 @@
-From: Planning Team <planning@asia-precision.example>
-To: Demo Purchasing <purchasing@demo-plant.example>
-Date: Mon, 12 Oct 2026 08:00:00 +0700
-Message-ID: <supplier-delay-4500192-10-v1@asia-precision.example>
-Subject: Delivery Update - PO 4500192 / Item 10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+From: supplier@example.test
+To: operations@example.test
+Subject: Fictional dispatch notice | DEMO-PO-8264 / item 20
 
-Dear Purchasing Team,
+Hello North Hall planning team,
 
-Due to capacity problems in our heat treatment department, we cannot meet
-the confirmed delivery date for PO 4500192, item 10.
+This is a fictional training message from Demo Metal Supply.
+Our delivery truck has broken down. The affected item is DEMO-ROD-20, a steel rod, diameter 20 mm and length 2 m, on purchase order DEMO-PO-8264, item 20.
 
-Material: SHAFT-DN300
-Open order quantity: 40 pcs
-Original confirmed delivery: 12 October 2026, 08:00 Asia/Bangkok
-New confirmed delivery: 19 October 2026, 08:00 Asia/Bangkok
+The 75 pcs originally confirmed available at your plant on 2026-11-10T08:00:00+01:00 will now be available on 2026-11-16T08:00:00+01:00.
 
-We may be able to ship 10 pcs on 13 October 2026, 08:00 Asia/Bangkok.
-This partial shipment is not yet confirmed and would be part of the
-existing total of 40 pcs, not an additional quantity.
+A replacement truck may bring 30 pcs for availability at your plant on 2026-11-11T08:00:00+01:00. This is an unconfirmed proposal. If you confirm this split, the final delivery on 2026-11-16T08:00:00+01:00 becomes 45 pcs. The total remains 75 pcs.
 
-Best regards,
-Planning Team
-Asia Precision Components
+Please review the four mounting-frame production batches and keep the replacement-truck offer separate from confirmed supply.
 
-Synthetic portfolio fixture - not a real supplier message.
+Demo Metal Supply — invented portfolio supplier

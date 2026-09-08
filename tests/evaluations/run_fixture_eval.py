@@ -32,7 +32,7 @@ def critical_fields(facts):
 
 
 def main():
-    source = ROOT / "fixtures/evaluation-v1.json"
+    source = ROOT / "fixtures/evaluation-v2.json"
     digest = hashlib.sha256(source.read_bytes()).hexdigest()
     assert digest == source.with_suffix(".sha256").read_text(encoding="utf-8").strip(), "Frozen dataset changed"
     dataset = json.loads(source.read_text(encoding="utf-8"))
@@ -77,7 +77,7 @@ def main():
             "limitations":["Structured API/form validation and exact known-email mapping do not establish free-text LLM accuracy.",
                             "Unsupported free text is intentionally reviewed, so incident-type accuracy can be below the live-model target.",
                             "Transport deduplication belongs to integration tests; duplicate inputs here test deterministic normalization only."]}
-    destination=ROOT / "evidence/evaluations/fixture-v1-report.json"
+    destination=ROOT / "evidence/evaluations/fixture-v2-report.json"
     destination.parent.mkdir(parents=True,exist_ok=True)
     destination.write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"report":str(destination),"splits":splits,"live_evaluation":"LIVE_EVAL_NOT_RUN"},indent=2))

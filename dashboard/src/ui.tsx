@@ -7,6 +7,7 @@ import {
   X,
 } from "lucide-react";
 import { api, ApiError, label, text, type RecordData } from "./api";
+import { fieldValue, technicalField } from "./presentation";
 
 export function useQuery<T>(
   path: string | null,
@@ -144,7 +145,7 @@ export function ErrorBox({
   );
 }
 export function Loading({
-  children = "Reading persisted data…",
+  children = "Loading records…",
 }: {
   children?: ReactNode;
 }) {
@@ -190,15 +191,52 @@ export function Json({
   );
 }
 export function Fields({ data }: { data: RecordData }) {
+  const order = [
+    "recipient",
+    "subject",
+    "title",
+    "body",
+    "production_order",
+    "operation_id",
+    "machine_id",
+    "site",
+    "start_at",
+    "end_at",
+    "required_hours",
+    "capability",
+    "lot_id",
+    "quantity",
+    "inspection_id",
+    "shipment_item_ids",
+  ];
+  const visible = Object.entries(data)
+    .filter(([key, value]) => !technicalField(key, value))
+    .sort(
+      ([a], [b]) =>
+        (order.indexOf(a) < 0 ? 99 : order.indexOf(a)) -
+        (order.indexOf(b) < 0 ? 99 : order.indexOf(b)),
+    );
+  const technical = Object.fromEntries(
+    Object.entries(data).filter(([key, value]) => technicalField(key, value)),
+  );
   return (
-    <dl className="fields">
-      {Object.entries(data).map(([key, value]) => (
-        <div key={key}>
-          <dt>{label(key)}</dt>
-          <dd>{text(value)}</dd>
-        </div>
-      ))}
-    </dl>
+    <>
+      <dl className="fields">
+        {visible.map(([key, value]) => (
+          <div key={key}>
+            <dt>{label(key)}</dt>
+            <dd>
+              {key === "body" || key === "subject" || key === "title"
+                ? text(value)
+                : fieldValue(value, key)}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {Object.keys(technical).length > 0 && (
+        <Json title="Technical details" value={technical} />
+      )}
+    </>
   );
 }
 export function Section({

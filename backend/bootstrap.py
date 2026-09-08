@@ -7,8 +7,9 @@ from uuid import NAMESPACE_URL, uuid5
 from backend.db import transaction, uid
 from backend.security import passwords
 from backend.seed import ROOT, seed_scope
+from backend.datasets import dataset_name, demo_clock
 
-DEFAULT_SCOPE = str(uuid5(NAMESPACE_URL,"apic-portfolio/default-demo"))
+DEFAULT_SCOPE = str(uuid5(NAMESPACE_URL,"apic-portfolio/default-demo/fictional-v2"))
 
 
 def main():
@@ -31,7 +32,7 @@ def main():
             if not conn.execute("SELECT 1 FROM ops.users WHERE username=%s",(user["username"],)).fetchone():
                 conn.execute("INSERT INTO ops.users VALUES (%s,%s,%s,%s)",(uid(),user["username"],passwords.hash(user["password"]),user["role"]))
         admin=conn.execute("SELECT id FROM ops.users WHERE role='admin' LIMIT 1").fetchone()
-        conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,'APIC synthetic demo',%s,'2026-10-10T01:00:00Z') ON CONFLICT DO NOTHING",(DEFAULT_SCOPE,admin["id"]))
+        conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,'APIC · Invented manufacturing world',%s,%s) ON CONFLICT DO NOTHING",(DEFAULT_SCOPE,admin["id"],demo_clock()))
         conn.execute("INSERT INTO ops.memberships SELECT %s,id FROM ops.users ON CONFLICT DO NOTHING",(DEFAULT_SCOPE,))
         seed_scope(conn,DEFAULT_SCOPE)
         roles={r["rolname"] for r in conn.execute("SELECT rolname FROM pg_roles").fetchall()}

@@ -1,0 +1,64 @@
+{
+  "run_at": "2026-09-08T10:30:31.906708+00:00",
+  "status": "TARGET_TESTED",
+  "scope_id": "a8d0ca00-22d8-41aa-92f4-a606fa5748ea",
+  "public_scope_isolation": "PASS",
+  "repeated_dispatch_idempotent": "PASS",
+  "email_delivery": "database capture; no external mail",
+  "actions": [
+    {
+      "id": "3478ece4-25a1-4321-aef4-7a97f5113556",
+      "action_type": "INTERNAL_TICKET",
+      "status": "SUCCEEDED",
+      "attempts": 1,
+      "provider_id": "ticket-3478ece4-25a1-4321-aef4-7a97f5113556",
+      "execution_id": "90",
+      "workflow_id": "NwyqBStHsct30JQZ"
+    },
+    {
+      "id": "59efed61-9410-4319-9309-5d37435a9130",
+      "action_type": "SUPPLIER_EMAIL",
+      "status": "SUCCEEDED",
+      "attempts": 1,
+      "provider_id": "sandbox-mail-59efed61-9410-4319-9309-5d37435a9130",
+      "execution_id": "109",
+      "workflow_id": "NwyqBStHsct30JQZ"
+    },
+    {
+      "id": "71757f1b-bc8e-4d7a-a046-0525a89f0acf",
+      "action_type": "INTERNAL_TICKET",
+      "status": "SUCCEEDED",
+      "attempts": 1,
+      "provider_id": "ticket-71757f1b-bc8e-4d7a-a046-0525a89f0acf",
+      "execution_id": "105",
+      "workflow_id": "NwyqBStHsct30JQZ"
+    },
+    {
+      "id": "9eeed449-a18f-43a8-9629-66fc3f132bf8",
+      "action_type": "INTERNAL_TICKET",
+      "status": "SUCCEEDED",
+      "attempts": 1,
+      "provider_id": "ticket-9eeed449-a18f-43a8-9629-66fc3f132bf8",
+      "execution_id": "98",
+      "workflow_id": "NwyqBStHsct30JQZ"
+    },
+    {
+      "id": "b558089d-90f3-4d00-b5de-3038164e0338",
+      "action_type": "RESCHEDULE",
+      "status": "SUCCEEDED",
+      "attempts": 1,
+      "provider_id": "erp-b558089d-90f3-4d00-b5de-3038164e0338",
+      "execution_id": "111",
+      "workflow_id": "NwyqBStHsct30JQZ"
+    },
+    {
+      "id": "bc80465f-8bc5-4b47-83bb-49779387bf28",
+      "action_type": "QUALITY_BLOCK",
+      "status": "SUCCEEDED",
+      "attempts": 1,
+      "provider_id": "erp-bc80465f-8bc5-4b47-83bb-49779387bf28",
+      "execution_id": "107",
+      "workflow_id": "NwyqBStHsct30JQZ"
+    }
+  ]
+}

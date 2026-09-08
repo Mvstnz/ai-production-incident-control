@@ -29,6 +29,20 @@ export interface Incident {
   affected_open_order_value_cents: number | null;
   updated_at: string;
 }
+export function incidentTitle(incident: Pick<Incident, "title">): string {
+  const examples: [string, string][] = [
+    ["SUPPLIER_DELAY:DEMO-PO-8264:20", "Steel rods delayed"],
+    ["MACHINE_BREAKDOWN:DEMO-SAW-01", "Band saw S-01 stops"],
+    [
+      "QUALITY_ISSUE:DEMO-LOT-PLATE-01:DEMO-QI-PLATE-01",
+      "Mounting plates: holes too large",
+    ],
+  ];
+  return (
+    examples.find(([key]) => incident.title.endsWith(key))?.[1] ??
+    incident.title
+  );
+}
 export interface Action {
   id?: string;
   action_type: string;
@@ -60,6 +74,7 @@ export interface Plan {
 export interface Approval {
   id: string;
   incident_id: string;
+  incident_title?: string;
   revision: number;
   plan_id: string;
   plan_version: number;
@@ -190,11 +205,47 @@ export const string = (value: unknown): string =>
       ? JSON.stringify(value)
       : String(value);
 export const text = (value: unknown): string => string(value) || "—";
+const readableLabels: Record<string, string> = {
+  INTERNAL_TICKET: "Planning notification",
+  SUPPLIER_EMAIL: "Supplier message",
+  RESCHEDULE: "Reschedule cutting",
+  QUALITY_BLOCK: "Shipment hold",
+  QUALITY_RELEASE: "Quality release",
+  SUPPLIER_DELAY: "Delivery delay",
+  MACHINE_BREAKDOWN: "Machine outage",
+  QUALITY_ISSUE: "Quality issue",
+  SUCCEEDED: "Completed",
+  WAITING_APPROVAL: "Awaiting approval",
+  MANUAL_REVIEW: "Needs review",
+  DEAD_LETTER: "Needs intervention",
+  UNKNOWN_OUTCOME: "Outcome needs checking",
+  RETRY_SCHEDULED: "Retry scheduled",
+  NORMALIZE: "Checking reported facts",
+  PENDING: "Awaiting review",
+  VIEWER: "Read-only access",
+  RELIABILITY: "Processing history",
+  MACHINE_ID: "Machine",
+  OPERATION_ID: "Cutting job",
+  SITE: "Location",
+  REQUIRED_HOURS: "Time needed",
+  START_AT: "Start",
+  END_AT: "Finish",
+  LOT_ID: "Batch",
+  INSPECTION_ID: "Inspection",
+  SHIPMENT_ITEM_IDS: "Affected shipments",
+  INCIDENT_REVISION: "Assessment version",
+  PURCHASE_ORDER_ITEM: "Order item",
+  CAPABILITY: "Operation",
+  RECIPIENT: "To",
+  BODY: "Message",
+};
 export const label = (value: unknown): string =>
+  readableLabels[string(value).toUpperCase()] ||
   string(value)
     .toLowerCase()
     .replaceAll("_", " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase()) || "Unknown";
+    .replace(/\b\w/g, (c) => c.toUpperCase()) ||
+  "Unknown";
 export function money(value: unknown, currency = "EUR") {
   return value === null ||
     value === undefined ||
@@ -206,10 +257,19 @@ export function money(value: unknown, currency = "EUR") {
         maximumFractionDigits: 0,
       }).format(Number(value) / 100);
 }
+let displayTimezone = "Europe/Berlin";
+export function setDisplayTimezone(value: string) {
+  try {
+    new Intl.DateTimeFormat("en-GB", { timeZone: value });
+    displayTimezone = value;
+  } catch {
+    /* Keep the configured default. */
+  }
+}
 export function date(value: unknown) {
   if (!value || !Number.isFinite(Date.parse(string(value)))) return "—";
   return new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Asia/Bangkok",
+    timeZone: displayTimezone,
     day: "2-digit",
     month: "short",
     year: "numeric",

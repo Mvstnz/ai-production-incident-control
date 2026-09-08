@@ -1,14 +1,19 @@
-# Demonstration walkthrough
+# Demo guide
 
-1. Start Compose with `rtk proxy python scripts/bootstrap.py`. Sign in as production_manager using the generated local account. Choose **Run demo → Supplier delay**, which creates an isolated scope and enters the real WF01 webhook.
-2. Observe the durable source event and job progress. Open the incident: 38 demand, 14 coverage, 24 shortage, three orders reviewed but only two affected, €126,400, score88. The allocation table shows the original and revised completion of each order.
-3. Inspect the source, immutable snapshot, risk factor sources, SOP and exact plan. The proposed ten pieces remain outside the baseline; the what-if score69 is visibly hypothetical.
-4. Review the approval inbox. The decision is bound to the exact recipient, message, action parameters, revision, version and hash. Enter a rationale and confirm the reviewed payload. Observe execution in Reliability and the local Mailpit inbox. The incident remains MONITORING.
-5. Submit **Run confirmed split revision** from the assessment. The same incident receives a new revision; the previous evaluation remains visible, stale approvals cannot dispatch, and the current score becomes69 with€54,400 exposure.
-6. Run the machine demo in a new scope. Inspect the qualified alternative and score52. Approve synthetic rescheduling with production_manager.
-7. Sign in as quality_manager and run the quality demo. Inspect inspection/lot/shipment trace, then approve the exact quality block. A release requires a new evidence-backed proposal and a fresh approval. A message alone never resolves the case.
-8. Use Reliability to inspect real job/Wait execution IDs, pending work, known failures and UNKNOWN_OUTCOME actions. Admin-only failure controls demonstrate bounded retries and ambiguous writes. Do not blindly retry an action whose provider outcome is unknown.
+Open the live app and choose **Explore the workspace**. Select a case in the overview or the guided examples dialog.
 
-All figures are synthetic open-position values, not predicted losses or claimed savings. Simulated fixture evaluation and live LLM performance are separate; live has not run.
+## Steel rods
 
-For repeatable automated demonstrations, run the HTTP acceptance scripts. They create their own scopes; select the resulting scope ID to inspect exactly the stored evidence. A demo reset is limited to the owner of that synthetic scope and preserves the immutable audit trail.
+A broken truck delays 75 rods (20 mm diameter, 2 m length). Four mounting-frame orders require 18, 26, 20 and 12 rods. Of 42 rods on hand, 10 are reserved elsewhere and 8 are quarantined, leaving 24 available. The dated allocation is 18, 6, 0 and 12. Two orders are affected, with 40 rods missing at need and EUR 55,400 in open-position exposure. The score is 83 / CRITICAL.
+
+Inspect the supplier email, immutable ERP snapshot and factor sources. An offer to deliver 30 rods early remains hypothetical. An authorized user can submit a confirmed 30 + 45 split: total supply stays 75, shortage becomes 10, one order remains affected and the score becomes 56 / HIGH. The previous plan is superseded and requires fresh approval.
+
+## Broken band saw
+
+Band saw S-01 cannot cut steel bars for two days because its drive belt broke. Of 16 required hours, 10 are uncovered. Saw S-02 has six free hours and can handle one cutting job. Drill press B-01 is not an alternative. The score is 62 / HIGH. A production manager must approve the exact rescheduling proposal.
+
+## Oversized plate holes
+
+An inspection finds 11 mm holes in 48 mounting plates instead of the specified 10 mm. Two pending shipments need 30 and 18 plates from that batch. Another correctly drilled batch is separate. The verified defect creates a CRITICAL override; a quality manager must approve shipment blocking.
+
+Public visitors can inspect evidence and proposals. Authenticated operational roles can run isolated scenarios and approve their exact sandbox actions. Messages are captured, and all ERP actions affect invented records only.

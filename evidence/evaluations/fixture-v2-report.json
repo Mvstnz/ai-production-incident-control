@@ -1,0 +1,1105 @@
+{
+  "run_at": "2026-09-08T09:51:58.180652+00:00",
+  "status": "LOCAL_TESTED",
+  "evaluation_mode": "deterministic fixture and structured-input validation; not model evaluation",
+  "dataset_version": "2.0",
+  "dataset_sha256": "02eafc6faf7f027a9116aecbe50f7d46572d586ac6ebaf0ce83076d6fe2419ba",
+  "provider": "fixture",
+  "model": "fixture-v1",
+  "prompt_version": "extraction-v1.0",
+  "live_evaluation": "LIVE_EVAL_NOT_RUN",
+  "live_blocker": "No authorized configured live-model credential, model and call/cost budget available for this run",
+  "provider_calls": 0,
+  "measured_provider_cost_eur": 0,
+  "splits": {
+    "development": {
+      "cases": 30,
+      "decision_accuracy": {
+        "numerator": 30,
+        "denominator": 30,
+        "ratio": 1.0
+      },
+      "incident_type_accuracy": {
+        "numerator": 26,
+        "denominator": 30,
+        "ratio": 0.866667
+      },
+      "critical_facts_exact_match": {
+        "numerator": 10,
+        "denominator": 10,
+        "ratio": 1.0
+      },
+      "schema_valid_or_review": {
+        "numerator": 30,
+        "denominator": 30,
+        "ratio": 1.0
+      },
+      "mandatory_review_recall": {
+        "numerator": 20,
+        "denominator": 20,
+        "ratio": 1.0
+      },
+      "automatic_processing_rate": {
+        "numerator": 10,
+        "denominator": 30,
+        "ratio": 0.333333
+      },
+      "unsubstantiated_critical_facts_rate": {
+        "numerator": 0,
+        "denominator": 10,
+        "ratio": 0.0
+      },
+      "latency_ms": {
+        "p50": 0.12425,
+        "p95": 0.6254
+      },
+      "critical_field_metrics": {
+        "purchase_order": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        },
+        "purchase_order_item": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        },
+        "material": {
+          "numerator": 8,
+          "denominator": 8,
+          "ratio": 1.0
+        },
+        "dates": {
+          "numerator": 8,
+          "denominator": 8,
+          "ratio": 1.0
+        },
+        "quantities": {
+          "numerator": 8,
+          "denominator": 8,
+          "ratio": 1.0
+        }
+      }
+    },
+    "holdout": {
+      "cases": 20,
+      "decision_accuracy": {
+        "numerator": 20,
+        "denominator": 20,
+        "ratio": 1.0
+      },
+      "incident_type_accuracy": {
+        "numerator": 18,
+        "denominator": 20,
+        "ratio": 0.9
+      },
+      "critical_facts_exact_match": {
+        "numerator": 8,
+        "denominator": 8,
+        "ratio": 1.0
+      },
+      "schema_valid_or_review": {
+        "numerator": 20,
+        "denominator": 20,
+        "ratio": 1.0
+      },
+      "mandatory_review_recall": {
+        "numerator": 12,
+        "denominator": 12,
+        "ratio": 1.0
+      },
+      "automatic_processing_rate": {
+        "numerator": 8,
+        "denominator": 20,
+        "ratio": 0.4
+      },
+      "unsubstantiated_critical_facts_rate": {
+        "numerator": 0,
+        "denominator": 8,
+        "ratio": 0.0
+      },
+      "latency_ms": {
+        "p50": 0.0982,
+        "p95": 0.7736
+      },
+      "critical_field_metrics": {
+        "purchase_order": {
+          "numerator": 4,
+          "denominator": 4,
+          "ratio": 1.0
+        },
+        "purchase_order_item": {
+          "numerator": 4,
+          "denominator": 4,
+          "ratio": 1.0
+        },
+        "material": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        },
+        "dates": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        },
+        "quantities": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "APIC-EVAL-v2-01",
+      "split": "development",
+      "scenario": "Known supplier email and proposed partial",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 3.779,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-02",
+      "split": "development",
+      "scenario": "Supplier structured API",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.6254,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-03",
+      "split": "development",
+      "scenario": "Supplier structured form",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.6507,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-04",
+      "split": "development",
+      "scenario": "Confirmed 30 plus 45 split",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.2862,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-05",
+      "split": "development",
+      "scenario": "Supplier missing PO item",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1178,
+      "review_reasons": [
+        "purchase_order_item: verified value is missing"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-06",
+      "split": "development",
+      "scenario": "Supplier missing PO",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1049,
+      "review_reasons": [
+        "purchase_order: verified value is missing"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-07",
+      "split": "development",
+      "scenario": "ERP material mismatch",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1037,
+      "review_reasons": [
+        "material: no unique matching ERP purchase-order item"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-08",
+      "split": "development",
+      "scenario": "Supplier date omits year",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1141,
+      "review_reasons": [
+        "confirmed_supply_schedule[0].available_at: full date with year, time and UTC offset required"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-09",
+      "split": "development",
+      "scenario": "Relative supplier date",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1635,
+      "review_reasons": [
+        "confirmed_supply_schedule[0].available_at: full date with year, time and UTC offset required"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-10",
+      "split": "development",
+      "scenario": "Negative supplier quantity",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.2756,
+      "review_reasons": [
+        "confirmed_supply_schedule[0].quantity: finite nonnegative value required"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-11",
+      "split": "development",
+      "scenario": "Supplier quantity exceeds PO",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1265,
+      "review_reasons": [
+        "Supply schedule exceeds open PO quantity; split must replace final arrival"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-12",
+      "split": "development",
+      "scenario": "Proposed arrival in confirmed baseline",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.106,
+      "review_reasons": [
+        "confirmed_supply_schedule: a proposed arrival cannot enter confirmed supply"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-13",
+      "split": "development",
+      "scenario": "Email instruction injection",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": false,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0956,
+      "review_reasons": [
+        "Instruction-like untrusted content: prompt-injection review"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-14",
+      "split": "development",
+      "scenario": "Unknown supplier identity",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": false,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.4171,
+      "review_reasons": [
+        "Unknown supplier sender: no verified fixture supplier association"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-15",
+      "split": "development",
+      "scenario": "Unmapped free text",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": false,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1894,
+      "review_reasons": [
+        "Unknown free text: fixture mode supports the exact supplied synthetic email only; live AI or structured input required"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-16",
+      "split": "development",
+      "scenario": "Verified machine API",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "dates": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.3725,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-17",
+      "split": "development",
+      "scenario": "Verified machine form",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "dates": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.2906,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-18",
+      "split": "development",
+      "scenario": "Machine missing identity",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0885,
+      "review_reasons": [
+        "machine_id: verified value is missing"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-19",
+      "split": "development",
+      "scenario": "Machine restoration unknown",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0682,
+      "review_reasons": [
+        "outage_end_at: full date with year, time and UTC offset required"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-20",
+      "split": "development",
+      "scenario": "Machine reversed interval",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.122,
+      "review_reasons": [
+        "outage_end_at must follow outage_start_at"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-21",
+      "split": "development",
+      "scenario": "Verified quality form",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "material": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.1284,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-22",
+      "split": "development",
+      "scenario": "Verified quality API",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "material": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.1157,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-23",
+      "split": "development",
+      "scenario": "Unrecognized inspection",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0769,
+      "review_reasons": [
+        "Urgent review: no verified failed ERP quality inspection"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-24",
+      "split": "development",
+      "scenario": "Unverified failed inspection",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1129,
+      "review_reasons": [
+        "Urgent review: no verified failed ERP quality inspection"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-25",
+      "split": "development",
+      "scenario": "Quality quantity contradiction",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0781,
+      "review_reasons": [
+        "Reported defect quantity/type disagrees with the verified inspection"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-26",
+      "split": "development",
+      "scenario": "Mixed ERP revision",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1189,
+      "review_reasons": [
+        "Mixed ERP snapshot: inconsistent erp_revision"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-27",
+      "split": "development",
+      "scenario": "Duplicate PO-position candidates",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.1441,
+      "review_reasons": [
+        "Purchase-order item is ambiguous in ERP"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-28",
+      "split": "development",
+      "scenario": "Injected recipient in structured facts",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": false,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0628,
+      "review_reasons": [
+        "Unknown incident type or unsupported fact/action fields"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-29",
+      "split": "development",
+      "scenario": "Equivalent explicit UTC schedule",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.6063,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-30",
+      "split": "development",
+      "scenario": "Supplier without an early offer",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.2409,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-31",
+      "split": "holdout",
+      "scenario": "Holdout known email with CRLF",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.9231,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-32",
+      "split": "holdout",
+      "scenario": "Holdout duplicate transport payload",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.7736,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-33",
+      "split": "holdout",
+      "scenario": "Holdout confirmed split API",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.2555,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-34",
+      "split": "holdout",
+      "scenario": "Holdout newer confirmed date",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "purchase_order": true,
+        "purchase_order_item": true,
+        "material": true,
+        "dates": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.5614,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-35",
+      "split": "holdout",
+      "scenario": "Holdout missing position",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0986,
+      "review_reasons": [
+        "purchase_order_item: verified value is missing"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-36",
+      "split": "holdout",
+      "scenario": "Holdout unknown PO",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0902,
+      "review_reasons": [
+        "purchase_order: no unique matching ERP purchase-order item"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-37",
+      "split": "holdout",
+      "scenario": "Holdout relative date",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0988,
+      "review_reasons": [
+        "confirmed_supply_schedule[0].available_at: full date with year, time and UTC offset required"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-38",
+      "split": "holdout",
+      "scenario": "Holdout overordered quantity",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0978,
+      "review_reasons": [
+        "Supply schedule exceeds open PO quantity; split must replace final arrival"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-39",
+      "split": "holdout",
+      "scenario": "Holdout code instruction",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": false,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0034,
+      "review_reasons": [
+        "Instruction-like untrusted content: prompt-injection review"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-40",
+      "split": "holdout",
+      "scenario": "Holdout required unsupported attachment",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": false,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0033,
+      "review_reasons": [
+        "Attachments are unsupported; required attachment facts need manual review"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-41",
+      "split": "holdout",
+      "scenario": "Holdout independent machine report",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "dates": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.2937,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-42",
+      "split": "holdout",
+      "scenario": "Holdout duplicate machine report",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "dates": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.2701,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-43",
+      "split": "holdout",
+      "scenario": "Holdout unknown outage end",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0686,
+      "review_reasons": [
+        "outage_end_at: full date with year, time and UTC offset required"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-44",
+      "split": "holdout",
+      "scenario": "Holdout missing machine identity",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0604,
+      "review_reasons": [
+        "machine_id: verified value is missing"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-45",
+      "split": "holdout",
+      "scenario": "Holdout independent quality report",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "material": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.1143,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-46",
+      "split": "holdout",
+      "scenario": "Holdout repeated quality report",
+      "status": "VERIFIED",
+      "expected_status": "VERIFIED",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": true,
+      "field_exact_matches": {
+        "material": true,
+        "quantities": true
+      },
+      "mandatory_review": false,
+      "schema_valid": true,
+      "latency_ms": 0.1086,
+      "review_reasons": [],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-47",
+      "split": "holdout",
+      "scenario": "Holdout unknown inspection ID",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.076,
+      "review_reasons": [
+        "Urgent review: no verified failed ERP quality inspection"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-48",
+      "split": "holdout",
+      "scenario": "Holdout defect contradiction",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0806,
+      "review_reasons": [
+        "Reported defect quantity/type disagrees with the verified inspection"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-49",
+      "split": "holdout",
+      "scenario": "Holdout mixed snapshot revision",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0598,
+      "review_reasons": [
+        "Mixed ERP snapshot: inconsistent erp_revision"
+      ],
+      "unsubstantiated_automatic_facts": false
+    },
+    {
+      "id": "APIC-EVAL-v2-50",
+      "split": "holdout",
+      "scenario": "Holdout ambiguous position candidates",
+      "status": "MANUAL_REVIEW",
+      "expected_status": "MANUAL_REVIEW",
+      "decision_correct": true,
+      "incident_type_correct": true,
+      "facts_exact_match": null,
+      "field_exact_matches": {},
+      "mandatory_review": true,
+      "schema_valid": true,
+      "latency_ms": 0.0926,
+      "review_reasons": [
+        "Purchase-order item is ambiguous in ERP"
+      ],
+      "unsubstantiated_automatic_facts": false
+    }
+  ],
+  "limitations": [
+    "Structured API/form validation and exact known-email mapping do not establish free-text LLM accuracy.",
+    "Unsupported free text is intentionally reviewed, so incident-type accuracy can be below the live-model target.",
+    "Transport deduplication belongs to integration tests; duplicate inputs here test deterministic normalization only."
+  ]
+}

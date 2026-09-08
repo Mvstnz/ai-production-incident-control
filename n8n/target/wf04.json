@@ -1,13 +1,7 @@
 {
   "id": "JidtBtBq79j2UeUU",
   "name": "APIC | WF04 | ERP Impact Analysis",
-  "active": false,
-  "isArchived": false,
-  "versionId": "3470d691-bfde-4c40-afdc-ed8c6f9c5ee3",
-  "activeVersionId": null,
-  "createdAt": "2026-09-07T11:38:19.048Z",
-  "updatedAt": "2026-09-07T11:38:19.048Z",
-  "description": "apic-portfolio: ERP Impact Analysis. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+  "active": true,
   "nodes": [
     {
       "id": "bd124479-9173-4f2d-8df1-b8a03d3fdf09",
@@ -19,7 +13,7 @@
         -270
       ],
       "parameters": {
-        "content": "## WF04 · ERP Impact Analysis\nRead one immutable ERP snapshot → pure baseline/incident allocation → persist evidence. No formula duplication in n8n.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "content": "## WF04 · ERP Impact Analysis\nRead one immutable ERP snapshot → pure baseline/incident allocation → persist evidence. No formula duplication in n8n.\n\nSynthetic data · simulated AI · hosted synthetic sandbox.",
         "height": 190,
         "width": 700
       }
@@ -62,11 +56,23 @@
         200
       ],
       "parameters": {
-        "url": "={{ 'https://configure-apic-erp.invalid/erp/v1/snapshots/'+$json.snapshot_id+'?scope_id='+$json.scope_id }}",
+        "url": "={{ 'https://ai-production-incident-control-dash.vercel.app/erp/v1/snapshots/'+$json.snapshot_id+'?scope_id='+$json.scope_id }}",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "options": {
-          "timeout": 15000
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "neverError": true,
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vMiILuRjr0lDhqTo",
+          "name": "APIC | Hosted ERP read"
         }
       }
     },
@@ -81,14 +87,20 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://configure-apic-ops.invalid/internal/impact/evaluate",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/impact/evaluate",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ {snapshot:$json,facts:$('Impact Context').first().json.facts} }}",
+        "jsonBody": "={{ {snapshot:$json.body,facts:$('Impact Context').first().json.facts} }}",
         "options": {
           "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
         }
       }
     },
@@ -103,7 +115,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://configure-apic-ops.invalid/internal/impact/save",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/impact/save",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -112,22 +124,104 @@
         "options": {
           "timeout": 15000
         }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
+        }
       }
     },
     {
-      "id": "91310a21-f20c-4ae8-b552-db00e362e744",
-      "name": "Target Configuration BLOCKED",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
+      "id": "c8a13be5-3c0e-5827-8f9a-f3102486c5c4",
+      "name": "ERP Snapshot Read Succeeded",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
       "position": [
-        -160,
-        -720
+        1080,
+        200
       ],
       "parameters": {
-        "content": "## BLOCKED — inactive / unpublished\nConfigure authorized Operations and ERP HTTPS endpoints and missing APIC credentials before any separately authorized execution.\n\nhttps://configure-apic-ops.invalid and https://configure-apic-erp.invalid are deliberately non-routable configuration placeholders. Preserve every endpoint path. Dynamic wakeup URLs must be backend-validated for the authorized n8n host and protected by APIC Webhook Intake.\n\nWorkflow settings (Asia/Bangkok, caller policy, retention and shared WF09 error routing) are pending: no documented SDK creation settings; update is blocked by the approval gate. WF09 must remain unpublished. No runtime test has run.",
-        "width": 980,
-        "height": 390,
-        "color": 3
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7091eadc-2d9f-5972-af44-28cc05078269",
+              "leftValue": "={{ $json.statusCode>=200 && $json.statusCode<300 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "47bc5e5f-acad-5967-a224-b5ef8be35a8e",
+      "name": "Preserve ERP Retry Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1890,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const response=$json; const status=Number(response.statusCode); const raw=response.headers?.['retry-after']; const seconds=raw==null?null:Number(raw); return [{json:{...$('Impact Context').first().json,error_class:status===429||status>=500?'TRANSIENT':'PERMANENT',retry_after:Number.isFinite(seconds)?seconds:null,message:'ERP snapshot HTTP '+status}}];"
+      }
+    },
+    {
+      "id": "b990d3b8-fcdb-5ed4-98fa-c917da134d77",
+      "name": "Persist Failed Snapshot Read",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2160,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/jobs/fail",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
+        }
+      }
+    },
+    {
+      "id": "1cec6854-cadb-5af3-a001-a0baade76f23",
+      "name": "Stop Failed Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2430,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "throw new Error('ERP snapshot read failed; retry metadata durably recorded');"
       }
     }
   ],
@@ -154,17 +248,6 @@
         ]
       ]
     },
-    "Read Immutable ERP Snapshot": {
-      "main": [
-        [
-          {
-            "node": "Calculate Temporal Impact",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Calculate Temporal Impact": {
       "main": [
         [
@@ -175,12 +258,67 @@
           }
         ]
       ]
+    },
+    "ERP Snapshot Read Succeeded": {
+      "main": [
+        [
+          {
+            "node": "Calculate Temporal Impact",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preserve ERP Retry Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preserve ERP Retry Metadata": {
+      "main": [
+        [
+          {
+            "node": "Persist Failed Snapshot Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Failed Snapshot Read": {
+      "main": [
+        [
+          {
+            "node": "Stop Failed Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Immutable ERP Snapshot": {
+      "main": [
+        [
+          {
+            "node": "ERP Snapshot Read Succeeded",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": true
+    "availableInMCP": true,
+    "errorWorkflow": "KF1ttQVhDbDHBDmY",
+    "timezone": "Europe/Berlin",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "tags": []
 }
-

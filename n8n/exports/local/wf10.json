@@ -13,14 +13,14 @@
         -270
       ],
       "parameters": {
-        "content": "## WF10 · Daily Management Digest\nOne digest per scope, Bangkok business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "content": "## WF10 · Daily Management Digest\nOne digest per scope, Berlin business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.\n\nSynthetic data · simulated AI · local sandbox only.",
         "height": 190,
         "width": 700
       }
     },
     {
-      "id": "de2f13ed-7dea-501b-96c7-70e92c8f4c39",
-      "name": "Daily at 08 Bangkok",
+      "id": "8f2ee71f-394d-50eb-8af2-9eff1f411e1a",
+      "name": "Daily at 08 Berlin",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.4,
       "position": [
@@ -122,7 +122,7 @@
     }
   ],
   "connections": {
-    "Daily at 08 Bangkok": {
+    "Daily at 08 Berlin": {
       "main": [
         [
           {
@@ -169,14 +169,14 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "timezone": "Asia/Bangkok",
+    "timezone": "Europe/Berlin",
     "saveDataErrorExecution": "all",
     "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",
     "errorWorkflow": "APICWF0900000001"
   },
-  "versionId": "f579338c-17e0-4b90-ba8c-280db83a241d",
-  "activeVersionId": "f579338c-17e0-4b90-ba8c-280db83a241d",
+  "versionId": "f3caa6f8-477b-48c8-a82e-bc9bdf5fbb17",
+  "activeVersionId": "f3caa6f8-477b-48c8-a82e-bc9bdf5fbb17",
   "pinData": {},
   "tags": []
 }

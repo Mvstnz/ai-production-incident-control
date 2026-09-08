@@ -1,16 +1,96 @@
 {
-  "fixture_version": "1.0",
+  "fixture_version": "2.0",
+  "dataset": "fictional-v2",
   "data_classification": "SYNTHETIC_ONLY",
-  "incident_type": "QUALITY_ISSUE",
-  "analysis_time": "2026-10-10T08:00:00+07:00",
+  "provenance": "Invented exclusively for this portfolio. No reference products, customers or operating records.",
+  "analysis_time": "2026-11-09T08:00:00+01:00",
+  "business_timezone": "Europe/Berlin",
   "currency": "EUR",
-  "inventory_lots": [{"lot_id": "LOT-Q100", "material": "SEAL-DN300", "physical_quantity": 20, "quality_status": "QUARANTINED"}],
-  "quality_inspections": [{"inspection_id": "QI-100", "lot_id": "LOT-Q100", "material": "SEAL-DN300", "verified": true, "result": "FAILED", "inspected_quantity": 20, "defect_type": "Dimensional tolerance failure", "inspected_at": "2026-10-10T07:30:00+07:00"}],
-  "shipments": [{"shipment_id": "SHIP-100", "status": "PENDING", "scheduled_at": "2026-10-11T08:00:00+07:00"}],
-  "shipment_items": [{"shipment_item_id": "SHIP-100/10", "shipment_id": "SHIP-100", "sales_line": "SO-4001/10", "open_quantity": 20, "open_net_line_value_cents": 3600000, "customer_due_at": "2026-10-11T08:00:00+07:00", "strategic_customer": false}],
-  "lot_allocations": [{"lot_id": "LOT-Q100", "shipment_item_id": "SHIP-100/10", "quantity": 20}],
-  "replacement_available_at": "2026-10-14T08:00:00+07:00",
+  "incident_type": "QUALITY_ISSUE",
+  "inventory_lots": [
+    {
+      "lot_id": "DEMO-LOT-PLATE-01",
+      "material": "DEMO-PLATE-10",
+      "physical_quantity": 48,
+      "quality_status": "QUARANTINED",
+      "site": "DEMO-NORTH-HALL"
+    },
+    {
+      "lot_id": "DEMO-LOT-PLATE-02",
+      "material": "DEMO-PLATE-10",
+      "physical_quantity": 16,
+      "quality_status": "RELEASED",
+      "site": "DEMO-NORTH-HALL"
+    }
+  ],
+  "quality_inspections": [
+    {
+      "inspection_id": "DEMO-QI-PLATE-01",
+      "lot_id": "DEMO-LOT-PLATE-01",
+      "material": "DEMO-PLATE-10",
+      "verified": true,
+      "result": "FAILED",
+      "inspected_quantity": 48,
+      "defect_type": "Mounting-plate holes measure 11 mm instead of the specified 10 mm",
+      "inspected_at": "2026-11-09T07:00:00+01:00",
+      "evidence": "Synthetic inspection: 48 mounting plates have 11 mm holes; the invented drawing requires 10 mm holes. Two pending shipments use this batch."
+    }
+  ],
+  "shipments": [
+    {
+      "shipment_id": "DEMO-SHIP-PLATE-51",
+      "status": "PENDING",
+      "scheduled_at": "2026-11-10T08:00:00+01:00"
+    },
+    {
+      "shipment_id": "DEMO-SHIP-PLATE-52",
+      "status": "PENDING",
+      "scheduled_at": "2026-11-11T08:00:00+01:00"
+    }
+  ],
+  "shipment_items": [
+    {
+      "shipment_item_id": "DEMO-SHIP-PLATE-51/40",
+      "shipment_id": "DEMO-SHIP-PLATE-51",
+      "sales_line": "DEMO-SO-PLATE-51/40",
+      "open_quantity": 30,
+      "open_net_line_value_cents": 1650000,
+      "customer_due_at": "2026-11-10T08:00:00+01:00",
+      "strategic_customer": false
+    },
+    {
+      "shipment_item_id": "DEMO-SHIP-PLATE-52/40",
+      "shipment_id": "DEMO-SHIP-PLATE-52",
+      "sales_line": "DEMO-SO-PLATE-52/40",
+      "open_quantity": 18,
+      "open_net_line_value_cents": 990000,
+      "customer_due_at": "2026-11-11T08:00:00+01:00",
+      "strategic_customer": false
+    }
+  ],
+  "lot_allocations": [
+    {
+      "lot_id": "DEMO-LOT-PLATE-01",
+      "shipment_item_id": "DEMO-SHIP-PLATE-51/40",
+      "quantity": 30
+    },
+    {
+      "lot_id": "DEMO-LOT-PLATE-01",
+      "shipment_item_id": "DEMO-SHIP-PLATE-52/40",
+      "quantity": 18
+    }
+  ],
+  "replacement_available_at": "2026-11-12T08:00:00+01:00",
   "qualified_alternative_available": false,
-  "facts": {"incident_type": "QUALITY_ISSUE", "lot_id": "LOT-Q100", "inspection_id": "QI-100", "material": "SEAL-DN300", "reported_quantity": 20, "defect_type": "Dimensional tolerance failure"},
-  "expected": {"blockable_quantity": 20, "shipped_quantity": 0, "hard_override": "VERIFIED_DEFECTIVE_LOT_PENDING_SHIPMENT", "severity": "CRITICAL", "required_role": "quality_manager"}
+  "facts": {
+    "incident_type": "QUALITY_ISSUE",
+    "lot_id": "DEMO-LOT-PLATE-01",
+    "inspection_id": "DEMO-QI-PLATE-01",
+    "material": "DEMO-PLATE-10",
+    "reported_quantity": 48,
+    "defect_type": "Mounting-plate holes measure 11 mm instead of the specified 10 mm",
+    "reason": "The holes in 48 mounting plates are too large: 11 mm instead of 10 mm. Two pending shipments share the affected batch. A second, correctly drilled batch is separate."
+  },
+  "description": "Mounting plate, four 10 mm holes",
+  "material_description": "Mounting plate, four 10 mm holes"
 }

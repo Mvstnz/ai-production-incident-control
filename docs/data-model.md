@@ -5,8 +5,8 @@ PostgreSQL stores all application business state. The application database has
 never reads or patches n8n's internal tables. The actual migration is
 [`001_initial.sql`](../database/migrations/001_initial.sql).
 
-Internal entities use UUIDs. ERP business identifiers, such as `4500192/10` and
-`SO-2001/10`, remain readable strings. A synthetic `scope_id` accompanies business
+Internal entities use UUIDs. ERP business identifiers, such as `DEMO-PO-8264/10` and
+`DEMO-SO-FRAME-42/20`, remain readable strings. A synthetic `scope_id` accompanies business
 entities and composite foreign keys so that relationships do not silently cross
 demo scopes. Users receive explicit scope memberships; membership and command
 role are separate checks.

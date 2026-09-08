@@ -10,10 +10,17 @@ if env.exists():
     public_keys={'PROFILE','EXTERNAL_ACTIONS_ENABLED','AI_MODE','LLM_MODEL','LLM_MAX_CALLS'}
     secrets += [value.encode() for line in env.read_text().splitlines() if '=' in line
                 for key,value in [line.split('=',1)] if key not in public_keys and len(value)>=20]
-for name in ('credentials.json','n8n-owner.json'):
+for name in ('credentials.json','n8n-owner.json','hosted-credentials.json'):
     path=ROOT/'.local'/name
     if path.exists():
         doc=json.loads(path.read_text());secrets += [u['password'].encode() for u in doc.get('users',[doc]) if u.get('password')]
+for name in ('hosted-env.json','hosting-access.json'):
+    path=ROOT/'.local'/name
+    if path.exists():
+        data=json.loads(path.read_text())
+        for key,value in data.items():
+            if isinstance(value,str) and len(value)>=20 and any(part in key.upper() for part in ('PASSWORD','SECRET','TOKEN','DATABASE','KEY')):
+                secrets.append(value.encode())
 issues=[];checked=0
 for name in files:
     p=ROOT/name

@@ -29,7 +29,7 @@ if options.phase!='normal' and not options.allow_interruption:
     raise SystemExit('Shared-service restart requires prior coordination and --allow-interruption.')
 
 OUTPUT=ROOT/'evidence/workflow-runs/resilience.json'
-report=json.loads(OUTPUT.read_text()) if OUTPUT.exists() else {'profile':'DEMO_LOCAL','started_at':datetime.now(timezone.utc).isoformat(),'tests':[],'scopes':[],'target_tests':'NOT_RUN','boundary':'Real loopback HTTP -> published local n8n -> APIs -> PostgreSQL and sandbox providers'}
+report=json.loads(OUTPUT.read_text(encoding='utf-8')) if OUTPUT.exists() else {'profile':'DEMO_LOCAL','started_at':datetime.now(timezone.utc).isoformat(),'tests':[],'scopes':[],'target_tests':'NOT_RUN','boundary':'Real loopback HTTP -> published local n8n -> APIs -> PostgreSQL and sandbox providers'}
 clients={r:Client(r) for r in ('admin','production_manager','purchasing')}
 c=clients['admin']
 

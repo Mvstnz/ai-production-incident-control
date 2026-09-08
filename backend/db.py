@@ -33,7 +33,8 @@ def transaction(erp=False, migration=False):
     url = os.environ.get(key) or os.environ.get("DATABASE_URL")
     if not url:
         raise RuntimeError(f"Required configuration {key} is missing")
-    with psycopg.connect(url, row_factory=dict_row, connect_timeout=4) as conn:
+    # Supabase transaction pooling cannot retain prepared statements across transactions.
+    with psycopg.connect(url, row_factory=dict_row, connect_timeout=8, prepare_threshold=None) as conn:
         with conn.transaction():
             yield conn
 

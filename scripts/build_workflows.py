@@ -12,7 +12,7 @@ CREDS={'ops':{'id':'apicOpsService01','name':'APIC Operations Service'},'erp':{'
 class Flow:
     def __init__(self,key,title,note,ai='simulated AI'):
         self.key=key; self.nodes=[]; self.connections={}
-        self.data={'id':IDS[key],'name':f'APIC | {key} | {title}','active':False,'nodes':self.nodes,'connections':self.connections,'settings':{'executionOrder':'v1','timezone':'Asia/Bangkok','saveDataErrorExecution':'all','saveDataSuccessExecution':'all','callerPolicy':'workflowsFromSameOwner'},'pinData':{},'tags':[]}
+        self.data={'id':IDS[key],'name':f'APIC | {key} | {title}','active':False,'nodes':self.nodes,'connections':self.connections,'settings':{'executionOrder':'v1','timezone':'Europe/Berlin','saveDataErrorExecution':'all','saveDataSuccessExecution':'all','callerPolicy':'workflowsFromSameOwner'},'pinData':{},'tags':[]}
         if key!='WF09': self.data['settings']['errorWorkflow']=IDS['WF09']
         self.add('Purpose','stickyNote',{'content':f'## {key} · {title}\n{note}\n\nSynthetic data · {ai} · local sandbox only.','height':190,'width':700},[-160,-270])
     def add(self,name,type,params,pos=None,cred=None):
@@ -59,7 +59,7 @@ def main():
             form=f.add('Authenticated Supplier Form','formTrigger',{'authentication':'basicAuth','formTitle':'Report a supplier delay','formDescription':'Synthetic demo only. Enter confirmed availability; proposed delivery is never treated as confirmed.','formFields':{'values':[{'fieldLabel':label,'fieldName':name,'fieldType':'text','requiredField':True} for label,name in [('Purchase order','purchase_order'),('PO position','purchase_order_item'),('Material','material'),('Open quantity (pcs)','quantity'),('Confirmed available at (ISO timestamp with offset)','available_at')]]},'responseMode':'lastNode','options':{'path':'apic-supplier-form','respondWithOptions':{'values':{'respondWith':'text','formSubmittedText':'Report durably recorded. Check the Operations dashboard for verified assessment or clarification.'}}}},pos=[0,700])
             f.nodes[-1]['webhookId']='apic-supplier-form'
             f.nodes[-1]['credentials']={'httpBasicAuth':{'id':'apicForm000001','name':'APIC Demo Form'}}
-            scope=str(uuid.uuid5(uuid.NAMESPACE_URL,'apic-portfolio/default-demo'))
+            scope=str(uuid.uuid5(uuid.NAMESPACE_URL,'apic-portfolio/default-demo/fictional-v2'))
             f.code('Form Envelope',"const d=$json; return [{json:{schema_version:'1.0',scope_id:'"+scope+"',source:'FORM',source_account_id:'apic-authenticated-form',source_id:'form-'+$execution.id,received_at:$now.toISO(),correlation_id:'00000000-0000-4000-8000-'+String($execution.id).padStart(12,'0'),sender:'operator@example.test',subject:'Structured supplier delay',content_text:'Authenticated structured supplier form',payload:{incident_type:'SUPPLIER_DELAY',purchase_order:d.purchase_order,purchase_order_item:d.purchase_order_item,material:d.material,confirmed_supply_schedule:[{quantity:Number(d.quantity),available_at:d.available_at,status:'CONFIRMED'}],reason:'Supplier form report'}}}];")
             f.post('Commit Form Source Event','/internal/source-events')
             f.execute('Start Form Analysis','WF03',False)
@@ -159,12 +159,12 @@ def main():
     f.post('Record Error and Classify Retry','/internal/errors')
     for name in ['Automatic Execution Error','Workflow Input','Protected Error Harness']:f.link(name,'Safe Error Metadata')
     f.chain('Safe Error Metadata','Record Error and Classify Retry');flows.append(f)
-    f=Flow('WF10','Daily Management Digest','One digest per scope, Bangkok business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.')
-    f.add('Daily at 08 Bangkok','scheduleTrigger',{'rule':{'interval':[{'field':'cronExpression','expression':'0 8 * * *'}]}})
+    f=Flow('WF10','Daily Management Digest','One digest per scope, Berlin business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.')
+    f.add('Daily at 08 Berlin','scheduleTrigger',{'rule':{'interval':[{'field':'cronExpression','expression':'0 8 * * *'}]}})
     f.sub();f.hook('Protected Digest Test','apic-digest',response='lastNode')
     f.code('Digest Context',"const d=$input.first().json.body||$input.first().json; return [{json:{scope_id:d.scope_id||null,execution_id:$execution.id,workflow_id:$workflow.id}}];")
     f.post('Commit Consistent Sandbox Digest','/internal/digest')
-    for name in ['Daily at 08 Bangkok','Workflow Input','Protected Digest Test']:f.link(name,'Digest Context')
+    for name in ['Daily at 08 Berlin','Workflow Input','Protected Digest Test']:f.link(name,'Digest Context')
     f.chain('Digest Context','Commit Consistent Sandbox Digest');flows.append(f)
     dest=ROOT/'n8n/workflows';dest.mkdir(parents=True,exist_ok=True)
     manifest={'profile':'DEMO_LOCAL','n8n_version':'2.37.10','deployment_status':'GENERATED_NOT_RUNTIME_TESTED','workflows':[]}

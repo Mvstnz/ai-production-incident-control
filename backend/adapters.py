@@ -25,26 +25,31 @@ def execute_action(body):
         if "permanent" in failure:
             conn.execute("UPDATE ops.incident_actions SET status='FAILED',result=%s WHERE scope_id=%s AND id=%s",(js({"error_class":"PERMANENT","message":"Synthetic permanent adapter failure"}),body.scope_id,body.action_id))
             return {"action_id":str(body.action_id),"status":"FAILED"}
-        payload=action["payload"]; provider_id=None; outcome="SUCCEEDED"
+        payload=action["payload"]; provider_id=None; outcome="SUCCEEDED"; receipt={"synthetic":True}
         previous=conn.execute("SELECT * FROM ops.provider_receipts WHERE scope_id=%s AND action_id=%s",(body.scope_id,body.action_id)).fetchone()
         if previous:
-            provider_id=str(previous["id"])
+            provider_id=previous["payload"].get("provider_id",str(previous["id"]))
+            receipt=previous["payload"]
         elif action["action_type"]=="INTERNAL_TICKET":
             provider_id="ticket-"+str(body.action_id)
         elif action["action_type"]=="SUPPLIER_EMAIL":
             recipient=payload.get("recipient",payload.get("to"))
             if recipient!="supplier@example.test": raise HTTPException(422,"Recipient is not in sandbox allowlist")
-            host=os.getenv("MAILPIT_HOST","mailpit")
-            if host not in ("mailpit","localhost","127.0.0.1","::1"): raise HTTPException(503,"Only local Mailpit transport is implemented")
             message=EmailMessage(); message["From"]="operations@example.test"; message["To"]=recipient
             message["Subject"]=payload["subject"]; message["Message-ID"]=f"<apic-{body.action_id}@example.test>"
             message.set_content(payload.get("body",payload.get("content_text","")))
-            try:
-                with smtplib.SMTP(host,int(os.getenv("SMTP_PORT","1025")),timeout=8) as smtp: smtp.send_message(message)
-                provider_id=str(message["Message-ID"])
-            except (TimeoutError,OSError,smtplib.SMTPException):
-                # The SMTP response may have been lost after acceptance. No blind retry.
-                outcome="UNKNOWN_OUTCOME"
+            if os.getenv("MAIL_TRANSPORT","smtp") == "database":
+                provider_id="sandbox-mail-"+str(body.action_id)
+                receipt.update(delivery_mode="captured",message=dict(to=recipient,subject=payload["subject"],body=message.get_content()))
+            else:
+                host=os.getenv("MAILPIT_HOST","mailpit")
+                if host not in ("mailpit","localhost","127.0.0.1","::1"): raise HTTPException(503,"Only local Mailpit transport is implemented")
+                try:
+                    with smtplib.SMTP(host,int(os.getenv("SMTP_PORT","1025")),timeout=8) as smtp: smtp.send_message(message)
+                    provider_id=str(message["Message-ID"])
+                except (TimeoutError,OSError,smtplib.SMTPException):
+                    # The SMTP response may have been lost after acceptance. No blind retry.
+                    outcome="UNKNOWN_OUTCOME"
         elif action["action_type"] in ("RESCHEDULE","QUALITY_BLOCK","QUALITY_RELEASE"):
             command={"RESCHEDULE":"reschedule","QUALITY_BLOCK":"quality-block","QUALITY_RELEASE":"quality-release"}[action["action_type"]]
             try:
@@ -54,10 +59,11 @@ def execute_action(body):
             except httpx.RequestError: outcome="UNKNOWN_OUTCOME"
         else: raise HTTPException(422,"Unsupported action adapter")
         if provider_id and not previous:
-            conn.execute("INSERT INTO ops.provider_receipts(id,scope_id,action_id,provider,payload) VALUES (%s,%s,%s,%s,%s) ON CONFLICT(scope_id,action_id) DO NOTHING",(uid(),body.scope_id,body.action_id,action["action_type"],js({"provider_id":provider_id,"synthetic":True})))
+            conn.execute("INSERT INTO ops.provider_receipts(id,scope_id,action_id,provider,payload) VALUES (%s,%s,%s,%s,%s) ON CONFLICT(scope_id,action_id) DO NOTHING",(uid(),body.scope_id,body.action_id,action["action_type"],js({**receipt,"provider_id":provider_id})))
         if "write-timeout" in failure and provider_id:
             outcome="UNKNOWN_OUTCOME"
         result={"synthetic":True,"provider_id":provider_id,"reconciliation_required":outcome=="UNKNOWN_OUTCOME"}
+        if "delivery_mode" in receipt: result["delivery_mode"]=receipt["delivery_mode"]
         conn.execute("UPDATE ops.incident_actions SET status=%s,provider_id=%s,result=%s,lease_until=NULL,completed_at=%s WHERE scope_id=%s AND id=%s",(outcome,provider_id,js(result),now(conn,body.scope_id),body.scope_id,body.action_id))
         audit(conn,body.scope_id,"ACTION_"+outcome,body.action_id,data={"provider_id":provider_id,"execution_id":body.execution_id,"workflow_id":body.workflow_id})
         plan=conn.execute("SELECT incident_id FROM ops.action_plans WHERE scope_id=%s AND id=%s",(body.scope_id,action["plan_id"])).fetchone()

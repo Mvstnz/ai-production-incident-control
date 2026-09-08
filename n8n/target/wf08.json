@@ -1,13 +1,7 @@
 {
   "id": "K8yUTKNLA2WyHJUU",
   "name": "APIC | WF08 | SLA Dispatch and Recovery",
-  "active": false,
-  "isArchived": false,
-  "versionId": "fbfa9f01-6f37-4062-8a2c-949a6fb6f3b5",
-  "activeVersionId": null,
-  "createdAt": "2026-09-07T11:40:38.089Z",
-  "updatedAt": "2026-09-07T11:40:38.089Z",
-  "description": "apic-portfolio: recover due jobs, approval plans, actions and protected wakeups through visible dispatch branches. BLOCKED configuration; inactive, unpublished, runtime NOT_RUN.",
+  "active": true,
   "nodes": [
     {
       "id": "55675c60-b2eb-40b4-a752-e10e0d53bcb2",
@@ -19,14 +13,14 @@
         -270
       ],
       "parameters": {
-        "content": "## WF08 · SLA Dispatch and Recovery\nEvery 60 seconds claim bounded due work. Recover leases, outstanding decisions and outbox; deduplicate each SLA stage. Business clock does not alter n8n Wait time.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "content": "## WF08 · SLA Dispatch and Recovery\nImmediate webhook wakeups follow completed analyses and approval decisions. An hourly fallback claims bounded due work, recovers leases and deduplicates SLA stages. The business clock does not alter n8n Wait time.\n\nSynthetic data · simulated AI · hosted synthetic sandbox.",
         "height": 190,
         "width": 700
       }
     },
     {
       "id": "f33a66a5-549b-4c69-8da5-ee8b6a4125d8",
-      "name": "Every Minute",
+      "name": "Hourly fallback",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.4,
       "position": [
@@ -37,8 +31,8 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 1
+              "field": "hours",
+              "hoursInterval": 1
             }
           ]
         }
@@ -57,12 +51,18 @@
         "httpMethod": "POST",
         "path": "apic-recovery",
         "authentication": "headerAuth",
-        "responseMode": "lastNode",
+        "responseMode": "onReceived",
         "options": {
-          "allowedOrigins": "http://127.0.0.1:5173"
+          "allowedOrigins": "https://ai-production-incident-control-dash.vercel.app"
         }
       },
-      "webhookId": "2017939c-4075-4d54-9e11-c554b7ffd0f8"
+      "webhookId": "2017939c-4075-4d54-9e11-c554b7ffd0f8",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "cVh9gXbvqwX7wfDa",
+          "name": "APIC | Hosted intake webhook"
+        }
+      }
     },
     {
       "id": "f01dfcc6-4ba5-4ece-b8c3-a4567e526c39",
@@ -103,7 +103,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://configure-apic-ops.invalid/internal/recovery",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/recovery",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -111,6 +111,12 @@
         "jsonBody": "={{ $json }}",
         "options": {
           "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
         }
       }
     },
@@ -263,6 +269,12 @@
             }
           }
         }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "cVh9gXbvqwX7wfDa",
+          "name": "APIC | Hosted intake webhook"
+        }
       }
     },
     {
@@ -310,7 +322,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://configure-apic-ops.invalid/internal/outbox/ack",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/outbox/ack",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -319,37 +331,16 @@
         "options": {
           "timeout": 15000
         }
-      }
-    },
-    {
-      "id": "f8f37f3d-9457-415c-93c2-69421889986c",
-      "name": "Target Configuration BLOCKED",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -160,
-        -720
-      ],
-      "parameters": {
-        "content": "## BLOCKED — inactive / unpublished\nConfigure authorized Operations and ERP HTTPS endpoints and missing APIC credentials before any separately authorized execution.\n\nhttps://configure-apic-ops.invalid and https://configure-apic-erp.invalid are deliberately non-routable configuration placeholders. Preserve every endpoint path. Dynamic wakeup URLs must be backend-validated for the authorized n8n host and protected by APIC Webhook Intake.\n\nWorkflow settings (Asia/Bangkok, caller policy, retention and shared WF09 error routing) are pending: no documented SDK creation settings; update is blocked by the approval gate. WF09 must remain unpublished. No runtime test has run.",
-        "width": 980,
-        "height": 390,
-        "color": 3
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
+        }
       }
     }
   ],
   "connections": {
-    "Every Minute": {
-      "main": [
-        [
-          {
-            "node": "Recovery Context",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Protected Recovery Test": {
       "main": [
         [
@@ -474,12 +465,27 @@
           }
         ]
       ]
+    },
+    "Hourly fallback": {
+      "main": [
+        [
+          {
+            "node": "Recovery Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": true
+    "availableInMCP": true,
+    "errorWorkflow": "KF1ttQVhDbDHBDmY",
+    "timezone": "Europe/Berlin",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "tags": []
 }
-

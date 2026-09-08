@@ -1,66 +1,118 @@
 {
-  "fixture_version": "1.0",
+  "fixture_version": "2.0",
+  "dataset": "fictional-v2",
   "data_classification": "SYNTHETIC_ONLY",
-  "analysis_time": "2026-10-10T08:00:00+07:00",
-  "business_timezone": "Asia/Bangkok",
+  "provenance": "Invented exclusively for this portfolio. No reference products, customers or operating records.",
+  "analysis_time": "2026-11-09T08:00:00+01:00",
+  "business_timezone": "Europe/Berlin",
   "currency": "EUR",
-  "supplier": "Asia Precision Components",
-  "purchase_order": "4500192",
-  "purchase_order_item": "10",
-  "material": "SHAFT-DN300",
+  "supplier": "Demo Metal Supply (fictional)",
+  "supplier_id": "DEMO-SUPPLIER-A",
+  "site": "DEMO-NORTH-HALL",
+  "material": "DEMO-ROD-20",
+  "material_description": "Steel rod, diameter 20 mm, length 2 m",
+  "inventory_lot_id": "DEMO-LOT-ROD-01",
+  "purchase_order": "DEMO-PO-8264",
+  "purchase_order_item": "20",
   "unit": "pcs",
-  "open_purchase_quantity": 40,
+  "open_purchase_quantity": 75,
+  "reason": "A broken delivery truck has delayed the steel rods needed for four mounting-frame orders.",
   "original_supply_schedule": [
-    {"quantity": 40, "available_at": "2026-10-12T08:00:00+07:00", "status": "CONFIRMED"}
+    {
+      "quantity": 75,
+      "available_at": "2026-11-10T08:00:00+01:00",
+      "status": "CONFIRMED"
+    }
   ],
-  "inventory": {"physical": 20, "reserved_for_other_demands": 6, "quarantined": 0, "available_to_this_scope": 14},
+  "inventory": {
+    "physical": 42,
+    "reserved_for_other_demands": 10,
+    "quarantined": 8,
+    "available_to_this_scope": 24
+  },
   "qualified_alternative_available": false,
   "production_requirements": [
-    {"production_order": "MO-1001", "required_quantity": 10, "need_at": "2026-10-13T08:00:00+07:00", "remaining_lead_time_calendar_days": 2, "sales_line": "SO-2000/10", "open_net_line_value_cents": 2500000, "customer_due_at": "2026-10-15T08:00:00+07:00", "strategic_customer": false},
-    {"production_order": "MO-1002", "required_quantity": 12, "need_at": "2026-10-14T08:00:00+07:00", "remaining_lead_time_calendar_days": 2, "sales_line": "SO-2001/10", "open_net_line_value_cents": 7200000, "customer_due_at": "2026-10-16T08:00:00+07:00", "strategic_customer": true},
-    {"production_order": "MO-1003", "required_quantity": 16, "need_at": "2026-10-15T08:00:00+07:00", "remaining_lead_time_calendar_days": 2, "sales_line": "SO-2002/10", "open_net_line_value_cents": 5440000, "customer_due_at": "2026-10-17T08:00:00+07:00", "strategic_customer": false}
+    {
+      "production_order": "DEMO-MO-FRAME-41",
+      "product": "Welded mounting frame",
+      "required_quantity": 18,
+      "need_at": "2026-11-11T08:00:00+01:00",
+      "remaining_lead_time_calendar_days": 1,
+      "sales_line": "DEMO-SO-FRAME-41/20",
+      "open_net_line_value_cents": 990000,
+      "customer_due_at": "2026-11-12T08:00:00+01:00",
+      "strategic_customer": false
+    },
+    {
+      "production_order": "DEMO-MO-FRAME-42",
+      "product": "Welded mounting frame",
+      "required_quantity": 26,
+      "need_at": "2026-11-12T08:00:00+01:00",
+      "remaining_lead_time_calendar_days": 2,
+      "sales_line": "DEMO-SO-FRAME-42/20",
+      "open_net_line_value_cents": 3380000,
+      "customer_due_at": "2026-11-14T08:00:00+01:00",
+      "strategic_customer": true
+    },
+    {
+      "production_order": "DEMO-MO-FRAME-43",
+      "product": "Welded mounting frame",
+      "required_quantity": 20,
+      "need_at": "2026-11-13T08:00:00+01:00",
+      "remaining_lead_time_calendar_days": 1,
+      "sales_line": "DEMO-SO-FRAME-43/20",
+      "open_net_line_value_cents": 2160000,
+      "customer_due_at": "2026-11-14T08:00:00+01:00",
+      "strategic_customer": false
+    },
+    {
+      "production_order": "DEMO-MO-FRAME-44",
+      "product": "Welded mounting frame",
+      "required_quantity": 12,
+      "need_at": "2026-11-18T08:00:00+01:00",
+      "remaining_lead_time_calendar_days": 1,
+      "sales_line": "DEMO-SO-FRAME-44/20",
+      "open_net_line_value_cents": 780000,
+      "customer_due_at": "2026-11-19T08:00:00+01:00",
+      "strategic_customer": false
+    }
   ],
   "source_email": {
     "sender": "supplier@example.test",
-    "subject": "Delivery Update – PO 4500192 / Item 10",
-    "content_text": "Dear Purchasing Team,\n\nDue to capacity problems in our heat treatment department, we cannot meet the confirmed material availability date for PO 4500192, item 10.\n\nMaterial: SHAFT-DN300\nQuantity: 40 pcs\nOriginally confirmed availability at your plant: 12 October 2026, 08:00 Bangkok time.\nNew confirmed availability at your plant: 19 October 2026, 08:00 Bangkok time, for the full quantity of 40 pcs.\n\nWe may be able to make 10 of these 40 pcs available at your plant on 13 October 2026, 08:00 Bangkok time. This early partial delivery is not confirmed yet. If confirmed, the remaining delivery on 19 October would be 30 pcs, not 40 additional pcs.\n\nBest regards,\nAsia Precision Components"
+    "subject": "Fictional dispatch notice | DEMO-PO-8264 / item 20",
+    "content_text": "Hello North Hall planning team,\n\nThis is a fictional training message from Demo Metal Supply.\nOur delivery truck has broken down. The affected item is DEMO-ROD-20, a steel rod, diameter 20 mm and length 2 m, on purchase order DEMO-PO-8264, item 20.\n\nThe 75 pcs originally confirmed available at your plant on 2026-11-10T08:00:00+01:00 will now be available on 2026-11-16T08:00:00+01:00.\n\nA replacement truck may bring 30 pcs for availability at your plant on 2026-11-11T08:00:00+01:00. This is an unconfirmed proposal. If you confirm this split, the final delivery on 2026-11-16T08:00:00+01:00 becomes 45 pcs. The total remains 75 pcs.\n\nPlease review the four mounting-frame production batches and keep the replacement-truck offer separate from confirmed supply.\n\nDemo Metal Supply — invented portfolio supplier"
   },
   "scenarios": [
     {
-      "id": "confirmed_delay_with_unconfirmed_partial_offer",
-      "confirmed_supply_schedule": [{"quantity": 40, "available_at": "2026-10-19T08:00:00+07:00", "status": "CONFIRMED"}],
-      "proposed_partial": {"quantity": 10, "available_at": "2026-10-13T08:00:00+07:00", "status": "PROPOSED", "replaces_quantity_from_final_delivery": true},
-      "expected": {
-        "allocations_at_need": [10, 4, 0],
-        "shortages_at_need": [0, 8, 16],
-        "total_shortage": 24,
-        "reviewed_production_orders": 3,
-        "affected_production_orders": ["MO-1002", "MO-1003"],
-        "affected_sales_lines": ["SO-2001/10", "SO-2002/10"],
-        "affected_open_order_value_cents": 12640000,
-        "risk_factors": {"disruption": 20, "value": 20, "urgency": 16, "resource_gap": 12, "alternative": 10, "strategic_customer": 10},
-        "risk_score": 88,
-        "severity": "CRITICAL"
+      "id": "steel_rods_delayed",
+      "confirmed_supply_schedule": [
+        {
+          "quantity": 75,
+          "available_at": "2026-11-16T08:00:00+01:00",
+          "status": "CONFIRMED"
+        }
+      ],
+      "proposed_partial": {
+        "quantity": 30,
+        "available_at": "2026-11-11T08:00:00+01:00",
+        "status": "PROPOSED",
+        "replaces_quantity_from_final_delivery": true
       }
     },
     {
-      "id": "confirmed_split_revision",
+      "id": "confirmed_replacement_truck_delivery",
       "confirmed_supply_schedule": [
-        {"quantity": 10, "available_at": "2026-10-13T08:00:00+07:00", "status": "CONFIRMED"},
-        {"quantity": 30, "available_at": "2026-10-19T08:00:00+07:00", "status": "CONFIRMED"}
-      ],
-      "expected": {
-        "allocations_at_need": [10, 12, 2],
-        "shortages_at_need": [0, 0, 14],
-        "total_shortage": 14,
-        "reviewed_production_orders": 3,
-        "affected_production_orders": ["MO-1003"],
-        "affected_sales_lines": ["SO-2002/10"],
-        "affected_open_order_value_cents": 5440000,
-        "risk_factors": {"disruption": 20, "value": 15, "urgency": 16, "resource_gap": 8, "alternative": 10, "strategic_customer": 0},
-        "risk_score": 69,
-        "severity": "HIGH"
-      }
+        {
+          "quantity": 30,
+          "available_at": "2026-11-11T08:00:00+01:00",
+          "status": "CONFIRMED"
+        },
+        {
+          "quantity": 45,
+          "available_at": "2026-11-16T08:00:00+01:00",
+          "status": "CONFIRMED"
+        }
+      ]
     }
   ]
 }

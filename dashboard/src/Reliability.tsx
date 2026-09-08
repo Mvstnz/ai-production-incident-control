@@ -9,6 +9,7 @@ import {
 import {
   api,
   date,
+  incidentTitle,
   label,
   record,
   rows,
@@ -30,6 +31,7 @@ import {
   useQuery,
 } from "./ui";
 import type { ViewProps } from "./App";
+import { actionName } from "./ActionDetails";
 
 export function Reliability({
   scopeId,
@@ -91,12 +93,14 @@ export function Reliability({
         </span>
         <span>
           <Activity size={18} />
-          <b>AI mode</b>
-          {text(system.data?.ai_mode)}
+          <b>Assessment method</b>
+          {record(system.data?.live_ai).enabled === true
+            ? "AI with verified records"
+            : "Verified rules"}
         </span>
         <span>
           <Clock3 size={18} />
-          <b>External actions</b>
+          <b>Live supplier delivery</b>
           {system.data?.external_actions_enabled === false
             ? "Disabled"
             : system.data?.external_actions_enabled === true
@@ -131,11 +135,11 @@ export function Reliability({
         </div>
       )}
       <Section
-        title="Analysis jobs"
-        subtitle="Actual n8n workflow and execution references are recorded by the workers"
+        title="Processing history"
+        subtitle="The status of each reported problem"
         action={
           <span className="count-label">
-            {system.data ? jobs.length : "—"} jobs
+            {system.data ? jobs.length : "—"} assessments
           </span>
         }
       >
@@ -150,29 +154,51 @@ export function Reliability({
             <table>
               <thead>
                 <tr>
-                  <th>Job / source</th>
-                  <th>Status / step</th>
+                  <th>Reported problem</th>
+                  <th>Assessment</th>
                   <th>Attempts</th>
                   <th>Next attempt</th>
-                  <th>Workflow / execution</th>
+                  <th>Details</th>
                 </tr>
               </thead>
               <tbody>
                 {jobs.map((job, index) => (
                   <tr key={string(job.id) || index}>
                     <td>
-                      <code className="block">{text(job.id)}</code>
-                      <small>Source {text(job.source_event_id)}</small>
+                      <strong>
+                        {incidentTitle({
+                          title:
+                            string(job.incident_title) ||
+                            "Report awaiting review",
+                        })}
+                      </strong>
+                      {job.incident_id ? (
+                        <a
+                          className="block"
+                          href={`#/incidents/${string(job.incident_id)}`}
+                        >
+                          View assessment
+                        </a>
+                      ) : (
+                        <small>No verified incident yet</small>
+                      )}
                     </td>
                     <td>
                       <Badge value={job.status} />
-                      <small className="block">{text(job.step)}</small>
+                      <small className="block">
+                        {job.status === "SUCCEEDED"
+                          ? "Impact and response prepared"
+                          : label(job.step)}
+                      </small>
                     </td>
                     <td>{text(job.attempts)}</td>
-                    <td>{date(job.next_attempt_at)}</td>
                     <td>
-                      <code className="block">{text(job.workflow_id)}</code>
-                      <code>{text(job.execution_id)}</code>
+                      {job.status === "RETRY_SCHEDULED"
+                        ? date(job.next_attempt_at)
+                        : "—"}
+                    </td>
+                    <td>
+                      <Json title="Technical details" value={job} />
                     </td>
                   </tr>
                 ))}
@@ -184,33 +210,47 @@ export function Reliability({
       <div className="detail-grid">
         <div className="detail-main">
           <Section
-            title="Waiting workflows"
-            subtitle="Registered execution references; a wakeup is not an approval"
+            title="Waiting for a decision"
+            subtitle="Proposed actions that need review"
           >
             {waits.length ? (
               <div className="table-scroll">
                 <table>
                   <thead>
                     <tr>
-                      <th>Plan</th>
-                      <th>Workflow / execution</th>
-                      <th>Registered</th>
+                      <th>Reported problem</th>
+                      <th>Details</th>
+                      <th>Requested</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {waits.map((wait, index) => (
-                      <tr key={string(wait.plan_id) || index}>
-                        <td>
-                          <code>{text(wait.plan_id)}</code>
-                        </td>
-                        <td>
-                          <code>
-                            {text(wait.workflow_id)} / {text(wait.execution_id)}
-                          </code>
-                        </td>
-                        <td>{date(wait.registered_at)}</td>
-                      </tr>
-                    ))}
+                    {waits
+                      .filter(
+                        (wait) =>
+                          ![
+                            "SUPERSEDED",
+                            "EXPIRED",
+                            "REJECTED",
+                            "COMPLETED",
+                          ].includes(string(wait.plan_status)),
+                      )
+                      .map((wait, index) => (
+                        <tr key={string(wait.plan_id) || index}>
+                          <td>
+                            <a href={`#/incidents/${string(wait.incident_id)}`}>
+                              {incidentTitle({
+                                title:
+                                  string(wait.incident_title) ||
+                                  "Action awaiting review",
+                              })}
+                            </a>
+                          </td>
+                          <td>
+                            <Json title="Technical details" value={wait} />
+                          </td>
+                          <td>{date(wait.registered_at)}</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -224,8 +264,8 @@ export function Reliability({
             )}
           </Section>
           <Section
-            title="Errors & dead letter queue"
-            subtitle="Redacted errors, retry eligibility and preserved references"
+            title="Problems needing attention"
+            subtitle="Failed steps and available recovery options"
           >
             {errors.error && (
               <div className="panel-padding">
@@ -292,27 +332,25 @@ export function Reliability({
         </div>
         <aside className="detail-aside">
           <Section
-            title="Local sandbox notifications"
+            title="Notifications"
             subtitle="Recorded notices and escalations"
           >
             <div className="panel-padding">
               {notifications.length ? (
                 notifications.map((notice, index) => (
                   <details className="receipt" key={string(notice.id) || index}>
-                    <summary>{date(notice.created_at)} Bangkok</summary>
+                    <summary>{date(notice.created_at)}</summary>
                     <Fields data={record(notice.body)} />
                   </details>
                 ))
               ) : (
-                <p className="muted">
-                  No sandbox notifications have been recorded.
-                </p>
+                <p className="muted">No notifications have been recorded.</p>
               )}
             </div>
           </Section>
           <Section
-            title="Transactional outbox"
-            subtitle="Persisted delivery and wakeup work"
+            title="Queued work"
+            subtitle="Actions and reviews waiting to be processed"
           >
             <div className="panel-padding">
               {outbox.length ? (
@@ -340,14 +378,14 @@ export function Reliability({
                 Retries retain the original job and action identities. Unknown
                 write outcomes require evidence before another dispatch.
               </p>
-              <p>The demo business clock and n8n runtime clock are separate.</p>
+              <p>Completed steps are kept in the processing history.</p>
             </div>
           </div>
         </aside>
       </div>
       <Section
-        title="Action receipts"
-        subtitle="Recorded provider outcomes; a receipt does not establish incident resolution"
+        title="Action history"
+        subtitle="What has been completed and what still needs approval"
       >
         {actions.error && (
           <div className="panel-padding">
@@ -359,7 +397,7 @@ export function Reliability({
             {actions.data.items.map((action, index) => (
               <details className="receipt" key={action.id || index}>
                 <summary>
-                  <strong>{label(action.action_type)}</strong>
+                  <strong>{actionName(action)}</strong>
                   <Badge value={action.status} />
                   <span>Attempts {text(action.attempts)}</span>
                 </summary>

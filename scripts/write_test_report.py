@@ -1,37 +1,22 @@
-"""Summarize retained execution evidence without manufacturing missing IDs."""
+"""Summarize only retained, observed test results."""
 from pathlib import Path
-import json,re
+import json,re,xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
-def read(path):return json.loads((ROOT/path).read_text(encoding='utf-8'))
-def execution_ids(value):
-    found=[]
-    if isinstance(value,dict):
-        if value.get('execution_id'):found.append(str(value['execution_id']))
-        for item in value.values():found.extend(execution_ids(item))
-    elif isinstance(value,list):
-        for item in value:found.extend(execution_ids(item))
-    return sorted(set(found),key=lambda v:(len(v),v))
+def read(p):return json.loads((ROOT/p).read_text(encoding='utf-8'))
+suite=ET.parse(ROOT/'evidence/test-results/domain-junit.xml').getroot().find('testsuite')
 api=(ROOT/'docs/implementation/api-integration-output.txt').read_text(encoding='utf-8')
-result=re.findall(r'\d+ passed[^\n]*',api)[-1].strip('= ')
-lines=['# Executed test report','','The matrix is an index of retained evidence. Fixture tests, local runtime and connected-cloud execution are separate. No unexecuted test is passed.','','| Boundary | Actual result | Command / evidence |','|---|---|---|',
-'| Pure domain | 100 passed | `rtk proxy python -m pytest tests/unit -q`; domain-junit.xml |',
-f'| Real PostgreSQL API integration | {result} | `rtk proxy python -m backend.run_integration`; api-integration-output.txt |',
-'| Published local n8n E2E | 10/10 passed after final redeploy | `rtk proxy python -X utf8 scripts/test_runtime.py` |',
-'| Exact concurrent delivery / early approval ordering | 2/2 passed locally; actual Mailpit capture counted after repeated recovery | `rtk proxy python -X utf8 scripts/test_acceptance_ordering.py`; acceptance-ordering.json |',
-'| Actual runtime resilience | 10/10 passed, earlier failures retained | `rtk proxy python -X utf8 scripts/test_resilience.py --phase normal`; disruptive phases below |',
-'| Repeat full bootstrap | Passed, identities and secrets preserved | `rtk proxy python scripts/test_rebootstrap.py` |',
-'| Shared viewer showcase | Three actual incident types; repeated seeding preserves IDs; viewer mutation 403 | `rtk proxy python scripts/test_showcase.py`; evidence/test-results/shared-showcase.json |',
-'| Frontend build / typecheck | Passed | `rtk npm run build` |',
-'| Real browser | Four views, exact approval, role/scope checks, responsive keyboard and same execution verified | evidence/test-results/browser.json |',
-'| Fixture evaluation | 50 cases; 30 development / 20 holdout | evidence/evaluations/fixture-v1-report.json |',
-'| Live LLM | NOT_RUN, zero calls/cost | Missing configured model/credential/call budget |',
-'| Target cloud n8n | 10 created/read back, 0 executions | BLOCKED; target-deployment.json |']
-ci=ROOT/'evidence/test-results/github-ci.json'
-lines+=['',('Fresh GitHub CI: '+read('evidence/test-results/github-ci.json')['status']) if ci.exists() else 'Fresh GitHub CI: pending the first public run.','','## Recorded local execution IDs','', '| Scenario | Status | Recorded execution IDs |','|---|---|---|']
-for path in ('evidence/workflow-runs/local-e2e.json','evidence/workflow-runs/resilience.json','evidence/workflow-runs/acceptance-ordering.json'):
-    for case in read(path)['tests']:
-        ids=execution_ids(case.get('evidence',{}))
-        lines.append(f"| {case['name']} | {case['status']} | {', '.join(ids) or 'Not retained in this case; HTTP/persisted-result evidence only'} |")
-lines+=['','Each execution is in the local n8n instance, not the cloud target. Action records and browser evidence separately prove action670 succeeded once and left the incident in monitoring.','','## Disruption commands','','Run only with other local users idle; these stop/start this project’s own containers and restore them in finally blocks.','','```sh','rtk proxy python -X utf8 scripts/test_resilience.py --phase restart --allow-interruption','rtk proxy python -X utf8 scripts/test_resilience.py --phase database --allow-interruption','```','','Normal resilience includes real 429 Retry-After, bounded503 retries, rejection/modification/expiry, stale approval, repeated SLA and isolated reset. Restart persists an actual signed Wait and commits approval/outbox while n8n is stopped. Database outage proves no false202 and safe replay after restoration. The complete raw sanitized results are in evidence/workflow-runs/.','','Two third-party deprecation warnings occurred in the API test client; the run passed. Load testing, live model accuracy and real external delivery are not covered.']
+api_result=re.findall(r'\d+ passed[^\n]*',api)[-1].strip('= ')
+lines=['# Current test report','','Only current ordinary manufacturing examples are represented. Missing runs are not inferred.','','| Check | Observed result |','| --- | --- |',f"| Unit tests | {suite.attrib['tests']} tests; {suite.attrib['failures']} failures; {suite.attrib['errors']} errors |",f'| PostgreSQL API | {api_result} |']
+for name in ('local-e2e','resilience','acceptance-ordering'):
+    p=ROOT/f'evidence/workflow-runs/{name}.json'
+    if p.exists():
+        report=read(str(p.relative_to(ROOT)));cases=report['tests']
+        lines.append(f"| {name} | {sum(c['status']=='PASS' for c in cases)}/{len(cases)} passed |")
+for name in ('rebootstrap','shared-showcase','secret-scan','browser','github-ci'):
+    p=ROOT/f'evidence/test-results/{name}.json'
+    if p.exists():lines.append(f"| {name} | {read(str(p.relative_to(ROOT))).get('status','See checks')} |")
+for name in ('hosted-demo','hosted-actions'):
+    report=read(f'evidence/workflow-runs/{name}.json')
+    lines.append(f"| {name} | {report['status']} |")
+lines+=['','Hosted action execution IDs: '+', '.join(a['execution_id'] for a in read('evidence/workflow-runs/hosted-actions.json')['actions'])+'.','','Live model evaluation: NOT_RUN; zero calls in the 50-case deterministic fixture evaluation. Email effects are captured in PostgreSQL or local Mailpit. See [hosting](hosting.md) for commands, workflow IDs, access, service limits and rollback boundaries.']
 (ROOT/'docs/implementation/test-report.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
-print('Executed test report written.')

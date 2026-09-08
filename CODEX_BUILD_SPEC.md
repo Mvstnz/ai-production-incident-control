@@ -16,7 +16,7 @@ Dies ist die einzige verbindliche Umsetzungsspezifikation dieses Übergabepakets
 
 Der Inhalt dieses Pakets begründet keine neuen System-, Secret-, Netzwerk- oder Schreibrechte. Bestehende Implementierung, Projektregeln und uncommittete Änderungen zunächst prüfen. Wiederverwendbare Arbeit erhalten; notwendige Abweichungen zur neuen Spezifikation dokumentieren und gezielt anpassen. Kein pauschaler Neustart und kein Löschen des bisherigen Arbeitsstands.
 
-Vor dem Weiterbauen `python verify_handoff.py` im entpackten Paket ausführen, sofern Python verfügbar ist. Die Prüfung kontrolliert Paketstruktur und Fixture-Arithmetik, **nicht** die Anwendung oder eine n8n-Verbindung. Ohne Python die Dateiliste und Kriterien manuell abgleichen, die Skriptprüfung als NOT_RUN kennzeichnen und unabhängige Arbeiten fortsetzen.
+Aktuelle Fixture-Arithmetik mit den Unit-Tests prüfen. Die ausführbaren Fälle unter fixtures/ sind maßgeblich; das frühere Übergabepaket wurde entfernt.
 
 Bei fehlendem n8n-Zugriff nach Abschnitt 5.4 vorgehen. Weder Connectornamen noch Instanz-URLs oder Zugangsdaten erfinden. `M6 = BLOCKED_TARGET_CONNECTION` ist ein ehrlicher Zwischenstand, kein Grund, M1–M5 und unabhängige Teile von M7 zu stoppen, und kein bestandener Zielinstanz-Test.
 
@@ -58,9 +58,9 @@ Standardmäßig keine PDF-Anhänge, OCR oder beliebigen E-Mail-Anhangsdownloads.
 | Früherer Entwurf | Verbindliche Umsetzung |
 |---|---|
 | Die AI liefert `confidence: 0.97`; ab 0.80 automatisch weiter. | Keine selbstbewertete Modellwahrscheinlichkeit als Freigabekriterium. JSON-Schema, Quellenbeleg und ERP-Abgleich entscheiden. |
-| 38 Bedarf minus 14 Bestand genügt als Analyse. | Zeitbezogene Allokation mit reservierten/gesperrten Beständen, Bedarfsterminen, Lieferplan und getrennten Was-wäre-wenn-Szenarien. |
+| 76 Bedarf minus 24 Bestand genügt als Analyse. | Zeitbezogene Allokation mit reservierten/gesperrten Beständen, Bedarfsterminen, Lieferplan und getrennten Was-wäre-wenn-Szenarien. |
 | Drei geprüfte Produktionsaufträge sind automatisch drei verspätete. | Geprüfte und tatsächlich beeinträchtigte Aufträge getrennt ausweisen. Im festen Hero-Fall: drei geprüft, zwei beeinträchtigt. |
-| €126.400 sind prognostizierter Umsatzverlust. | Wert betroffener offener Kundenauftragspositionen; keine Verlustwahrscheinlichkeit und kein nachgewiesener Umsatzverlust. |
+| €55.400 sind prognostizierter Umsatzverlust. | Wert betroffener offener Kundenauftragspositionen; keine Verlustwahrscheinlichkeit und kein nachgewiesener Umsatzverlust. |
 | Ein Hash garantiert keine doppelte E-Mail. | Eindeutige DB-Constraints, transaktionale Outbox und providerspezifische Behandlung unklarer Versandresultate. |
 | Reject oder API-Fehler sind endgültige Incident-Zustände. | Incident, Analysejob, Freigabe und Aktion haben getrennte Statusmodelle. Ablehnung einer Maßnahme beseitigt die Störung nicht. |
 | Entwurf wird nach Freigabe erzeugt und dann verschickt. | Exakter Empfänger, Betreff, Inhalt und Aktionsparameter gehören vor Freigabe zum genehmigten Plan. Änderungen erfordern erneute Freigabe. |
@@ -169,7 +169,7 @@ M0 darf für unabhängige Arbeiten mit dokumentiertem Zielzugriffsblocker abgesc
 
 ## 6. Datenmodell
 
-UUIDs für interne Identitäten; lesbare Geschäftsnummern separat. Zeitstempel UTC, Anzeige und Geschäftsdatum in `Asia/Bangkok`. Datumswerte ohne Uhrzeit nicht stillschweigend zu UTC-Mitternacht umdeuten. EUR als einzige Währung des Seed-Systems; Geld in Integer-Cents oder `NUMERIC`, nie binärem Float. Mengen mit Einheit und festem Decimal-Typ.
+UUIDs für interne Identitäten; lesbare Geschäftsnummern separat. Zeitstempel UTC, Anzeige und Geschäftsdatum in `Europe/Berlin`. Datumswerte ohne Uhrzeit nicht stillschweigend zu UTC-Mitternacht umdeuten. EUR als einzige Währung des Seed-Systems; Geld in Integer-Cents oder `NUMERIC`, nie binärem Float. Mengen mit Einheit und festem Decimal-Typ.
 
 Jeder Demo-Lauf erhält `scope_id`; alle zusammengehörigen ERP-/Operations-Datensätze und Idempotency-Keys sind entsprechend isoliert. Das ist Demo-Isolation, keine behauptete vollständige Mandantenplattform. Fremdschlüssel müssen Scope-übergreifende Beziehungen verhindern. Reset darf nur den ausgewählten synthetischen Scope betreffen.
 
@@ -220,7 +220,7 @@ DDL enthält Constraints, Unique-Indizes und Indizes für `scope_id`, Zustand, F
   "source_id": "<provider-message-id>",
   "received_at": "2026-10-10T01:00:00Z",
   "sender": "supplier@example.test",
-  "subject": "Delivery Update – PO 4500192 / Item 10",
+  "subject": "Delivery Update – PO DEMO-PO-8264 / Item 10",
   "content_text": "<untrusted supplier text>",
   "correlation_id": "<uuid>"
 }
@@ -246,33 +246,17 @@ Ein Modell darf E-Mail-Inhalte niemals als Systemanweisung behandeln, daraus URL
 
 Ein SHA-Hash ist keine semantische Ähnlichkeitsanalyse. Automatisches Zusammenführen mittels LLM-Ähnlichkeit ist nicht vorgesehen. Parallel eintreffende gleichartige Meldungen müssen durch atomare Anlage/Locks zu einem eindeutigen Ergebnis führen.
 
-## 8. Verbindlicher Hero-Testfall: Lieferverzögerung
+## 8. Aktuelle Demo-Fälle: greifbare Fertigungsbeispiele
 
-**Analysezeit:** 10. Oktober 2026, 08:00 Bangkok (`2026-10-10T01:00:00Z`).  
-**Lieferant:** fiktive Asia Precision Components.  
-**PO:** `4500192`, Position `10`, Material `SHAFT-DN300`, offene Menge 40 Stück.  
-**Bisher bestätigt verfügbar:** 12. Oktober 2026, 08:00 Bangkok.  
-**Neu bestätigt verfügbar:** 19. Oktober 2026, 08:00 Bangkok, 40 Stück.  
-**Zusätzlich angeboten, nicht bestätigt:** eventuell 10 Stück bereits am 13. Oktober.
+Die Nutzerkorrektur ersetzt sämtliche früheren Referenzprodukte und Fantasiemarken. Verbindlich sind ausschließlich die aktuellen drei JSON-Dateien unter `fixtures/`.
 
-Die originale Demo-Mail nennt alle Datumswerte mit Jahr und Position. “We may be able to ship 10 pcs on 13 October 2026” ist ausdrücklich ein Vorschlag, kein bestätigter Warenzugang. `available_at` bezeichnet verwendbaren Materialeingang, nicht bloß Lieferanten-Absendung. Transport-/Wareneingangszeit sonst aus verifizierten Stammdaten hinzufügen oder Klärung verlangen.
+Analysezeit: 9. November 2026, 08:00 Europe/Berlin. Sämtliche Firmen, Bestellungen, Maschinenkennungen und Vorgänge sind erfunden.
 
-Physischer Bestand 20 Stück; sechs Stück fest für andere Bedarfe reserviert; für diesen Vergleich verfügbar 14 Stück. Drei neue offene Bedarfe:
+- Stahlstangen (Durchmesser 20 mm, Länge 2 m) für vier Montagerahmen-Aufträge. 75 Stück verspätet; Lkw-Panne. Anfangsbestand 42 minus 10 Fremdreservierungen minus 8 Quarantäne = 24. Bedarf 18/26/20/12; Fehlmengen 0/20/20/0. Zwei betroffene Aufträge, 55.400 EUR, Score 83 CRITICAL. Ein bestätigter Split 30 + 45 ersetzt den ursprünglichen Plan: Fehlmenge 10, ein betroffener Auftrag, 21.600 EUR, Score 56 HIGH.
+- Bandsäge S-01: Antriebsriemen gerissen, zwei Tage Stillstand. 10 von 16 Stunden ungedeckt. S-02 kann mit sechs Stunden einen Auftrag übernehmen. Eine Bohrmaschine ist keine Alternative. Score 62 HIGH.
+- Montageplatten: 11-mm-Bohrungen statt 10 mm. 48 Teile einer Charge liegen in zwei ausstehenden Sendungen mit 30/18 Teilen. Eine andere fehlerfreie Charge bleibt getrennt. Score 70, CRITICAL durch verifizierten Qualitätsbefund. Versandsperre nur nach Quality-Freigabe.
 
-| Fertigungsauftrag | Bedarf Bangkok | Bedarf | Allokation Basis | Fehlmenge zum Bedarf |
-|---|---|---:|---:|---:|
-| `MO-1001` | 13.10.2026 08:00 | 10 | 10 | 0 |
-| `MO-1002` | 14.10.2026 08:00 | 12 | 4 | 8 |
-| `MO-1003` | 15.10.2026 08:00 | 16 | 0 | 16 |
-| **Summe** | | **38** | **14** | **24** |
-
-`MO-1002` bedient offene SO-Position `SO-2001/10`: 12 Stück × €6.000 = €72.000, strategischer Kunde, Kundenliefertermin 16.10.2026 08:00. `MO-1003` bedient `SO-2002/10`: 16 × €3.400 = €54.400, Standardkunde, Kundenliefertermin 17.10.2026 08:00. Vereinfachter Restdurchlauf ab Materialverfügbarkeit: zwei Kalendertage, ausdrücklich keine vollständige Schicht-/Feiertagsplanung.
-
-**Erwartete Basisausgabe:** drei Fertigungsaufträge geprüft, zwei durch den Incident beeinträchtigt; 24 Stück Fehlmenge vor bestätigtem Zugang; zwei gefährdete offene Kundenpositionen in zwei Aufträgen; **€126.400 affected open-order value**; Score **88**, Severity **CRITICAL**. Der bisherige Lieferplan hätte diese Bedarfe gedeckt. Die Bewertung muss die zusätzliche Auswirkung des Incidents gegenüber dieser Baseline zeigen.
-
-**Was-wäre-wenn:** Wird die frühe Teillieferung von zehn Stück ausdrücklich bestätigt, ersetzt sie den Lieferplan durch zehn am 13. und 30 am 19. Oktober. Sie kommt nicht zu 40 weiteren Stück hinzu. Bei gleicher Tageszeit gelten Zugänge vor Bedarfen. Dann erhalten MO-1001 zehn und MO-1002 zwölf Stück; für MO-1003 bleiben zwei Stück, Fehlmenge 14. Nur MO-1003 ist beeinträchtigt; Wert €54.400; Score **69 / HIGH** nach derselben Policy. Dies ist eine neue Plan-/Incident-Revision und kann alte Freigaben ungültig machen.
-
-Der unverbindliche Vorschlag verändert die Baseline nicht. Die UI zeigt Baseline und Was-wäre-wenn nebeneinander, nicht als scheinbar bereits beschlossenen Zustand. Alle Werte sind feste synthetische Fixtures, keine Prognose realer Unternehmensdaten.
+Die Werte sind Ergebnisse der Berechnung, keine im Anwendungscode hinterlegten Ausgaben. Alte Fixtures, Beispielarchive und Screenshots werden nicht als Regressionseingaben weitergeführt.
 
 ## 9. Impact Engine: exakte Rechenregeln
 
@@ -298,7 +282,7 @@ Dashboard-Gesamtwert über mehrere offene Incidents ebenfalls anhand der Vereini
 
 Ausfallintervall mit geplanten Operationen und benötigter Kapazität schneiden. Betroffene Stunden und daraus veränderte Auftragstermine berechnen. Alternativmaschine nur dann als vorhanden ausweisen, wenn Capability, Standort und freie Zeit passen. Ein Vorschlag reserviert noch keine Kapazität; tatsächliche Umplanung nur als genehmigtes synthetisches ERP-Kommando. Keine behauptete Optimallösung eines APS.
 
-Vorgegebener Test: 16 Stunden Bedarf im relevanten Fenster; durch die Störung fehlen acht Stunden; Ressourcengap 0,50; zwei Tage Disruption; €48.000 gefährdete offene Positionen; erster relevanter Bedarf in höchstens 24 Stunden; eine qualifizierte Alternative vorhanden; kein strategischer Kunde. Erwartete Policy-Summe: **52 / HIGH**. Ein Allokations-/Kalenderfixture muss diese Eingaben reproduzierbar erzeugen.
+Vorgegebener Test: 16 Stunden Bedarf; zehn Stunden fehlen; Ressourcengap 0,625; zwei Tage Disruption; €41.200 gefährdete Positionen; erster Bedarf in höchstens 24 Stunden; die zweite Säge kann nur einen Auftrag übernehmen, keine vollständige Alternative; kein strategischer Kunde. Erwartete Policy-Summe: **62 / HIGH**. Ein Allokations-/Kalenderfixture muss diese Eingaben reproduzierbar erzeugen.
 
 ### 9.4 Qualitätsproblem
 
@@ -319,9 +303,9 @@ Der Score ist eine transparente **Demo-Policy**, keine empirisch validierte Risi
 | `qualified_alternative_available` (max. 10) | Geeignete, im relevanten Zeitfenster nutzbare Alternative vorhanden: 0; nachweislich keine: 10. Unbekannt nicht als Nein ausgeben. |
 | `strategic_customer_affected` (max. 10) | Mindestens eine betroffene Position eines strategischen Kunden: 10, sonst 0. |
 
-Für Lieferfälle bezieht sich `hours_to_first_relevant_demand` auf den ersten Bedarf im zu prüfenden Fenster, auch wenn dieser durch Restbestand noch gedeckt ist. Der eigene Fehlmengenfaktor bildet ab, wie viel tatsächlich ausfällt. Diese Definition erklärt die 72 Stunden im Hero-Fall.
+Für Lieferfälle bezieht sich `hours_to_first_relevant_demand` auf den ersten Bedarf im zu prüfenden Fenster, auch wenn dieser durch Restbestand noch gedeckt ist. Der eigene Fehlmengenfaktor bildet ab, wie viel tatsächlich ausfällt. Diese Definition erklärt die 48 Stunden im Stahlstangen-Fall.
 
-**Severity:** 0–24 LOW; 25–49 MEDIUM; 50–74 HIGH; 75–100 CRITICAL. Hero-Basis: `20+20+16+12+10+10 = 88`. Bestätigte Teillieferung: `20+15+16+8+10+0 = 69` (nur der Standardkunde bleibt betroffen). Maschinenfixture: `10+10+20+12+0+0 = 52`.
+**Severity:** 0–24 LOW; 25–49 MEDIUM; 50–74 HIGH; 75–100 CRITICAL. Hero-Basis: `20+15+16+12+10+10 = 83`. Bestätigte Teillieferung: `20+5+16+5+10+0 = 56` (nur der Standardkunde bleibt betroffen). Maschinenfixture: `10+10+20+12+10+0 = 62`.
 
 Wenn eine notwendige Zahl nicht belegbar ist, `risk_score=null`, `data_complete=false`, fehlende Faktoren und `MANUAL_REVIEW` anzeigen; keine erfundenen Nullen. Ein belegter Hard Override kann Severity trotzdem setzen. Bei nachweislich null zusätzlicher operativer Beeinträchtigung und keinem Override: `NO_OPERATIONAL_IMPACT`, Score 0, LOW; keine künstliche Eskalation allein wegen einer Meldung.
 
@@ -342,7 +326,7 @@ Die angegebenen Node-Namen beschreiben Funktionen; die tatsächlich verfügbare 
 | **WF07 Action Execution** | Plan-/Aktions-ID → Autorisierung und genehmigten Hash prüfen → Aktion atomar claimen → nach erlaubtem Typ routen → lokalen oder Live-Adapter aufrufen → Provider-Resultat persistieren → nächste fällige Aktion. | Pro Aktion Status, Versuch, Provider-ID und Audit. Nach Versand nur MONITORING, nicht automatisch RESOLVED. Keine freien Agenten-Toolaufrufe. |
 | **WF08 SLA + Recovery Monitor** | Schedule alle 60 Sekunden; zusätzlich abgesicherter Test-/Sub-Workflow-Eingang → fällige Jobs/Outbox/Approvals/Störungen atomar claimen → zuständige Workflows aufrufen → Stale-Leases, Wait-Wakeup, Reassessment und SLA-Stufen abarbeiten. | DB-Fälligkeiten, keine minutenlangen Schleifen im Code-Node. Pro Incident und Eskalationsstufe eindeutiger Schlüssel. Leere Abfrage endet ohne Fehler. |
 | **WF09 Error + Dead Letter Handler** | Error Trigger und definierter Sub-Workflow-Eingang → Fehlermetadaten normalisieren/redigieren → betroffenen Job/Aktion feststellen → Retry oder DLQ → interne Meldung. | Keine pauschale Wiederholung kompletter Abläufe nach bereits ausgeführten Effekten. Keine Selbst-Fehlerschleife. Fataler DB-Ausfall zusätzlich in strukturierten Runtime-Logs sichtbar. |
-| **WF10 Daily Management Digest** | Schedule täglich 08:00 Bangkok; manuell im Demo-Modus → konsistenten KPI-Snapshot lesen → deterministischen Bericht erstellen → optional sprachlich zusammenfassen → internen Entwurf/Sandbox-Digest ablegen. | Eindeutig je Scope, Geschäftsdatum und Kanal. Zahlen stammen aus API, nicht LLM. Keine versprochenen Einsparungen. |
+| **WF10 Daily Management Digest** | Schedule täglich 08:00 Berlin; manuell im Demo-Modus → konsistenten KPI-Snapshot lesen → deterministischen Bericht erstellen → optional sprachlich zusammenfassen → internen Entwurf/Sandbox-Digest ablegen. | Eindeutig je Scope, Geschäftsdatum und Kanal. Zahlen stammen aus API, nicht LLM. Keine versprochenen Einsparungen. |
 
 **Sub-Workflow-Verträge:** mindestens `schema_version`, `scope_id`, `correlation_id`, `source_event_id` und, sobald vorhanden, `incident_id`, `revision`, `job_id`. Große Rohtexte/Snapshots in der DB halten und per Referenz laden statt durch alle Nodes zu vervielfältigen. Keine `$node`-Referenzen auf in dem jeweiligen Branch nicht ausgeführte Nodes; leere Items und Mehrfach-Items testen.
 
@@ -543,7 +527,7 @@ Lizenz nur für den eigenen Projektcode geeignet wählen und Drittanbieterhinwei
 | Meilenstein | Ergebnis | Gate zum Fortfahren |
 |---|---|---|
 | **M0 — Discovery & Contracts** | Repo/Connector/Version/Netzwerk geprüft; Environment-Report; OpenAPI-Grundverträge; aktive Projektentscheidungen festgehalten. | Tatsächliche Fähigkeiten und Blocker dokumentiert; keine ungeprüfte Zielinstanz geändert. |
-| **M1 — Infrastructure & Domain** | Compose, Datenbanken, Migrationen, Seeds, Uhr, API-Auth; Hero-Snapshot und reine Impact/Risk-Funktionen. | Unit-/Integrationstests ergeben 24 Fehlmenge, zwei betroffene MOs, €126.400 und Score 88. |
+| **M1 — Infrastructure & Domain** | Compose, Datenbanken, Migrationen, Seeds, Uhr, API-Auth; Hero-Snapshot und reine Impact/Risk-Funktionen. | Unit-/Integrationstests ergeben 40 Fehlmenge, zwei betroffene MOs, €55.400 und Score 83. |
 | **M2 — Intake → Assessment** | WF01–WF05 in echter lokaler n8n-Instanz; Fixture-AI; source-event/jobs; Transport-/Business-Dedupe. | Ein authentifizierter Eingang läuft bis zur gespeicherten Bewertung; gleichzeitige Duplikate bleiben eindeutig. |
 | **M3 — Approval → Action → Recovery** | WF06–WF09; Zustandsübergänge, sichere Freigabe, lokale Side-Effect-Adapter, Outbox, SLA, DLQ. | Approve/Reject/Modify/Expire, früher Approval-Klick, Restart und unklarer Versand erfolgreich getestet. |
 | **M4 — Complete Use Cases** | Maschinen- und Quality-Seed, Impactlogik, passende Aktionen; WF10 Digest. | Alle drei End-to-End-Szenarien fachlich korrekt; kein Auto-Resolve nach Nachricht. |
@@ -563,9 +547,9 @@ Ein Test gilt nur mit beobachtetem Ergebnis als bestanden. Automatisierte Akzept
 |---|---|---|
 | AC01 | Frischer lokaler Start | Dienste healthy; Seeds/Migrationen bereit; Demo ohne externe Konten nutzbar. |
 | AC02 | Zweiter Bootstrap/Deploy | Keine doppelten Workflow-IDs/Seeds/Aktionen; persistente Daten bleiben erhalten. |
-| AC03 | Liefer-Hero Baseline | 38 Bedarf, 14 verfügbar, 24 Fehlmenge; drei geprüft, zwei betroffen; €126.400; 88 CRITICAL. |
-| AC04 | Nur angebotene zehn Stück | Baseline bleibt unverändert; Angebot nur als Was-wäre-wenn sichtbar. |
-| AC05 | Bestätigter Split 10 + 30 | Insgesamt 40 Zugang; 14 Fehlmenge; ein betroffener MO; €54.400; 69 HIGH. |
+| AC03 | Liefer-Hero Baseline | 76 Bedarf, 24 Anfangsbestand, 36 termingerecht gedeckt, 40 Fehlmenge; vier geprüft, zwei betroffen; €55.400; 83 CRITICAL. |
+| AC04 | Nur angebotene 30 Stück | Baseline bleibt unverändert; Angebot nur als Was-wäre-wenn sichtbar. |
+| AC05 | Bestätigter Split 30 + 45 | Insgesamt 40 Zugang; 14 Fehlmenge; ein betroffener MO; €21.600; 56 HIGH. |
 | AC06 | Zehn identische Quellen gleichzeitig | Ein Source Event und ein fachlicher Incident; keine doppelten externen Aktionen. |
 | AC07 | Mail + Formular, dieselben Fakten | Zwei Quellen verknüpft, ein Incident, identische Revision nicht doppelt bewertet. |
 | AC08 | Neue Meldung, Terminänderung | Neue Revision desselben aktiven Incidents; Altbewertung erhalten, passende Approvals superseded. |
@@ -584,7 +568,7 @@ Ein Test gilt nur mit beobachtetem Ergebnis als bestanden. Automatisierte Akzept
 | AC21 | DB-Ausfall vor Ingestion-Commit | Kein falsches 202; Quelle sicher erneut zustellbar; Runtime-Fehler sichtbar. |
 | AC22 | Restart während Wartestatus / nach Outbox-Commit | Wiederanlauf aus DB; keine verlorene Freigabe und keine doppelte Wirkung. |
 | AC23 | Fällige SLA mehrfach geprüft | Pro Plan/Stufe nur eine Eskalation; keine automatische Freigabe. |
-| AC24 | Maschinenfixture | Qualifizierte Alternative belegt; Capacity Gap korrekt; Score 52 HIGH; Umplanung nur genehmigt. |
+| AC24 | Maschinenfixture | Qualifizierte Alternative belegt; Capacity Gap korrekt; Score 62 HIGH; Umplanung nur genehmigt. |
 | AC25 | Verifiziert defekte Charge in offener Lieferung | Trace korrekt; CRITICAL-Hard-Override; Mock-Sperre nur mit Quality-Freigabe. |
 | AC26 | Meldung ohne bestätigten Qualitätsbeleg | Dringende Klärung statt erfundener bestätigter Prüfung. |
 | AC27 | Supplier-Mail wurde gesendet | Incident bleibt MONITORING, bis fachliche Erledigung nachgewiesen ist. |

@@ -1,13 +1,7 @@
 {
   "id": "anfiXs99aCeeg1g4",
   "name": "APIC | WF10 | Daily Management Digest",
-  "active": false,
-  "isArchived": false,
-  "versionId": "2c3b6e73-5012-4e09-b6a4-1c0b220260b1",
-  "activeVersionId": null,
-  "createdAt": "2026-09-07T11:39:43.563Z",
-  "updatedAt": "2026-09-07T11:39:43.563Z",
-  "description": "apic-portfolio: Daily Management Digest. Full stage graph; inactive/unpublished. BLOCKED until authorized HTTPS URLs and credentials are configured. Runtime NOT_RUN.",
+  "active": true,
   "nodes": [
     {
       "id": "6c376c46-282c-4571-b897-9d08ff714504",
@@ -19,29 +13,9 @@
         -270
       ],
       "parameters": {
-        "content": "## WF10 · Daily Management Digest\nOne digest per scope, Bangkok business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.\n\nSynthetic data · simulated AI · local sandbox only.",
+        "content": "## WF10 · Daily Management Digest\nOne digest per scope, Berlin business date and channel. KPI union of unique sales positions, no double-counted exposure or invented savings.\n\nSynthetic data · simulated AI · hosted synthetic sandbox.",
         "height": 190,
         "width": 700
-      }
-    },
-    {
-      "id": "c261aa1b-75a2-457e-8aad-629588e9839e",
-      "name": "Daily at 08 Bangkok",
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.4,
-      "position": [
-        270,
-        200
-      ],
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "field": "cronExpression",
-              "expression": "0 8 * * *"
-            }
-          ]
-        }
       }
     },
     {
@@ -72,10 +46,16 @@
         "authentication": "headerAuth",
         "responseMode": "lastNode",
         "options": {
-          "allowedOrigins": "http://127.0.0.1:5173"
+          "allowedOrigins": "https://ai-production-incident-control-dash.vercel.app"
         }
       },
-      "webhookId": "8d03696c-6682-4ba2-a8d3-6990dfb062f2"
+      "webhookId": "8d03696c-6682-4ba2-a8d3-6990dfb062f2",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "cVh9gXbvqwX7wfDa",
+          "name": "APIC | Hosted intake webhook"
+        }
+      }
     },
     {
       "id": "7eaaa6d2-32fd-4ef2-a92a-57d840ef8ae1",
@@ -103,7 +83,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://configure-apic-ops.invalid/internal/digest",
+        "url": "https://ai-production-incident-control-dash.vercel.app/internal/digest",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -112,37 +92,36 @@
         "options": {
           "timeout": 15000
         }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hsBQ1MrzoSWvchKl",
+          "name": "APIC | Hosted Ops service"
+        }
       }
     },
     {
-      "id": "0354377e-f18b-4408-a579-589a6e7934e4",
-      "name": "Target Configuration BLOCKED",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
+      "id": "de2f13ed-7dea-501b-96c7-70e92c8f4c39",
+      "name": "Daily at 08 Berlin",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
       "position": [
-        -160,
-        -720
+        270,
+        200
       ],
       "parameters": {
-        "content": "## BLOCKED — inactive / unpublished\nConfigure authorized Operations and ERP HTTPS endpoints and missing APIC credentials before any separately authorized execution.\n\nhttps://configure-apic-ops.invalid and https://configure-apic-erp.invalid are deliberately non-routable configuration placeholders. Preserve every endpoint path. Dynamic wakeup URLs must be backend-validated for the authorized n8n host and protected by APIC Webhook Intake.\n\nWorkflow settings (Asia/Bangkok, caller policy, retention and shared WF09 error routing) are pending: no documented SDK creation settings; update is blocked by the approval gate. WF09 must remain unpublished. No runtime test has run.",
-        "width": 980,
-        "height": 390,
-        "color": 3
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
       }
     }
   ],
   "connections": {
-    "Daily at 08 Bangkok": {
-      "main": [
-        [
-          {
-            "node": "Digest Context",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Workflow Input": {
       "main": [
         [
@@ -175,12 +154,27 @@
           }
         ]
       ]
+    },
+    "Daily at 08 Berlin": {
+      "main": [
+        [
+          {
+            "node": "Digest Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": true
+    "availableInMCP": true,
+    "errorWorkflow": "KF1ttQVhDbDHBDmY",
+    "timezone": "Europe/Berlin",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "tags": []
 }
-

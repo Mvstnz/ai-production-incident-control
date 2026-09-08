@@ -4,7 +4,7 @@ from runtime_client import Client
 
 def main():
     client=Client('admin')
-    scope_id=str(uuid5(NAMESPACE_URL,'apic-portfolio/default-demo'))
+    scope_id=str(uuid5(NAMESPACE_URL,'apic-portfolio/default-demo/fictional-v2'))
     system=client.ok('/api/system?scope_id='+scope_id)
     assert system['profile']=='DEMO_LOCAL' and system['external_actions_enabled'] is False
     existing={i['incident_type'] for i in client.ok('/api/incidents?limit=200&scope_id='+scope_id)['items']}

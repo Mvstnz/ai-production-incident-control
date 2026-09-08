@@ -1,6 +1,6 @@
 {
   "profile": "DEMO_LOCAL",
-  "started_at": "2026-09-07T13:05:31.724612+00:00",
+  "started_at": "2026-09-08T10:17:54.979987+00:00",
   "tests": [
     {
       "name": "ten_concurrent_first_deliveries_then_one_sandbox_effect",
@@ -9,51 +9,51 @@
       ],
       "status": "PASS",
       "evidence": {
-        "scope_id": "17eb5d34-3de0-4c00-94d1-a06cd36e13fe",
-        "incident_id": "dabcacb5-0bd2-4c10-8ebc-805b43076388",
+        "scope_id": "17a8243b-955c-44e3-92ea-d518d80b8fbf",
+        "incident_id": "595fafb4-a3f5-4aee-a17a-faa278096183",
         "concurrent_requests": 10,
         "initial_incident_count": 0,
         "unique_source_event_ids": [
-          "aa964bdb-a695-4745-a4cb-84f4581e83f9"
+          "8d705ea0-57c4-4860-bc0c-d98ba45b52df"
         ],
         "unique_job_ids": [
-          "c6f31fa7-2734-4c20-b40b-f1a6968253f0"
+          "b5b5dcfa-0579-40ab-9a35-5a309ddab5c8"
         ],
         "incident_count": 1,
         "linked_source_count": 1,
         "decisions": [
           {
-            "approval_id": "950fe1c7-a12b-4ab9-bac4-9b7218ed54d4",
+            "approval_id": "50a72022-bf54-4c0f-85bc-f60babccf59e",
             "status": "APPROVED"
           }
         ],
         "actions": [
           {
-            "id": "2ba55f0c-e048-46eb-99b0-a615e8b7d1ab",
+            "id": "07fc5108-70d2-475b-a0d9-001714ec12c2",
             "action_type": "SUPPLIER_EMAIL",
             "status": "SUCCEEDED",
             "attempts": 1,
-            "execution_id": "1553",
+            "execution_id": "12175",
             "workflow_id": "APICWF0700000001",
-            "provider_id": "<apic-2ba55f0c-e048-46eb-99b0-a615e8b7d1ab@example.test>"
+            "provider_id": "<apic-07fc5108-70d2-475b-a0d9-001714ec12c2@example.test>"
           },
           {
-            "id": "4aac0f79-b3e8-4126-910d-deb6152b566c",
+            "id": "f539cb0d-ec42-41d7-8f64-8c8cbeaf51cf",
             "action_type": "INTERNAL_TICKET",
             "status": "SUCCEEDED",
             "attempts": 1,
-            "execution_id": "1552",
+            "execution_id": "12173",
             "workflow_id": "APICWF0700000001",
-            "provider_id": "ticket-4aac0f79-b3e8-4126-910d-deb6152b566c"
+            "provider_id": "ticket-f539cb0d-ec42-41d7-8f64-8c8cbeaf51cf"
           }
         ],
         "mailpit_capture_ids": [
-          "k35rNgqLfUnQFzMyCAYycs"
+          "CAaB2L7fBv7U4t2ok3vS4j"
         ],
         "smtp_message_count": 1,
         "effects_stable_after_three_recoveries": true
       },
-      "duration_seconds": 17.765
+      "duration_seconds": 9.032
     },
     {
       "name": "committed_approval_observed_before_any_wait_then_n8n_delivery",
@@ -62,46 +62,46 @@
       ],
       "status": "PASS",
       "evidence": {
-        "scope_id": "1ebcaacb-ddbf-4306-8bc2-096a4685389e",
-        "incident_id": "fae2a6aa-8653-4cc0-9a55-2c574beba3b1",
+        "scope_id": "44710577-5c21-4fa8-8c1a-14f5c3addc52",
+        "incident_id": "e3338091-04c0-4300-b83f-6049a29bddd3",
         "decisions": [
           {
-            "approval_id": "02348876-2eb3-46a4-8b39-d5b7688ae990",
+            "approval_id": "0646b393-5662-45dc-9428-dce9dfbe3578",
             "status": "APPROVED"
           }
         ],
         "wait_registrations_before_decision": [],
         "wait_registrations_after_committed_decision": [],
-        "early_decision_observed_at": "2026-09-07T13:05:51.606350+00:00",
+        "early_decision_observed_at": "2026-09-08T10:18:05.550480+00:00",
         "decision_persisted_before_recovery": true,
         "continuation": "Recovery executes persisted approved actions even when no Wait was registered.",
         "actions": [
           {
-            "id": "7c2a266c-bbbc-4eec-8d93-7406e396875d",
-            "action_type": "INTERNAL_TICKET",
-            "status": "SUCCEEDED",
-            "attempts": 1,
-            "execution_id": "1564",
-            "workflow_id": "APICWF0700000001",
-            "provider_id": "ticket-7c2a266c-bbbc-4eec-8d93-7406e396875d"
-          },
-          {
-            "id": "a1272a62-39a9-4058-8ded-28eddfd6e0da",
+            "id": "311ebbdb-5f70-4255-9bae-5d202d4ce4fe",
             "action_type": "SUPPLIER_EMAIL",
             "status": "SUCCEEDED",
             "attempts": 1,
-            "execution_id": "1565",
+            "execution_id": "12198",
             "workflow_id": "APICWF0700000001",
-            "provider_id": "<apic-a1272a62-39a9-4058-8ded-28eddfd6e0da@example.test>"
+            "provider_id": "<apic-311ebbdb-5f70-4255-9bae-5d202d4ce4fe@example.test>"
+          },
+          {
+            "id": "d702a9ea-f4bd-4fb9-b167-c039fc86df0f",
+            "action_type": "INTERNAL_TICKET",
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "execution_id": "12197",
+            "workflow_id": "APICWF0700000001",
+            "provider_id": "ticket-d702a9ea-f4bd-4fb9-b167-c039fc86df0f"
           }
         ],
         "mailpit_capture_ids": [
-          "GcLMtJ8kp3vHGoT4Z5kEJ6"
+          "oFgZSNDNs2od4a3Gpepjjw"
         ],
         "smtp_message_count": 1,
         "effects_stable_after_three_recoveries": true
       },
-      "duration_seconds": 7.375
+      "duration_seconds": 5.562
     }
   ]
 }

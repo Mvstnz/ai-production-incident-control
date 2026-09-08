@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import {
   api,
+  incidentTitle,
   canDecide,
   date,
   label,
@@ -34,6 +35,8 @@ import {
   useQuery,
 } from "./ui";
 import type { ViewProps } from "./App";
+import { ActionDetails, actionName } from "./ActionDetails";
+import { businessName, readableSummary } from "./presentation";
 
 function count(value: unknown) {
   return Array.isArray(value) ? value.length : "—";
@@ -289,15 +292,11 @@ export function IncidentDetail({
       <div className="incident-heading">
         <div>
           <div className="incident-ref">
-            <span>{incident.number}</span>
             <span>Revision {incident.revision}</span>
             <Badge value={incident.incident_type} />
           </div>
-          <h2>{incident.title}</h2>
-          <p>
-            Updated {date(incident.updated_at)} Bangkok · Incident{" "}
-            <code>{incident.id}</code>
-          </p>
+          <h2>{incidentTitle(incident)}</h2>
+          <p>Updated {date(incident.updated_at)}</p>
         </div>
         <div className="incident-heading-status">
           <Badge value={incident.status} />
@@ -344,14 +343,14 @@ export function IncidentDetail({
               </strong>
               <p>
                 {impact.data_complete === true
-                  ? `Consistent ERP snapshot · Revision ${text(impact.erp_revision)} · Method ${text(impact.method_version)}`
+                  ? "Checked against inventory, order and production records"
                   : Array.isArray(impact.review_reasons)
                     ? impact.review_reasons.map(string).join(" · ") ||
                       "Awaiting a complete, verified assessment."
                     : "Awaiting a complete, verified assessment."}
               </p>
             </div>
-            <small>As of {date(impact.analysis_time)} Bangkok</small>
+            <small>As of {date(impact.analysis_time)}</small>
           </div>
           <div className="detail-grid">
             <div className="detail-main">
@@ -438,7 +437,9 @@ export function IncidentDetail({
                             )}
                           >
                             <td>
-                              <strong>{text(row.production_order)}</strong>
+                              <strong>
+                                {businessName(row.production_order)}
+                              </strong>
                               <small className="block">
                                 {row.affected === true
                                   ? "Affected"
@@ -451,7 +452,7 @@ export function IncidentDetail({
                             <td>
                               {row.need_at
                                 ? date(row.need_at)
-                                : text(row.operation_id)}
+                                : businessName(row.operation_id)}
                             </td>
                             <td className="numeric">
                               {text(row.covered_at_need)} /{" "}
@@ -535,9 +536,8 @@ export function IncidentDetail({
                       value={impact.proposals}
                     />
                     <p className="footnote">
-                      Confirming this synthetic scenario submits new facts
-                      through n8n. It creates a revision and may supersede
-                      existing approvals; it does not dispatch an action.
+                      Confirm the early delivery to recalculate coverage. The
+                      updated plan will need a fresh review.
                     </p>
                     {error && <ErrorBox error={error} />}
                     <button
@@ -548,11 +548,12 @@ export function IncidentDetail({
                       <GitBranch size={16} />
                       {splitBusy
                         ? "Submitting revision…"
-                        : "Run confirmed split revision"}
+                        : "Confirm early delivery"}
                     </button>
                     {session.user.role === "viewer" && (
                       <small className="block">
-                        An operational role is required to revise this scope.
+                        Only an authorized team member can change the delivery
+                        plan.
                       </small>
                     )}
                   </div>
@@ -574,7 +575,7 @@ export function IncidentDetail({
             <aside className="detail-aside">
               <Section
                 title="Risk assessment"
-                subtitle={`Demo policy ${text(risk.policy_version)}`}
+                subtitle="Priority based on the verified impact"
               >
                 <div className="risk-score">
                   <strong>
@@ -586,7 +587,10 @@ export function IncidentDetail({
                 {risk.override_reason ? (
                   <div className="override-note">
                     <ShieldAlert size={17} />
-                    <span>Hard override: {label(risk.override_reason)}</span>
+                    <span>
+                      Urgent: a verified quality defect affects shipments
+                      waiting to leave.
+                    </span>
                   </div>
                 ) : null}
                 <div className="risk-factors">
@@ -626,24 +630,23 @@ export function IncidentDetail({
               <Section
                 title="Response summary"
                 subtitle={
-                  latest
-                    ? label(latest.body.summary_mode)
-                    : "Awaiting a stored plan"
+                  latest ? "Impact and next steps" : "Awaiting assessment"
                 }
               >
                 <div className="panel-padding">
-                  <span className="badge simulated">
-                    Simulated AI / template
-                  </span>
                   <p className="summary-text">
-                    {latest?.body.summary ||
+                    {(latest ? readableSummary(latest.body.summary) : "") ||
                       "No response plan has been persisted yet."}
                   </p>
                   {latest && (
                     <>
-                      <p className="footnote">
-                        SOP references: {latest.body.sop_ids.join(", ")}
-                      </p>
+                      <Json
+                        title="Assessment method"
+                        value={{
+                          procedures: latest.body.sop_ids,
+                          mode: latest.body.summary_mode,
+                        }}
+                      />
                       <small>
                         Plan version {latest.plan_version} · Incident revision{" "}
                         {latest.revision}
@@ -676,7 +679,7 @@ export function IncidentDetail({
               return (
                 <Section
                   key={string(source.id) || index}
-                  title={string(envelope.subject) || `Source ${index + 1}`}
+                  title={`Report ${index + 1} · ${label(source.source)}`}
                   subtitle={`${label(source.source)} · Revision ${text(source.revision)}`}
                   action={<Badge value={source.status} />}
                 >
@@ -688,17 +691,21 @@ export function IncidentDetail({
                         source_id: source.id,
                       }}
                     />
-                    {envelope.content_text ? (
-                      <EvidenceText
-                        content={string(envelope.content_text)}
-                        evidence={evidence}
-                      />
-                    ) : (
-                      <Json
-                        title="Structured intake payload"
-                        value={envelope.payload}
-                      />
-                    )}
+                    <p className="summary-text">{incidentTitle(incident)}</p>
+                    <details className="source-original">
+                      <summary>Original report and exact references</summary>
+                      {envelope.content_text ? (
+                        <EvidenceText
+                          content={string(envelope.content_text)}
+                          evidence={evidence}
+                        />
+                      ) : (
+                        <Json
+                          title="Structured intake payload"
+                          value={envelope.payload}
+                        />
+                      )}
+                    </details>
                     <p className="footnote">
                       Highlighted text is the recorded source evidence. Source
                       content is rendered as text and cannot execute
@@ -793,11 +800,14 @@ export function IncidentDetail({
                     <Badge value={plan.status} />
                     <span>Incident revision {plan.revision}</span>
                   </summary>
-                  <p>{plan.body.summary}</p>
-                  <small className="hash">Hash {plan.plan_hash}</small>
+                  <p>{readableSummary(plan.body.summary)}</p>
+                  <Json
+                    title="Technical reference"
+                    value={{ plan_hash: plan.plan_hash }}
+                  />
                   {plan.body.actions.map((action, index) => (
                     <div className="payload-card" key={index}>
-                      <h3>{label(action.action_type)}</h3>
+                      <h3>{actionName(action)}</h3>
                       <small>
                         {action.required_role
                           ? `Required role: ${label(action.required_role)}`
@@ -805,7 +815,7 @@ export function IncidentDetail({
                             ? "Internal action · no separate role approval"
                             : "Role not specified"}
                       </small>
-                      <Fields data={action.payload} />
+                      <ActionDetails action={action} />
                     </div>
                   ))}
                 </details>
@@ -820,7 +830,7 @@ export function IncidentDetail({
           </Section>
           <Section
             title="Action outcomes"
-            subtitle="Provider and workflow evidence from persisted action records"
+            subtitle="Completed steps and actions still awaiting approval"
           >
             <div className="table-scroll">
               <table>
@@ -829,26 +839,26 @@ export function IncidentDetail({
                     <th>Action</th>
                     <th>Status</th>
                     <th>Attempts</th>
-                    <th>Provider reference</th>
-                    <th>Workflow / execution</th>
+                    <th>Details</th>
                   </tr>
                 </thead>
                 <tbody>
                   {incident.actions.map((action, index) => (
                     <tr key={action.id || index}>
-                      <td>{label(action.action_type)}</td>
+                      <td>{actionName(action)}</td>
                       <td>
                         <Badge value={action.status} />
                       </td>
                       <td>{text(action.attempts)}</td>
                       <td>
-                        <code>{text(action.provider_id)}</code>
-                      </td>
-                      <td>
-                        <code>
-                          {text(action.workflow_id)} /{" "}
-                          {text(action.execution_id)}
-                        </code>
+                        <Json
+                          title="Technical details"
+                          value={{
+                            provider: action.provider_id,
+                            workflow: action.workflow_id,
+                            execution: action.execution_id,
+                          }}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -861,7 +871,7 @@ export function IncidentDetail({
       {tab === "timeline" && (
         <Section
           title="Audit trail"
-          subtitle="Append-only recorded events; no synthetic progress steps"
+          subtitle="A recorded history of assessments, decisions and actions"
         >
           <ol className="timeline">
             {incident.timeline.map((item, index) => (
@@ -870,12 +880,12 @@ export function IncidentDetail({
                 <div>
                   <div className="timeline-title">
                     <strong>{label(item.event)}</strong>
-                    <time>{date(item.created_at)} Bangkok</time>
+                    <time>{date(item.created_at)}</time>
                   </div>
-                  <p>
-                    Actor {text(item.actor)} · Object{" "}
-                    <code>{text(item.object_id)}</code>
-                  </p>
+                  <Json
+                    title="Technical reference"
+                    value={{ actor: item.actor, object: item.object_id }}
+                  />
                   <Json title="Event details" value={item.data} />
                 </div>
               </li>

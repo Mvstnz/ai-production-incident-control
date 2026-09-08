@@ -1,6 +1,6 @@
 {
   "profile": "DEMO_LOCAL",
-  "readback_at": "2026-09-07T12:47:06.659079+00:00",
+  "readback_at": "2026-09-08T10:17:07.010024+00:00",
   "n8n_version": "2.37.10",
   "workflows": [
     {
@@ -10,7 +10,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf01.json",
-      "sha256": "121b5a1a69e384cb69d4071f91f3fae935345add05fbd64fbcab7dda69e0878d",
+      "sha256": "598edf3ecdcdc9deebd71dade99f9b61cebf52f14e59dd643450dd8d9368edd6",
       "url": "http://127.0.0.1:5678/workflow/APICWF0100000001"
     },
     {
@@ -20,7 +20,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf02.json",
-      "sha256": "2fd768dc036c78aaa83197c1c4eeb4e24d22d6ab15ec31f25577556ae894f8b7",
+      "sha256": "228deccaf645d2831920562a66515f894271014620d58c66954f3ea4b2b8944f",
       "url": "http://127.0.0.1:5678/workflow/APICWF0200000001"
     },
     {
@@ -30,7 +30,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf03.json",
-      "sha256": "4a1b709e98591d0d15d34983d0560fbdc6b85b03382b81c01b71121569c1ff4d",
+      "sha256": "b8727b5ed4563e348a7a373528a0a7a01eb9f8a33d1f2e7fde740439d0d2445c",
       "url": "http://127.0.0.1:5678/workflow/APICWF0300000001"
     },
     {
@@ -40,7 +40,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf04.json",
-      "sha256": "45860bee0600f482aef807480ac1be1aafa49dcf3919fe7620e1fb6303a83651",
+      "sha256": "17f1169ff5daf023bb3295453e561644825cfa6fa23d884a92f71f4163c0fa02",
       "url": "http://127.0.0.1:5678/workflow/APICWF0400000001"
     },
     {
@@ -50,7 +50,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf05.json",
-      "sha256": "bbc44651a89abb2dbf62cf048dacff27740a3aa1456cca064b7f7eafd6dbe7db",
+      "sha256": "dbb353d5fda04e6c21be92e1c214070ce11a639ed398676386636373d23dcfca",
       "url": "http://127.0.0.1:5678/workflow/APICWF0500000001"
     },
     {
@@ -60,7 +60,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf06.json",
-      "sha256": "a26c0f738ff705b7f402e94941bc874afb59f3ae8bd10f916280d84b9b22dd44",
+      "sha256": "ec9f14fd0bc42c2beea64e74626314bb823aed7ec2069661999a587272e29bae",
       "url": "http://127.0.0.1:5678/workflow/APICWF0600000001"
     },
     {
@@ -70,7 +70,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf07.json",
-      "sha256": "54cb1b6864e0f558c8b9944a5e74746ed8b6cae2c5d5d7ae4fb71f50575da980",
+      "sha256": "fc3fb8a8634e76d74a4ca6c14ba8e9f6ae6dd61277e1c24fcf2baa99248f43e9",
       "url": "http://127.0.0.1:5678/workflow/APICWF0700000001"
     },
     {
@@ -80,7 +80,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf08.json",
-      "sha256": "822de1315f89552d4d6970c25491f071c946b57a5111ed109057b55b38b27e34",
+      "sha256": "3db3dfa50b4854025ad61cfb87e23d460ef471e38622ce45f567204ba88d3d95",
       "url": "http://127.0.0.1:5678/workflow/APICWF0800000001"
     },
     {
@@ -90,7 +90,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf09.json",
-      "sha256": "bf6fd4dfe4b1128c7f55bd75e578d6b888e4bd1d64474f494a2fd6c1ba518b7b",
+      "sha256": "8fea96799beb819d629f88c44b8268aeef258bd0e017c37fb2d06471ada545bf",
       "url": "http://127.0.0.1:5678/workflow/APICWF0900000001"
     },
     {
@@ -100,7 +100,7 @@
       "state": "PUBLISHED",
       "graph_comparison": "PASS",
       "file": "n8n/exports/local/wf10.json",
-      "sha256": "c432855a581ecb8ad512c739ddb9f9cbbff179c359aa771c1c65f3ba9be652ec",
+      "sha256": "0199ee329dee2fa29435906e75b6d642231239bca29a72e8a85dd1f5d5bc6306",
       "url": "http://127.0.0.1:5678/workflow/APICWF1000000001"
     }
   ]

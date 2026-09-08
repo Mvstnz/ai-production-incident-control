@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 import httpx
 import psycopg
 from argon2.exceptions import VerificationError
-from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import AwareDatetime
@@ -23,12 +23,24 @@ from backend.domain import aggregate_values, build_plan, evaluate_impact, evalua
 from backend.models import ActionCommand, Claim, CustomEmail, Decision, Demo, DraftInput, Envelope, ExtractInput, ImpactInput, LiveExtractionInput, Login, PlanContext, RiskInput, Stage
 from backend.security import BodyLimitMiddleware, hashed, origin, passwords, rate_limit, role, safe_message, scope, service, user
 from backend.seed import fixture
+from backend.datasets import dataset_name, demo_clock, demo_timezone
 from backend.clock import SLA, add_business_hours
 from backend.state import correlate, create_plan, plan_result, require_job, revalidate, stage_for, supersede
 
 app=FastAPI(title="AI Production Incident Control",version="1.0.0",description="Synthetic demo. n8n orchestrates; API commands persist atomic state.")
 app.add_middleware(BodyLimitMiddleware)
 log=logging.getLogger("apic")
+
+
+def notify_recovery():
+    """Wake n8n after committed work; the scheduled recovery remains the fallback."""
+    url=os.getenv("N8N_RECOVERY_URL")
+    if not url: return
+    try:
+        response=httpx.post(url,json={},headers={"X-Webhook-Token":os.getenv("N8N_WEBHOOK_TOKEN","")},timeout=10)
+        response.raise_for_status()
+    except httpx.HTTPError:
+        log.warning("n8n recovery wakeup deferred to scheduled recovery")
 
 
 @app.exception_handler(HTTPException)
@@ -72,6 +84,30 @@ def login(body:Login,request:Request,response:Response):
         scopes=conn.execute("SELECT s.id,s.name FROM ops.scopes s JOIN ops.memberships m ON m.scope_id=s.id WHERE m.user_id=%s ORDER BY s.created_at",(found["id"],)).fetchall()
     response.set_cookie("apic_session",raw,max_age=8*3600,httponly=True,samesite="strict",secure=os.getenv("COOKIE_SECURE","false")=="true",path="/api")
     return {"user":{k:found[k] for k in ("id","username","role")},"csrf_token":csrf,"scopes":scopes}
+
+
+@app.post("/api/auth/demo")
+def public_demo(request:Request,response:Response):
+    """A public visitor can only read the explicitly published synthetic scope."""
+    if os.getenv("PUBLIC_DEMO_ENABLED","false") != "true":
+        raise HTTPException(404,"Public demo is not enabled")
+    origin(request); rate_limit(request,"public-demo",20)
+    from backend.bootstrap import DEFAULT_SCOPE
+    with transaction() as conn:
+        found=conn.execute("SELECT id,username,role FROM ops.users WHERE username='public_viewer' AND role='viewer'").fetchone()
+        if not found: raise HTTPException(503,"Public demo is being prepared")
+        raw,csrf=secrets.token_urlsafe(48),secrets.token_urlsafe(32)
+        conn.execute("DELETE FROM ops.sessions WHERE user_id=%s AND expires_at<%s",(found["id"],utcnow()))
+        conn.execute("INSERT INTO ops.sessions VALUES (%s,%s,%s,%s)",(hashed(raw),found["id"],hashed(csrf),utcnow()+timedelta(hours=2)))
+        available=conn.execute("SELECT s.id,s.name FROM ops.scopes s JOIN ops.memberships m ON m.scope_id=s.id WHERE m.user_id=%s AND s.id=%s",(found["id"],DEFAULT_SCOPE)).fetchall()
+    response.set_cookie("apic_session",raw,max_age=7200,httponly=True,samesite="strict",secure=os.getenv("COOKIE_SECURE","false")=="true",path="/api")
+    return {"user":found,"csrf_token":csrf,"scopes":available}
+
+
+@app.get("/api/demo/catalog")
+def demo_catalog():
+    data=fixture("SUPPLIER_DELAY")
+    return {"dataset":dataset_name(),"timezone":demo_timezone(),"public_demo_enabled":os.getenv("PUBLIC_DEMO_ENABLED","false")=="true","live_ai_enabled":live_ai_config()[0],"source_email":data["source_email"]}
 
 
 @app.get("/api/auth/me")
@@ -262,7 +298,8 @@ def plan(body:Stage):
 
 
 @app.post("/internal/jobs/complete",dependencies=[Depends(service)])
-def complete(body:Stage):
+def complete(body:Stage,background_tasks:BackgroundTasks):
+    background_tasks.add_task(notify_recovery)
     s=body.model_dump(mode="json",exclude_none=True)
     with transaction() as conn:
         row=conn.execute("SELECT * FROM ops.analysis_jobs WHERE scope_id=%s AND id=%s FOR UPDATE",(body.scope_id,body.job_id)).fetchone()
@@ -349,7 +386,7 @@ def dashboard(conn,sid,updated_after=None,updated_before=None):
     pending=conn.execute("SELECT count(*) AS n FROM ops.approvals WHERE scope_id=%s AND status='PENDING'",(sid,)).fetchone()["n"]
     sla=conn.execute("SELECT count(*) AS n FROM ops.outbox_events WHERE scope_id=%s AND kind='SLA'",(sid,)).fetchone()["n"]
     live,_,_=live_ai_config()
-    return {"open_incidents":len(incidents),"critical_incidents":sum(i["severity"]=="CRITICAL" for i in incidents),"affected_open_order_value_cents":value["affected_open_order_value_cents"],"pending_approvals":pending,"sla_breaches":sla,"currency":"EUR","clock":now(conn,sid),"timezone":"Asia/Bangkok","ai_mode":"Live Gemini + verified facts" if live else "Simulated AI","profile":"DEMO_LOCAL","aggregation":"union of unique open sales positions"}
+    return {"open_incidents":len(incidents),"critical_incidents":sum(i["severity"]=="CRITICAL" for i in incidents),"affected_open_order_value_cents":value["affected_open_order_value_cents"],"pending_approvals":pending,"sla_breaches":sla,"currency":"EUR","clock":now(conn,sid),"timezone":demo_timezone(),"ai_mode":"Live Gemini + verified facts" if live else "Simulated AI","profile":os.getenv("PROFILE","DEMO_LOCAL"),"aggregation":"union of unique open sales positions"}
 
 
 @app.get("/api/dashboard")
@@ -398,13 +435,14 @@ def event(event_id:UUID,scope_id:UUID,actor=Depends(user)):
 def approval_list(scope_id:UUID,actor=Depends(user)):
     with transaction() as conn:
         scope(conn,actor,scope_id)
-        rows=conn.execute("SELECT a.*,p.incident_id,p.revision FROM ops.approvals a JOIN ops.action_plans p ON (p.scope_id,p.id)=(a.scope_id,a.plan_id) WHERE a.scope_id=%s ORDER BY a.expires_at",(scope_id,)).fetchall()
+        rows=conn.execute("SELECT a.*,p.incident_id,p.revision,i.title AS incident_title FROM ops.approvals a JOIN ops.action_plans p ON (p.scope_id,p.id)=(a.scope_id,a.plan_id) JOIN ops.incidents i ON (i.scope_id,i.id)=(p.scope_id,p.incident_id) WHERE a.scope_id=%s ORDER BY a.expires_at",(scope_id,)).fetchall()
         for row in rows: row["actions"]=conn.execute("SELECT action_type,payload FROM ops.incident_actions WHERE scope_id=%s AND plan_id=%s",(scope_id,row["plan_id"])).fetchall()
         return {"items":rows}
 
 
 @app.post("/api/approvals/{approval_id}/decision")
-def decide(approval_id:UUID,body:Decision,actor=Depends(user)):
+def decide(approval_id:UUID,body:Decision,background_tasks:BackgroundTasks,actor=Depends(user)):
+    background_tasks.add_task(notify_recovery)
     with transaction() as conn:
         scope(conn,actor,body.scope_id)
         approval=conn.execute("SELECT * FROM ops.approvals WHERE scope_id=%s AND id=%s FOR UPDATE",(body.scope_id,approval_id)).fetchone()
@@ -458,7 +496,18 @@ def system(scope_id:UUID,actor=Depends(user)):
     with transaction() as conn:
         scope(conn,actor,scope_id)
         calls=conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls").fetchone()["count"]
-        return {"profile":"DEMO_LOCAL","ai_mode":"Live Gemini + verified facts" if live else "Simulated AI","live_ai":{"enabled":live,"model":model or None,"calls_used":calls,"calls_limit":limit},"external_actions_enabled":False,"jobs":conn.execute("SELECT id,source_event_id,status,step,attempts,next_attempt_at,execution_id,workflow_id,last_error FROM ops.analysis_jobs WHERE scope_id=%s",(scope_id,)).fetchall(),"outbox":conn.execute("SELECT kind,status,count(*) AS count FROM ops.outbox_events WHERE scope_id=%s GROUP BY kind,status",(scope_id,)).fetchall(),"notifications":conn.execute("SELECT id,body,created_at FROM ops.sandbox_notifications WHERE scope_id=%s ORDER BY created_at DESC",(scope_id,)).fetchall(),"wait_registrations":conn.execute("SELECT scope_id,plan_id,execution_id,workflow_id,registered_at FROM ops.wait_registrations WHERE scope_id=%s",(scope_id,)).fetchall(),"health":{"database":"ready"}}
+        jobs=conn.execute("""SELECT j.id,j.source_event_id,j.status,j.step,j.attempts,j.next_attempt_at,
+            j.execution_id,j.workflow_id,j.last_error,i.id AS incident_id,i.title AS incident_title
+            FROM ops.analysis_jobs j LEFT JOIN ops.incident_sources s
+            ON (s.scope_id,s.source_event_id)=(j.scope_id,j.source_event_id)
+            LEFT JOIN ops.incidents i ON (i.scope_id,i.id)=(s.scope_id,s.incident_id)
+            WHERE j.scope_id=%s""",(scope_id,)).fetchall()
+        waits=conn.execute("""SELECT w.scope_id,w.plan_id,w.execution_id,w.workflow_id,w.registered_at,
+            i.id AS incident_id,i.title AS incident_title,p.status AS plan_status
+            FROM ops.wait_registrations w JOIN ops.action_plans p ON (p.scope_id,p.id)=(w.scope_id,w.plan_id)
+            JOIN ops.incidents i ON (i.scope_id,i.id)=(p.scope_id,p.incident_id)
+            WHERE w.scope_id=%s""",(scope_id,)).fetchall()
+        return {"profile":os.getenv("PROFILE","DEMO_LOCAL"),"ai_mode":"Live Gemini + verified facts" if live else "Simulated AI","live_ai":{"enabled":live,"model":model or None,"calls_used":calls,"calls_limit":limit},"external_actions_enabled":False,"jobs":jobs,"outbox":conn.execute("SELECT kind,status,count(*) AS count FROM ops.outbox_events WHERE scope_id=%s GROUP BY kind,status",(scope_id,)).fetchall(),"notifications":conn.execute("SELECT id,body,created_at FROM ops.sandbox_notifications WHERE scope_id=%s ORDER BY created_at DESC",(scope_id,)).fetchall(),"wait_registrations":waits,"health":{"database":"ready"}}
 
 
 def forward_intake(envelope):
@@ -492,19 +541,19 @@ def demo(body:Demo,actor=Depends(user)):
     with transaction() as conn:
         if body.scope_id: scope(conn,actor,sid)
         else:
-            conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,%s,%s,'2026-10-10T01:00:00Z')",(sid,"Demo · "+body.scenario,actor["id"]))
+            conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,%s,%s,%s)",(sid,"Demo · "+body.scenario,actor["id"],demo_clock()))
             # Explicit synthetic-team membership, never a global role-based scope bypass.
             conn.execute("INSERT INTO ops.memberships SELECT %s,id FROM ops.users WHERE id=%s OR role IN ('production_manager','quality_manager','purchasing','admin')",(sid,actor["id"]))
             audit(conn,sid,"DEMO_CREATED",sid,actor=str(actor["id"]),data={"scenario":body.scenario})
     erp_call("/erp/v1/demo/seed",{"scope_id":sid,"shipped":body.scenario=="quality-shipped"},write=True)
-    base={"schema_version":"1.0","scope_id":sid,"source_account_id":"synthetic-demo","source_id":uid(),"received_at":"2026-10-10T01:00:00Z","correlation_id":uid()}
+    base={"schema_version":"1.0","scope_id":sid,"source_account_id":"synthetic-demo","source_id":uid(),"received_at":demo_clock(),"correlation_id":uid()}
     if body.scenario in ("supplier-delay","unknown-input"):
         data=fixture("SUPPLIER_DELAY")["source_email"]
         envelope={**base,"source":"EMAIL",**data}
         if body.scenario=="unknown-input": envelope["content_text"]="Our delivery might arrive next Friday. Please advise."
     elif body.scenario=="supplier-split":
         f=fixture("SUPPLIER_DELAY")
-        envelope={**base,"source":"FORM","payload":{"incident_type":"SUPPLIER_DELAY",**{k:f[k] for k in ("purchase_order","purchase_order_item","material")},"confirmed_supply_schedule":f["scenarios"][1]["confirmed_supply_schedule"],"reason":"Heat treatment capacity problems"},"subject":"Confirmed split revision"}
+        envelope={**base,"source":"FORM","payload":{"incident_type":"SUPPLIER_DELAY",**{k:f[k] for k in ("purchase_order","purchase_order_item","material")},"confirmed_supply_schedule":f["scenarios"][1]["confirmed_supply_schedule"],"reason":f.get("reason","A broken delivery truck has delayed the steel rods needed for four mounting-frame orders.")},"subject":"Confirmed split revision"}
     else:
         kind="MACHINE_BREAKDOWN" if body.scenario=="machine-breakdown" else "QUALITY_ISSUE"
         envelope={**base,"source":"API","payload":fixture(kind)["facts"],"subject":body.scenario}
@@ -520,12 +569,12 @@ def custom_email(body:CustomEmail,actor=Depends(user)):
     with transaction() as conn:
         calls=conn.execute("SELECT count(*) AS count FROM ops.live_ai_calls").fetchone()["count"]
         if calls>=limit: raise HTTPException(429,"The configured live AI call budget is exhausted")
-        conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,'Demo · Gemini mail',%s,'2026-10-10T01:00:00Z')",(sid,actor["id"]))
+        conn.execute("INSERT INTO ops.scopes(id,name,owner_id,clock_at) VALUES (%s,'Demo · Gemini mail',%s,%s)",(sid,actor["id"],demo_clock()))
         conn.execute("INSERT INTO ops.memberships SELECT %s,id FROM ops.users WHERE id=%s OR role IN ('production_manager','quality_manager','purchasing','admin')",(sid,actor["id"]))
         audit(conn,sid,"DEMO_CREATED",sid,actor=str(actor["id"]),data={"scenario":"custom-gemini-email","synthetic":True})
     erp_call("/erp/v1/demo/seed",{"scope_id":sid,"shipped":False},write=True)
     envelope=Envelope(scope_id=sid,source="EMAIL",source_account_id="synthetic-custom-mail",
-        source_id=uid(),received_at="2026-10-10T01:00:00Z",correlation_id=uid(),
+        source_id=uid(),received_at=demo_clock(),correlation_id=uid(),
         sender="supplier@example.test",subject=body.subject,content_text=body.content_text,ai_mode="live")
     return {**forward_intake(envelope.model_dump(mode="json")),"scope_id":sid}
 
@@ -554,7 +603,7 @@ def reset(scope_id:UUID,actor=Depends(user)):
         conn.execute("DELETE FROM ops.source_events WHERE scope_id=%s",(scope_id,))
         for table in ("outbox_events","digests","failures"):
             conn.execute(f"DELETE FROM ops.{table} WHERE scope_id=%s",(scope_id,))
-        conn.execute("UPDATE ops.scopes SET clock_at='2026-10-10T01:00:00Z' WHERE id=%s",(scope_id,))
+        conn.execute("UPDATE ops.scopes SET clock_at=%s WHERE id=%s",(demo_clock(),scope_id))
         audit(conn,scope_id,"DEMO_RESET",scope_id,actor=str(actor["id"]),data={"audit_retained":True})
     erp_call("/erp/v1/demo/reset",{"scope_id":str(scope_id)},write=True)
     return {"scope_id":str(scope_id),"status":"reset","audit_retained":True}
@@ -741,7 +790,7 @@ def daily_digest(body:dict):
         scopes=conn.execute("SELECT s.id FROM ops.scopes s WHERE (%s::uuid IS NULL OR s.id=%s) AND EXISTS (SELECT 1 FROM ops.memberships m WHERE m.scope_id=s.id)",(body.get("scope_id"),body.get("scope_id"))).fetchall()
         reports=[]
         for s in scopes:
-            sid=s["id"]; date=now(conn,sid).astimezone(ZoneInfo("Asia/Bangkok")).date()
+            sid=s["id"]; date=now(conn,sid).astimezone(ZoneInfo(demo_timezone())).date()
             data=dashboard(conn,sid)
             report=conn.execute("INSERT INTO ops.digests VALUES (%s,%s,%s,'sandbox',%s) ON CONFLICT(scope_id,business_date,channel) DO NOTHING RETURNING *",(uid(),sid,date,js(data))).fetchone()
             if not report: report=conn.execute("SELECT * FROM ops.digests WHERE scope_id=%s AND business_date=%s AND channel='sandbox'",(sid,date)).fetchone()

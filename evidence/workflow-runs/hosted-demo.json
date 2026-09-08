@@ -1,0 +1,51 @@
+{
+  "run_at": "2026-09-08T10:32:49.019561+00:00",
+  "origin": "https://ai-production-incident-control-dash.vercel.app",
+  "dataset": "fictional-v2",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/health/live",
+      "status": 200
+    },
+    {
+      "path": "/health/ready",
+      "status": 200
+    },
+    {
+      "path": "/api/demo/catalog",
+      "status": 200
+    },
+    {
+      "public_read_only_scope": "PASS",
+      "public_mutation_denied": "PASS"
+    }
+  ],
+  "incidents": [
+    {
+      "id": "42050072-3f66-4134-9315-868d056ea1fe",
+      "incident_type": "SUPPLIER_DELAY",
+      "risk_score": 83,
+      "severity": "CRITICAL",
+      "status": "WAITING_APPROVAL"
+    },
+    {
+      "id": "cd1a5634-b0ea-4c06-8a5c-9fd8ff26ba2a",
+      "incident_type": "MACHINE_BREAKDOWN",
+      "risk_score": 62,
+      "severity": "HIGH",
+      "status": "WAITING_APPROVAL"
+    },
+    {
+      "id": "bbe352f8-1e69-4a8a-9601-825c91c3a205",
+      "incident_type": "QUALITY_ISSUE",
+      "risk_score": 70,
+      "severity": "CRITICAL",
+      "status": "WAITING_APPROVAL"
+    }
+  ],
+  "status": "TARGET_TESTED"
+}
