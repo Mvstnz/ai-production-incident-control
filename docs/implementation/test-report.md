@@ -4,8 +4,8 @@ The matrix is an index of retained evidence. Fixture tests, local runtime and co
 
 | Boundary | Actual result | Command / evidence |
 |---|---|---|
-| Pure domain | 100 passed | `rtk proxy python -m pytest tests/unit -q`; domain-junit.xml |
-| Real PostgreSQL API integration | 30 passed, 2 warnings in 152.87s (0:02:32) | `rtk proxy python -m backend.run_integration`; api-integration-output.txt |
+| Pure domain | 108 passed | `rtk proxy python -m pytest tests/unit -q`; domain-junit.xml |
+| Real PostgreSQL API integration | 34 passed, 2 dependency warnings in 47.93s | `rtk proxy python -m backend.run_integration`; api-integration-output.txt |
 | Published local n8n E2E | 10/10 passed after final redeploy | `rtk proxy python -X utf8 scripts/test_runtime.py` |
 | Exact concurrent delivery / early approval ordering | 2/2 passed locally; actual Mailpit capture counted after repeated recovery | `rtk proxy python -X utf8 scripts/test_acceptance_ordering.py`; acceptance-ordering.json |
 | Actual runtime resilience | 10/10 passed, earlier failures retained | `rtk proxy python -X utf8 scripts/test_resilience.py --phase normal`; disruptive phases below |

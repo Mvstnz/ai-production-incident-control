@@ -47,7 +47,7 @@ WF03 invokes WF04 then WF05 synchronously. Their inputs carry work item + live c
 
 ## Browser API
 
-Session cookies via Starlette SessionMiddleware with server-side session record; POST origin + CSRF required except login (origin still required). `/v1/auth/login` `{username,password}` → `{user:{id,username,role},csrf_token}`. `/v1/auth/me` same; `/v1/auth/logout` POST. Roles viewer, operator, production_manager, quality_manager, admin; admin does not implicitly bypass quality decision. Generated local passwords in ignored `.local/credentials.json`, not committed.
+Session cookies via Starlette SessionMiddleware with server-side session record; POST origin + CSRF required except login (origin still required). `/v1/auth/login` `{username,password}` → `{user:{id,username,role},csrf_token}`. `/v1/auth/me` same; `/v1/auth/logout` POST. Roles viewer, operator, production_manager, quality_manager, admin; admin inherits every business-role permission while all non-role authorization checks remain enforced. Generated local passwords in ignored `.local/credentials.json`, not committed.
 
 `GET /v1/incidents?type=&status=&severity=` → `{items:[{id,type,lifecycle,analysis_status,revision,severity,risk_score,at_risk_order_value_minor,created_at,updated_at}]}`.
 `GET /v1/incidents/{id}` → incident fields plus `source_events`, `revisions`, `impact`, `risk`, `plans`, `actions`, `approvals`, `audit` (execution IDs + times).

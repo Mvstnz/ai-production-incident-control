@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import {
   api,
+  canDecide,
   date,
   label,
   money,
@@ -763,7 +764,7 @@ export function IncidentDetail({
       {tab === "response" && (
         <>
           {incident.incident_type === "QUALITY_ISSUE" &&
-            session.user.role === "quality_manager" &&
+            canDecide(session.user.role, "quality_manager") &&
             incident.actions.some(
               (action) =>
                 action.action_type === "QUALITY_BLOCK" &&

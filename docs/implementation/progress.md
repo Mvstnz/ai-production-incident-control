@@ -5,7 +5,7 @@ Authoritative handoff: CODEX_BUILD_SPEC.md v1.1, M0–M7 and AC01–AC36. Branch
 | Milestone | Status | Observed gate |
 |---|---|---|
 | M0 Discovery & Contracts | IMPLEMENTED / LOCAL_TESTED | Full specification and ADRs read; contracts fixed; actual MCP discovery and own target probe readback. Target execution blocked. |
-| M1 Infrastructure & Domain | LOCAL_TESTED | Real PostgreSQL, separate databases/roles, persistent Compose stack, 100 domain tests and 30 API integration tests. Repeat bootstrap preserves all observed identities and secrets. |
+| M1 Infrastructure & Domain | LOCAL_TESTED | Real PostgreSQL, separate databases/roles, persistent Compose stack, 108 domain tests and 34 API integration tests. Repeat bootstrap preserves all observed identities and secrets. |
 | M2 Intake → Assessment | LOCAL_TESTED | Published local n8n intake, correlation, impact and plan stages; actual Hero/split/dedup execution evidence. |
 | M3 Approval → Action → Recovery | LOCAL_TESTED | Exact approvals, roles, UNKNOWN_OUTCOME, real 429/503 and four-attempt DLQ passed. Actual signed Wait restart, offline approval/outbox persistence and database outage/redelivery passed. Resilience suite: 10/10. |
 | M4 Complete Use Cases | LOCAL_TESTED | Supplier88/69, machine52 with approved reschedule, quality hard override with approved synthetic block. |

@@ -217,4 +217,5 @@ export function date(value: unknown) {
     minute: "2-digit",
   }).format(new Date(string(value)));
 }
-export const canDecide = (role: Role, required: string) => role === required;
+export const canDecide = (role: Role, required: string) =>
+  role === "admin" || role === required;

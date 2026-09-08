@@ -13,7 +13,11 @@ password hashes; sessions persist token hashes server-side. Roles are loaded fro
 the database rather than caller-supplied headers. Browser mutations validate the
 allowed Origin and a session-bound CSRF token; navigation GETs do not approve
 anything. Users must also have membership in the requested scope. Login and user
-requests have process-local rate limits.
+requests have process-local rate limits. The authenticated admin role is a
+deliberate application superuser and inherits every business-role permission.
+This does not bypass authentication, CSRF, scope membership, plan-version or
+payload-hash checks. This user-authorized override is recorded in
+[ADR 0005](adr/0005-admin-superuser.md).
 
 Internal n8n routes require `X-Service-Token`. ERP reads and writes use separate
 `X-ERP-Token` credentials. Constant-time comparison checks service credentials.

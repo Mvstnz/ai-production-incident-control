@@ -200,6 +200,40 @@ def test_auth_csrf_scope_and_mutated_roles(setup):
     assert viewer.get("/api/auth/me").json()["csrf_token"]
 
 
+@pytest.mark.parametrize(
+    "scenario,required_role",
+    [
+        ("supplier-delay", "production_manager"),
+        ("quality", "quality_manager"),
+    ],
+)
+def test_admin_can_decide_a_business_role_approval(
+    setup, scenario, required_role
+):
+    t = setup
+    state = pipeline(t, envelope(t, scenario))
+    approvals = t["clients"]["admin"].get(
+        "/api/approvals", params={"scope_id": t["sid"]}
+    ).json()["items"]
+    approval = next(
+        item
+        for item in approvals
+        if item["plan_id"] == state["plan_id"]
+        and item["required_role"] == required_role
+    )
+    response = t["clients"]["admin"].post(
+        f"/api/approvals/{approval['id']}/decision",
+        json={
+            "scope_id": t["sid"],
+            "decision": "APPROVE",
+            "expected_version": approval["plan_version"],
+            "plan_hash": approval["plan_hash"],
+            "comment": "Administrator reviewed the exact synthetic plan",
+        },
+    )
+    assert response.status_code == 200, response.text
+
+
 def test_approval_replay_stale_and_early_wait(setup):
     t=setup;s=pipeline(t)
     approvals=t["clients"]["viewer"].get("/api/approvals",params={"scope_id":t["sid"]}).json()["items"]

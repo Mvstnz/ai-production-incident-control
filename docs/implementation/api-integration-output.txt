@@ -4,39 +4,41 @@ Database: apic_integration (PostgreSQL; separate from demo and n8n)
 platform linux -- Python 3.12.10, pytest-8.4.1, pluggy-1.6.0 -- /usr/local/bin/python
 rootdir: /app
 plugins: anyio-4.15.1
-collecting ... collected 32 items
+collecting ... collected 34 items
 
-tests/integration/test_acceptance_edges.py::test_ambiguous_po_position_or_missing_year_enters_persisted_review[multiple_positions] PASSED [  3%]
-tests/integration/test_acceptance_edges.py::test_ambiguous_po_position_or_missing_year_enters_persisted_review[missing_year] PASSED [  6%]
-tests/integration/test_acceptance_edges.py::test_tampered_draft_is_replaced_before_plan_persistence_and_dispatch PASSED [  9%]
-tests/integration/test_acceptance_edges.py::test_unverified_quality_has_no_incident_action_or_approval PASSED [ 12%]
-tests/integration/test_acceptance_edges.py::test_genuinely_computed_low_supplier_mail_still_cannot_dispatch_unapproved PASSED [ 15%]
-tests/integration/test_acceptance_edges.py::test_dashboard_unions_same_sales_position_across_two_current_incidents PASSED [ 18%]
-tests/integration/test_api.py::test_supplier_baseline_split_and_immutable_history PASSED [ 21%]
-tests/integration/test_api.py::test_concurrent_transport_deduplication PASSED [ 25%]
-tests/integration/test_api.py::test_mail_form_same_facts_links_source_without_revision PASSED [ 28%]
-tests/integration/test_api.py::test_unknown_and_injection_are_manual_review PASSED [ 31%]
-tests/integration/test_api.py::test_live_ai_budget_is_bounded_idempotent_and_model_locked PASSED [ 34%]
-tests/integration/test_api.py::test_custom_email_is_unavailable_when_live_ai_is_disabled PASSED [ 37%]
-tests/integration/test_api.py::test_auth_csrf_scope_and_mutated_roles PASSED [ 40%]
-tests/integration/test_api.py::test_approval_replay_stale_and_early_wait PASSED [ 43%]
-tests/integration/test_api.py::test_reject_modify_expire_no_dispatch[REJECT] PASSED [ 46%]
-tests/integration/test_api.py::test_reject_modify_expire_no_dispatch[MODIFY] PASSED [ 50%]
-tests/integration/test_api.py::test_reject_modify_expire_no_dispatch[EXPIRE] PASSED [ 53%]
-tests/integration/test_api.py::test_unknown_outcome_ticket_effect_at_most_once PASSED [ 56%]
-tests/integration/test_api.py::test_job_retry_four_attempts_retry_after_and_dlq PASSED [ 59%]
-tests/integration/test_api.py::test_digest_sla_and_current_value_dedup PASSED [ 62%]
-tests/integration/test_api.py::test_machine_quality_and_privileged_erp_reject PASSED [ 65%]
-tests/integration/test_api.py::test_immutable_snapshot_and_cross_scope_foreign_key PASSED [ 68%]
-tests/integration/test_api.py::test_body_limit_and_unknown_timestamp_are_rejected PASSED [ 71%]
-tests/integration/test_api.py::test_scoped_reset_keeps_other_scope_and_audit PASSED [ 75%]
-tests/integration/test_api.py::test_database_failure_no_false_acceptance PASSED [ 78%]
-tests/integration/test_api.py::test_real_sandbox_smtp_success_and_unknown_outcome PASSED [ 81%]
-tests/integration/test_api.py::test_authorized_erp_commands_and_separate_quality_disposition PASSED [ 84%]
-tests/integration/test_api.py::test_execution_error_lookup_and_bounded_retry PASSED [ 87%]
-tests/integration/test_api.py::test_own_inventory_reservation_is_preserved_in_snapshot PASSED [ 90%]
-tests/integration/test_api.py::test_rate_limit_is_enforced PASSED        [ 93%]
-tests/integration/test_api.py::test_context_preserves_provider_retry_after_before_generic_error_trigger PASSED [ 96%]
+tests/integration/test_acceptance_edges.py::test_ambiguous_po_position_or_missing_year_enters_persisted_review[multiple_positions] PASSED [  2%]
+tests/integration/test_acceptance_edges.py::test_ambiguous_po_position_or_missing_year_enters_persisted_review[missing_year] PASSED [  5%]
+tests/integration/test_acceptance_edges.py::test_tampered_draft_is_replaced_before_plan_persistence_and_dispatch PASSED [  8%]
+tests/integration/test_acceptance_edges.py::test_unverified_quality_has_no_incident_action_or_approval PASSED [ 11%]
+tests/integration/test_acceptance_edges.py::test_genuinely_computed_low_supplier_mail_still_cannot_dispatch_unapproved PASSED [ 14%]
+tests/integration/test_acceptance_edges.py::test_dashboard_unions_same_sales_position_across_two_current_incidents PASSED [ 17%]
+tests/integration/test_api.py::test_supplier_baseline_split_and_immutable_history PASSED [ 20%]
+tests/integration/test_api.py::test_concurrent_transport_deduplication PASSED [ 23%]
+tests/integration/test_api.py::test_mail_form_same_facts_links_source_without_revision PASSED [ 26%]
+tests/integration/test_api.py::test_unknown_and_injection_are_manual_review PASSED [ 29%]
+tests/integration/test_api.py::test_live_ai_budget_is_bounded_idempotent_and_model_locked PASSED [ 32%]
+tests/integration/test_api.py::test_custom_email_is_unavailable_when_live_ai_is_disabled PASSED [ 35%]
+tests/integration/test_api.py::test_auth_csrf_scope_and_mutated_roles PASSED [ 38%]
+tests/integration/test_api.py::test_admin_can_decide_a_business_role_approval[supplier-delay-production_manager] PASSED [ 41%]
+tests/integration/test_api.py::test_admin_can_decide_a_business_role_approval[quality-quality_manager] PASSED [ 44%]
+tests/integration/test_api.py::test_approval_replay_stale_and_early_wait PASSED [ 47%]
+tests/integration/test_api.py::test_reject_modify_expire_no_dispatch[REJECT] PASSED [ 50%]
+tests/integration/test_api.py::test_reject_modify_expire_no_dispatch[MODIFY] PASSED [ 52%]
+tests/integration/test_api.py::test_reject_modify_expire_no_dispatch[EXPIRE] PASSED [ 55%]
+tests/integration/test_api.py::test_unknown_outcome_ticket_effect_at_most_once PASSED [ 58%]
+tests/integration/test_api.py::test_job_retry_four_attempts_retry_after_and_dlq PASSED [ 61%]
+tests/integration/test_api.py::test_digest_sla_and_current_value_dedup PASSED [ 64%]
+tests/integration/test_api.py::test_machine_quality_and_privileged_erp_reject PASSED [ 67%]
+tests/integration/test_api.py::test_immutable_snapshot_and_cross_scope_foreign_key PASSED [ 70%]
+tests/integration/test_api.py::test_body_limit_and_unknown_timestamp_are_rejected PASSED [ 73%]
+tests/integration/test_api.py::test_scoped_reset_keeps_other_scope_and_audit PASSED [ 76%]
+tests/integration/test_api.py::test_database_failure_no_false_acceptance PASSED [ 79%]
+tests/integration/test_api.py::test_real_sandbox_smtp_success_and_unknown_outcome PASSED [ 82%]
+tests/integration/test_api.py::test_authorized_erp_commands_and_separate_quality_disposition PASSED [ 85%]
+tests/integration/test_api.py::test_execution_error_lookup_and_bounded_retry PASSED [ 88%]
+tests/integration/test_api.py::test_own_inventory_reservation_is_preserved_in_snapshot PASSED [ 91%]
+tests/integration/test_api.py::test_rate_limit_is_enforced PASSED        [ 94%]
+tests/integration/test_api.py::test_context_preserves_provider_retry_after_before_generic_error_trigger PASSED [ 97%]
 tests/integration/test_api.py::test_completed_early_approval_has_no_orphan_pending_wakeup PASSED [100%]
 
 =============================== warnings summary ===============================
@@ -49,9 +51,9 @@ tests/integration/test_api.py::test_completed_early_approval_has_no_orphan_pendi
     _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-======================= 32 passed, 2 warnings in 44.12s ========================
+======================= 34 passed, 2 warnings in 47.93s ========================
  Container apic-portfolio-postgres-1 Running 
  Container apic-portfolio-postgres-1 Waiting 
  Container apic-portfolio-postgres-1 Healthy 
- Container apic-portfolio-bootstrap-run-8934221979c9 Creating
- Container apic-portfolio-bootstrap-run-8934221979c9 Created
+ Container apic-portfolio-bootstrap-run-9b9d253647dd Creating 
+ Container apic-portfolio-bootstrap-run-9b9d253647dd Created 

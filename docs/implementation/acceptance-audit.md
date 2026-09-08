@@ -8,8 +8,9 @@ acceptance matrix. At this cutoff, `acceptance/acceptance-matrix.json` still has
 the planning note and all 36 entries marked `NOT_RUN`, despite substantial newer
 evidence. The final matrix needs reconciliation with that evidence.
 
-The unit output records **100 passed in 0.27 seconds**. The API output records
-**23 passed in 45.96 seconds**, with two upstream deprecation warnings. API tests
+At this historical cutoff, the unit output recorded **100 passed in 0.27
+seconds** and the API output recorded **23 passed in 45.96 seconds**, with two
+upstream deprecation warnings. API tests
 use genuine PostgreSQL and local Mailpit, but an in-process ERP TestClient; their
 synthetic workflow references are not n8n execution IDs. The local runtime report
 records ten successful cases with actual n8n references. The resilience report
@@ -104,4 +105,4 @@ for the final authorized run. Only then can recorded gaps be upgraded.
 
 ## Final verification after the audit cutoff
 
-All six added API edge cases were actually executed by the final whole-directory runner: 30/30 integration tests passed, including AC09/11/13/26/35. The actual resilience suite now has 10/10 passes including database outage (AC21) and signed Wait/restart/offline approval-outbox persistence (AC22); original failures remain in history. The complete repeat bootstrap passed (AC02). The browser report asserts the same incident/action and real n8n execution670 (AC36), plus reload/keyboard corrections. The current acceptance matrix supersedes the cutoff statuses above. [Fresh GitHub CI](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34124335738) passed (AC01), including the second bootstrap on Linux. Target AC31 remains blocked. Exact combined delivery and early-approval ordering checks have a separate retained report, `evidence/workflow-runs/acceptance-ordering.json`; their observed results, rather than the earlier broad case names, determine AC06/AC15.
+All six added API edge cases and the Production/Quality admin-superuser approval paths were actually executed by the final whole-directory runner: 34/34 integration tests passed, including AC09/11/13/26/35. The actual resilience suite now has 10/10 passes including database outage (AC21) and signed Wait/restart/offline approval-outbox persistence (AC22); original failures remain in history. The complete repeat bootstrap passed (AC02). The browser report asserts the same incident/action and real n8n execution670 (AC36), plus reload/keyboard corrections. The current acceptance matrix supersedes the cutoff statuses above. [Fresh GitHub CI](https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34124335738) passed (AC01), including the second bootstrap on Linux. Target AC31 remains blocked. Exact combined delivery and early-approval ordering checks have a separate retained report, `evidence/workflow-runs/acceptance-ordering.json`; their observed results, rather than the earlier broad case names, determine AC06/AC15.

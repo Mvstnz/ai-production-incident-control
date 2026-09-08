@@ -96,14 +96,14 @@ Bootstrap generates random local credentials, starts the services, applies migra
 | Operations OpenAPI   | http://127.0.0.1:8000/docs |
 | Mailpit inbox        | http://127.0.0.1:8025      |
 
-Sign in with one of the generated accounts in **`.local/credentials.json`**. Available roles are viewer, operator, purchasing, production manager, quality manager and admin. Keep `.local/` and `.env` private.
+Sign in with one of the generated accounts in **`.local/credentials.json`**. Available roles are viewer, operator, purchasing, production manager, quality manager and admin. Admin is the application superuser and inherits every business-role permission while authentication, CSRF and scope checks remain enforced ([ADR 0005](docs/adr/0005-admin-superuser.md)). Keep `.local/` and `.env` private.
 
 ## Try the demo
 
 1. Open the dashboard and select **Run demo → Supplier delay**.
 2. Inspect the verified source, allocation, affected orders and six-factor risk calculation.
 3. Review the exact proposed action in **Approval inbox**.
-4. Approve it as the appropriate manager and inspect the single captured message in Mailpit.
+4. Approve it as the appropriate manager or as admin and inspect the single captured message in Mailpit.
 5. Run the confirmed split revision and verify that the old approval can no longer authorize the changed plan.
 6. Repeat with the machine and quality scenarios, then inspect retries and execution references under **Reliability**.
 
@@ -139,7 +139,7 @@ Every real provider attempt consumes one durable budget slot. The key is importe
 The latest hosted pipeline runs the full stack on a fresh Ubuntu runner:
 
 - **108 unit tests** for impact, risk, verification and control rules
-- **32 integration tests** against a real isolated PostgreSQL database
+- **34 integration tests** against a real isolated PostgreSQL database
 - **10/10 local n8n runtime scenarios** through published workflows
 - frontend build and typecheck
 - repeated bootstrap and workflow readback

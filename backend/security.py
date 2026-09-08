@@ -68,7 +68,8 @@ def scope(conn, actor, scope_id):
 
 
 def role(actor, *roles):
-    if actor["role"] not in roles:
+    """Allow listed roles while treating authenticated admins as app superusers."""
+    if actor["role"] != "admin" and actor["role"] not in roles:
         raise HTTPException(403, "Role is not permitted for this command")
 
 

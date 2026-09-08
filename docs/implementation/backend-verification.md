@@ -10,7 +10,7 @@ rtk proxy python -m backend.run_integration
 
 The runner uses the existing project's PostgreSQL and Mailpit services, provisions the separate `apic_integration` PostgreSQL database idempotently, applies migrations, and runs API tests. Secrets stay in process environment. It does not enqueue work in the demo database or n8n. Its own test scopes have work and membership removed during teardown; append-only audit history and immutable snapshots remain. The default demonstration scope is not reset.
 
-Final observed result: **30 passed** in **152.87 seconds**, with two upstream TestClient deprecation warnings. Exact output, including the six acceptance edge cases: `api-integration-output.txt`.
+Final observed result: **34 passed** in **47.93 seconds**, with two upstream TestClient deprecation warnings. Exact output includes admin-superuser approval cases for Production and Quality roles: `api-integration-output.txt`.
 
 The tested boundaries are FastAPI TestClient â†’ genuine PostgreSQL and ERP FastAPI TestClient â†’ genuine PostgreSQL. SMTP tests actually connect to Compose Mailpit. ERP-command tests call the genuine ERP API in process; they are not evidence of n8n execution. Runtime workflow tests and actual n8n execution IDs belong to the separate end-to-end report.
 
@@ -30,4 +30,4 @@ Known boundaries: SMTP has no general exactly-once guarantee; uncertain acceptan
 
 ## Final acceptance edge suite
 
-The final runner collects all of tests/integration. Actual result: 30 passed, 2 dependency deprecation warnings in 152.87 seconds against real isolated PostgreSQL. This includes precise ambiguous-PO/missing-year review, tampered-draft replacement, unverified-quality review, a calculated LOW external mail approval gate, and two-incident sales-value union. See api-integration-output.txt for every executed test name.
+The final runner collects all of tests/integration. Actual result: 34 passed, 2 dependency deprecation warnings in 47.93 seconds against real isolated PostgreSQL. This includes precise ambiguous-PO/missing-year review, tampered-draft replacement, unverified-quality review, a calculated LOW external mail approval gate, two-incident sales-value union and admin-superuser approval paths for Production and Quality roles. See api-integration-output.txt for every executed test name.
