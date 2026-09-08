@@ -1,0 +1,41 @@
+{
+  "tested_at": "2026-09-08T11:49:09.905352+00:00",
+  "origin": "https://ai-production-incident-control-dash.vercel.app",
+  "scope_id": "21617427-907d-446b-880f-e58b9b9656e6",
+  "source_event_id": "5c994097-0180-4e35-bcdd-c6c830676049",
+  "job_id": "3bc49f32-b4a7-4556-8362-d86c5c8d0e47",
+  "job_status": "SUCCEEDED",
+  "source_status": "VERIFIED",
+  "boundary": "One actual hosted synthetic mail extraction; no external email sent; not a statistical accuracy evaluation.",
+  "workflow_id": "DaGeYQsYvTTBkzpA",
+  "execution_id": "122",
+  "live_ai": {
+    "enabled": true,
+    "model": "models/gemini-3.1-flash-lite",
+    "calls_used": 1,
+    "calls_limit": 20
+  },
+  "incident_id": "a146a0cf-e363-4906-9424-b78cd81ce302",
+  "extraction_metadata": {
+    "model": "models/gemini-3.1-flash-lite",
+    "provider": "google-gemini",
+    "prompt_version": "extraction-v2.0",
+    "response_metadata": {
+      "latency_ms": null,
+      "request_id": null,
+      "total_tokens": null,
+      "finish_reason": "STOP",
+      "prompt_tokens": null,
+      "completion_tokens": null
+    }
+  },
+  "result": {
+    "risk_score": 83,
+    "severity": "CRITICAL",
+    "shortage": 40,
+    "affected_orders": 2,
+    "affected_value_cents": 5540000,
+    "partial_status": "PROPOSED"
+  },
+  "status": "PASS"
+}

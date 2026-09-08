@@ -1,0 +1,30 @@
+{
+  "execution": {
+    "id": "120",
+    "workflowId": "6tHziLEHudpdk5hk",
+    "mode": "integrated",
+    "status": "success",
+    "startedAt": "2026-09-08T11:48:49.357Z",
+    "stoppedAt": "2026-09-08T11:49:09.611Z",
+    "retryOf": null,
+    "retrySuccessId": null,
+    "waitTill": null
+  },
+  "nodes": [
+    {
+      "name": "Extract Supplier Facts with Gemini",
+      "status": "success",
+      "duration_ms": 2187,
+      "token_usage": {
+        "inputTokens": 886,
+        "outputTokens": 480
+      }
+    },
+    {
+      "name": "Verify Gemini Facts",
+      "status": "success",
+      "duration_ms": 320
+    }
+  ],
+  "boundary": "Sanitized execution provenance only; source payloads, resume tokens and provider thought signatures are omitted."
+}

@@ -1,0 +1,89 @@
+{
+  "status": "PASS",
+  "run_id": 34223684112,
+  "commit": "8520a591373f043d23a7a7a1edd68118b1c1d5f4",
+  "url": "https://github.com/Mvstnz/ai-production-incident-control/actions/runs/34223684112",
+  "conclusion": "success",
+  "steps": [
+    {
+      "name": "Set up job",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install pinned command proxy",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python -m pip install -r backend/requirements.lock.txt",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk npm ci",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk npm run build",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python -m pytest tests/unit -q",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python scripts/bootstrap.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python scripts/test_showcase.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python scripts/test_rebootstrap.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python -m backend.run_integration",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python -X utf8 scripts/test_runtime.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run rtk proxy python scripts/scan_repository.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Stop this job's local stack",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "conclusion": "success"
+    }
+  ]
+}

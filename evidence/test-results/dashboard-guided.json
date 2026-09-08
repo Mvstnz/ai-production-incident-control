@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "tested_at": "2026-09-08T12:07:08.956679+00:00",
+  "application_commit": "8520a591373f043d23a7a7a1edd68118b1c1d5f4",
+  "origin": "https://ai-production-incident-control-dash.vercel.app",
+  "deployment_id": "dpl_H9ctmCkWmhSsp6atNLmtyMV9gVYM",
+  "browser": "Codex in-app browser",
+  "checks": [
+    {
+      "name": "Local guided supplier case",
+      "result": "40 rods; two affected orders; EUR 55400; proposed split remains unconfirmed; hypothetical shortage 10"
+    },
+    {
+      "name": "Local guided machine case",
+      "result": "Two affected cutting orders; 10 uncovered hours; proposed S-02 slot for order 61 from 08:00 to 14:00 Berlin"
+    },
+    {
+      "name": "Local guided quality case",
+      "result": "48 defective plates; two pending shipment positions with quantities 30 and 18; EUR 26400"
+    },
+    {
+      "name": "Local responsive layout",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "document_scroll_width": 375,
+      "result": "No document overflow; mobile navigation opens and route change closes it; viewport override reset"
+    },
+    {
+      "name": "Hosted public entry and read-only access",
+      "result": "Public entry foregrounded; three scoped examples; API denies visitor mutations"
+    },
+    {
+      "name": "Hosted team access",
+      "result": "Existing admin account signs in; editable mail form and actual submit control visible; case dialog links to one dedicated mail entry"
+    },
+    {
+      "name": "Hosted actual Gemini incident",
+      "incident_id": "a146a0cf-e363-4906-9424-b78cd81ce302",
+      "result": "Guided view correctly identifies actual Gemini extraction; confirmed 75 rods and proposed 30-rod early shipment displayed separately"
+    },
+    {
+      "name": "Technical detail access",
+      "result": "Advanced view opens with impact, comparison, risk and response sections; no page alerts observed"
+    },
+    {
+      "name": "Hosted release",
+      "result": "Final UI and English-input limitation verified on production alias; no additional provider call triggered by browsing"
+    }
+  ],
+  "scope": "Interactive UI inspection and assertions, not a comprehensive accessibility certification or browser compatibility matrix."
+}
